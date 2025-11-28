@@ -18,16 +18,27 @@ function createDiv(id, parent, styles)
     return newDiv;
 }
 
-  // Get the canvas element
-  const canvas = document.getElementById("canvas-wrapper-div");
+function createCanvas(id, parent, styles) {
+    // Create a canvas element
+    const canvas = document.createElement("canvas");
+    canvas.id = id;
 
-  // Get the 2D rendering context
-  const ctx = canvas.getContext("2d");
+    // Apply styles if needed
+    for (const style of styles) {
+        canvas.classList.add(style);
+    }
 
-  // Set the fill color for the rectangle
-  ctx.fillStyle = "blue";
+    // Append it to parent
+    parent.appendChild(canvas);
 
-  // Draw a filled rectangle
-  // Parameters: x-coordinate, y-coordinate, width, height
-  ctx.fillRect(20, 20, 150, 60);
-  ctx.fill
+    // Get context
+    const ctx = canvas.getContext("2d");
+
+    // Draw a rectangle
+    ctx.fillStyle = "red";
+    ctx.fillRect(20, 20, 150, 60);
+
+    return canvas;
+}
+
+createCanvas("canvas-wrapper-div", body_div, []);
