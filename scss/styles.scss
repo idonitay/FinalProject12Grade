@@ -1,10 +1,12 @@
 
 
-.canvas {
+.canvas_wrapper_div {
     border: 1px solid black;
     width: 400px;
     height: 400px;
     display: block;
     position: relative;
+    margin-left: 400px;
+    margin-right: 50px;
 }
 

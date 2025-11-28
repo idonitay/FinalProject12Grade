@@ -27,6 +27,8 @@ function createCanvas(id, parent, styles) {
     for (const style of styles) {
         canvas.classList.add(style);
     }
+    canvas.width = 400;
+    canvas.height = 400;
 
     // Append it to parent
     parent.appendChild(canvas);
@@ -35,10 +37,11 @@ function createCanvas(id, parent, styles) {
     const ctx = canvas.getContext("2d");
 
     // Draw a rectangle
-    ctx.fillStyle = "red";
-    ctx.fillRect(20, 20, 150, 60);
+    
+    // Parameters: x-coordinate, y-coordinate, width, height
+    ctx.fillRect(400, 50, 400, 400);
 
     return canvas;
 }
-
-createCanvas("canvas-wrapper-div", body_div, []);
+canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas_wrapper_div"])
+canvas = createCanvas("canvas", canvas_wrapper_div, []);
