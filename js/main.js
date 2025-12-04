@@ -45,61 +45,72 @@ function createCanvas(id, parent, styles) {
     return canvas;
 }
 
-function drawLine(canvasOrId, p1, p2) {
-    // Find the canvas element
-    const canvas =
-        typeof canvasOrId === "string"
-            ? document.getElementById(canvasOrId)
-            : canvasOrId;
+function drawLine(canvasOrId, p1, p2, able2draw) {
+    if (able2draw)
+    {
+        // Find the canvas element
+        const canvas =
+            typeof canvasOrId === "string"
+                ? document.getElementById(canvasOrId)
+                : canvasOrId;
 
-    const ctx = canvas.getContext("2d");
-    //stylethe brush
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "black";
+        const ctx = canvas.getContext("2d");
+        //stylethe brush
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
 
-    //draw the line
-    ctx.beginPath();
-    ctx.moveTo(p1.x, p1.y);
-    ctx.lineTo(p2.x, p2.y);
-    ctx.stroke();
+        //draw the line
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+    }
 }
 
 
 function playerDrawHandler() {
-    let points = [];
-
-    canvas.onclick = function (e) {
+    
+    let canDraw = false;
+    console.log("sss")
+    canvas.onmousedown = function (e) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        points.push({ x, y });
+        canDraw = true;
+        let pointa = {x, y};
 
         canvas.onmousemove = function (moveEvent) {
+            console.log("jjj")
             const rect = canvas.getBoundingClientRect();
             const x = moveEvent.clientX - rect.left;
             const y = moveEvent.clientY - rect.top;
 
-            points.push({ x, y });
+            let pointb = pointa;
+            pointa = {x, y};
 
-            drawLine(
-                "canvas",
-                points[points.length - 2],
-                points[points.length - 1]
-            );
+            drawLine("canvas", pointa, pointb, canDraw);
 
-            canvas.mouseup = function () 
+            canvas.mouseleave = function () 
             {
-                points = [];
+                console.log("hhh")
                 canvas.onmousemove = null;
+                canDraw = false
+            };
+
+            canvas.onmouseup = function () 
+            {
+                console.log("hhh")
+                canvas.onmousemove = null;
+                canDraw = false
             };
         };
     };
 
-    canvas.mouseup = function () 
+    canvas.onmouseleave = function () 
     {
-        points = [];
         canvas.onmousemove = null;
+        canDraw = false;
     };
 
     
@@ -108,7 +119,7 @@ function playerDrawHandler() {
 
 canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas_wrapper_div"])
 canvas = createCanvas("canvas", canvas_wrapper_div, []);
-canvas.addEventListener('click', playerDrawHandler)
+canvas.addEventListener('mousedown', playerDrawHandler)
 
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
 // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
