@@ -1,6 +1,7 @@
 
 
 let body_div = document.getElementById("body");
+current_painting_color = "#000000";
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 
@@ -45,7 +46,7 @@ function createCanvas(id, parent, styles) {
     return canvas;
 }
 
-function drawLine(canvasOrId, p1, p2, able2draw) {
+function drawLine(canvasOrId, p1, p2, able2draw, color) {
     if (able2draw)
     {
         // Find the canvas element
@@ -57,7 +58,7 @@ function drawLine(canvasOrId, p1, p2, able2draw) {
         const ctx = canvas.getContext("2d");
         //stylethe brush
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = color;
 
         //draw the line
         ctx.beginPath();
@@ -89,7 +90,7 @@ function playerDrawHandler() {
             let pointb = pointa;
             pointa = {x, y};
 
-            drawLine("canvas", pointa, pointb, canDraw);
+            drawLine("canvas", pointa, pointb, canDraw, current_painting_color);
 
             canvas.mouseleave = function () 
             {
