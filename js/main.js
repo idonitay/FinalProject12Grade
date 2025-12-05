@@ -2,6 +2,7 @@
 
 let body_div = document.getElementById("body");
 current_painting_color = "#000000";
+current_brush_size = 2;
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 
@@ -46,7 +47,7 @@ function createCanvas(id, parent, styles) {
     return canvas;
 }
 
-function drawLine(canvasOrId, p1, p2, able2draw, color) {
+function drawLine(canvasOrId, p1, p2, able2draw, color, brush_size) {
     if (able2draw)
     {
         // Find the canvas element
@@ -57,7 +58,7 @@ function drawLine(canvasOrId, p1, p2, able2draw, color) {
 
         const ctx = canvas.getContext("2d");
         //stylethe brush
-        ctx.lineWidth = 2;
+        ctx.lineWidth = brush_size;
         ctx.strokeStyle = color;
 
         //draw the line
@@ -88,7 +89,7 @@ function playerDrawHandler() {
             let pointb = pointa;
             pointa = {x, y};
 
-            drawLine("canvas", pointa, pointb, canDraw, current_painting_color);
+            drawLine("canvas", pointa, pointb, canDraw, current_painting_color, current_brush_size);
 
             canvas.mouseleave = function () 
             {
@@ -113,7 +114,7 @@ function playerDrawHandler() {
     
 }
 
-function changebrushcolor()
+function changeBrushColor()
 {
     red_color_box.onclick = function() {
         current_painting_color = "#FF0000"
@@ -121,6 +122,21 @@ function changebrushcolor()
 
     black_color_box.onclick = function() {
         current_painting_color = "#000000"
+    }
+
+    green_color_box.onclick = function() {
+        current_painting_color = "rgb(6, 150, 51)"
+    }
+}
+
+function changeBrushSize() 
+{
+    small_brush.onclick = function() {
+        current_brush_size = 2;
+    }
+
+    big_brush.onclick = function() {
+        current_brush_size = 7;
     }
 }
 
@@ -131,11 +147,21 @@ canvas.addEventListener('mousedown', playerDrawHandler)
 
 //colors creation and event handlers
 colors_wrapper = createDiv("colors-wrapper-div", body_div, ["color_box_wrapper"]);
-red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg"]);
 black_color_box = createDiv("black-color-box", colors_wrapper, ["color_box", "black_bg"]);
+red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg"]);
+green_color_box = createDiv("green-color-box", colors_wrapper, ["color_box", "green_bg"]);
 
-red_color_box.addEventListener('click', changebrushcolor)
-black_color_box.addEventListener('click', changebrushcolor)
+
+red_color_box.addEventListener('click', changeBrushColor)
+black_color_box.addEventListener('click', changeBrushColor)
+green_color_box.addEventListener('click', changeBrushColor)
+
+//brush size creation and event handlers
+small_brush = createDiv("small-brush", body_div, ["circle", "small_circle"]);
+big_brush = createDiv("big-brush", body_div, ["circle", "big_circle"]);
+
+small_brush.addEventListener("click", changeBrushSize)
+big_brush.addEventListener("click", changeBrushSize)
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
 // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
 

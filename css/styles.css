@@ -10,13 +10,9 @@
 
 .color_box {
   border: 1px solid black;
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
   margin-left: 500px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
   margin-top: 5px;
 }
 
@@ -28,10 +24,33 @@
   background-color: black;
 }
 
+.green_bg {
+  background-color: rgb(6, 150, 51);
+}
+
 .color_box_wrapper {
   margin-top: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
+  height: 90px;
+  border: 1px solid black;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  grid-template-rows: auto auto; /* Two rows */
+  gap: 10px;
+}
+
+.circle {
+  background-color: black; /* Optional: Add a background color to make it visible */
+  border-radius: 50%; /* This makes it a circle */
+}
+
+.small_circle {
+  width: 10px;
+  height: 10px;
+}
+
+.big_circle {
+  width: 25px;
+  height: 25px;
 }
