@@ -72,7 +72,6 @@ function drawLine(canvasOrId, p1, p2, able2draw, color) {
 function playerDrawHandler() {
     
     let canDraw = false;
-    console.log("sss")
     canvas.onmousedown = function (e) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -82,7 +81,6 @@ function playerDrawHandler() {
         let pointa = {x, y};
 
         canvas.onmousemove = function (moveEvent) {
-            console.log("jjj")
             const rect = canvas.getBoundingClientRect();
             const x = moveEvent.clientX - rect.left;
             const y = moveEvent.clientY - rect.top;
@@ -94,14 +92,12 @@ function playerDrawHandler() {
 
             canvas.mouseleave = function () 
             {
-                console.log("hhh")
                 canvas.onmousemove = null;
                 canDraw = false
             };
 
             canvas.onmouseup = function () 
             {
-                console.log("hhh")
                 canvas.onmousemove = null;
                 canDraw = false
             };
@@ -117,11 +113,29 @@ function playerDrawHandler() {
     
 }
 
+function changebrushcolor()
+{
+    red_color_box.onclick = function() {
+        current_painting_color = "#FF0000"
+    }
 
+    black_color_box.onclick = function() {
+        current_painting_color = "#000000"
+    }
+}
+
+//canvas creation and event handler
 canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas_wrapper_div"])
 canvas = createCanvas("canvas", canvas_wrapper_div, []);
 canvas.addEventListener('mousedown', playerDrawHandler)
 
+//colors creation and event handlers
+colors_wrapper = createDiv("colors-wrapper-div", body_div, ["color_box_wrapper"]);
+red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg"]);
+black_color_box = createDiv("black-color-box", colors_wrapper, ["color_box", "black_bg"]);
+
+red_color_box.addEventListener('click', changebrushcolor)
+black_color_box.addEventListener('click', changebrushcolor)
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
 // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
 
