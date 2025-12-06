@@ -6,16 +6,17 @@ socket.addEventListener("open", () => {
     console.log("Connected to server!");
 
     // Send a message to the server
-    send_message_to_server({'opcode':0, 'message': "Hello server!"});
+    send_message_to_server({'opcode':client_2_server['login'], 'message': 'hi from Ido'});
 });
 
 // Fired when a message comes from the server
 socket.addEventListener("message", (event) => {
-
+    console.log(event.data);
     let response = JSON.parse(event.data);
-    console.log("Message from server:", response);
-});
+    console.log(response)
+    console.log(`opcode: ${response.opcode} message: ${response.message}`);
 
+});
 // Fired if an error happens
 socket.addEventListener("error", (error) => {
     console.error("WebSocket error:", error);

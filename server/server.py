@@ -3,6 +3,7 @@ from http.client import responses
 from aiohttp import web
 from pathlib import Path
 import json
+import opcodes
 
 STATIC_DIR = "../client"
 
@@ -17,8 +18,11 @@ async def index(request):
 async def handle_user_message(user_message: dict) -> dict:
     print(user_message)
     opcode = user_message['opcode']
-    if opcode == 0:
-        return {'opcode': 1, 'message': 3}
+
+    # await ws.send_str(f"opcode: {opcodes.server_2_client['Connection Established']}, message: Connection Established")
+    #
+    if opcode == opcodes.client_2_server['login']:
+        return {'opcode': opcodes.server_2_client["Connection Established"], 'message': {'a':2, 'b':4}}
     elif opcode == 6:
         return {'opcode': 1, 'message': "crap"}
     return {'opcode': "unknown"}
@@ -29,6 +33,7 @@ async def websocket_handler(request):
     await ws.prepare(request)
 
     print("WebSocket connected")
+
 
     async for msg in ws:
         if msg.type == web.WSMsgType.TEXT:
