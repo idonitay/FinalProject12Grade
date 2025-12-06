@@ -1,8 +1,15 @@
 from aiohttp import web
+from pathlib import Path
+
+STATIC_DIR = "../client"
 
 # --- HTTP handler ---
 async def http_handler(request):
     return web.Response(text="Hello from HTTP!")
+
+async def index(request):
+    content = open(f"{STATIC_DIR}/Scribble.html", "rt").read()
+    return web.Response(text=content, content_type="text/html")
 
 # --- WebSocket handler ---
 async def websocket_handler(request):
@@ -24,8 +31,10 @@ async def websocket_handler(request):
 def main():
     # --- App setup ---
     app = web.Application()
-    app.router.add_get("/", http_handler)          # HTTP endpoint
+    # app.router.add_get("/", http_handler)          # HTTP endpoint
+    app.router.add_get("/", index)
     app.router.add_get("/ws", websocket_handler)   # WebSocket endpoint
+    app.router.add_static("/", path="../client")
 
     # Run BOTH on the same server + port
     web.run_app(app, host="localhost", port=8080)
