@@ -1,5 +1,8 @@
+from http.client import responses
+
 from aiohttp import web
 from pathlib import Path
+import json
 
 STATIC_DIR = "../client"
 
@@ -11,6 +14,15 @@ async def index(request):
     content = open(f"{STATIC_DIR}/Scribble.html", "rt").read()
     return web.Response(text=content, content_type="text/html")
 
+async def handle_user_message(user_message: dict) -> dict:
+    print(user_message)
+    opcode = user_message['opcode']
+    if opcode == 0:
+        return {'opcode': 1, 'message': 3}
+    elif opcode == 6:
+        return {'opcode': 1, 'message': "crap"}
+    return {'opcode': "unknown"}
+
 # --- WebSocket handler ---
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
@@ -20,8 +32,11 @@ async def websocket_handler(request):
 
     async for msg in ws:
         if msg.type == web.WSMsgType.TEXT:
-            print("WS message:", msg.data)
-            await ws.send_str(f"You said: {msg.data}")
+            user_message_as_dict = json.loads(msg.data)
+            response_as_dict = await handle_user_message(user_message_as_dict)
+            response_as_str = json.dumps(response_as_dict)
+            await ws.send_str(response_as_str)
+
         elif msg.type == web.WSMsgType.ERROR:
             print("WebSocket error:", ws.exception())
 
