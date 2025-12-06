@@ -6,11 +6,14 @@
         {
             "label": "compile sass",
             "type": "shell",
-            "command": "/Users/idonitay/FinalProject12Grade/scripts/compile_scss.sh",
+            "command": "/Users/idonitay/FinalProject12Grade/client/scripts/compile_scss.sh",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/client"
             }
         }
     ]
