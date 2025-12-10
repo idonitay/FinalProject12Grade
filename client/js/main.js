@@ -140,6 +140,12 @@ function changeBrushSize()
     }
 }
 
+function clearCanvas()
+{
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 //canvas creation and event handler
 canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas_wrapper_div"])
 canvas = createCanvas("canvas", canvas_wrapper_div, []);
@@ -157,11 +163,22 @@ black_color_box.addEventListener('click', changeBrushColor)
 green_color_box.addEventListener('click', changeBrushColor)
 
 //brush size creation and event handlers
-small_brush = createDiv("small-brush", body_div, ["circle", "small_circle"]);
-big_brush = createDiv("big-brush", body_div, ["circle", "big_circle"]);
+brushes_wrapper_div = createDiv("brushes-wrapper-div", body_div, []);
+small_brush = createDiv("small-brush", brushes_wrapper_div, ["circle", "small_circle"]);
+big_brush = createDiv("big-brush", brushes_wrapper_div, ["circle", "big_circle"]);
 
-small_brush.addEventListener("click", changeBrushSize)
-big_brush.addEventListener("click", changeBrushSize)
+small_brush.addEventListener("click", changeBrushSize);
+big_brush.addEventListener("click", changeBrushSize);
+
+//eraser creation
+eraser_wrapper = createDiv("eraser-wrapper", body_div, ["eraser_wrapper"]);
+const eraser = document.createElement('img');
+eraser.src = '../assets/eraser.png'; // Replace with your image path or URL
+
+eraser_wrapper.appendChild(eraser);
+eraser.classList.add("eraser");
+
+eraser.addEventListener("click", clearCanvas)
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
 // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
 
