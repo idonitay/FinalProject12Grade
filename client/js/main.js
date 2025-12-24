@@ -117,16 +117,26 @@ function playerDrawHandler() {
 function changeBrushColor()
 {
     red_color_box.onclick = function() {
-        current_painting_color = "#FF0000"
+        current_painting_color = "#FF0000";
     }
 
     black_color_box.onclick = function() {
-        current_painting_color = "#000000"
+        current_painting_color = "#000000";
     }
 
     green_color_box.onclick = function() {
-        current_painting_color = "rgb(6, 150, 51)"
+        current_painting_color = "rgb(6, 150, 51)";
     }
+
+    blue_color_box.onclick = function() {
+        current_painting_color = "rgb(31, 10, 188)";
+    }
+
+    yellow_color_box.onclick = function() {
+        current_painting_color = "#FFFF00";
+    }
+
+
 }
 
 function changeBrushSize() 
@@ -158,14 +168,18 @@ colors_wrapper = createDiv("colors-wrapper-div", draw_tools_wrapper, ["color_box
 black_color_box = createDiv("black-color-box", colors_wrapper, ["color_box", "black_bg"]);
 red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg"]);
 green_color_box = createDiv("green-color-box", colors_wrapper, ["color_box", "green_bg"]);
+blue_color_box = createDiv("blue-color-box", colors_wrapper, ["color_box", "blue_bg"]);
+yellow_color_box = createDiv("yellow-color-box", colors_wrapper, ["color_box", "yellow_bg"]);
 
 
-red_color_box.addEventListener('click', changeBrushColor)
-black_color_box.addEventListener('click', changeBrushColor)
-green_color_box.addEventListener('click', changeBrushColor)
+red_color_box.addEventListener('click', changeBrushColor);
+black_color_box.addEventListener('click', changeBrushColor);
+green_color_box.addEventListener('click', changeBrushColor);
+blue_color_box.addEventListener('click', changeBrushColor);
+yellow_color_box.addEventListener('click', changeBrushColor);
 
 //brush size creation and event handlers
-brushes_wrapper_div = createDiv("brushes-wrapper-div", draw_tools_wrapper, []);
+brushes_wrapper_div = createDiv("brushes-wrapper-div", draw_tools_wrapper, ["brushes_wrapper"]);
 small_brush = createDiv("small-brush", brushes_wrapper_div, ["circle", "small_circle"]);
 big_brush = createDiv("big-brush", brushes_wrapper_div, ["circle", "big_circle"]);
 

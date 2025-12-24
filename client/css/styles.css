@@ -10,9 +10,8 @@
 
 .color_box {
   border: 1px solid black;
-  width: 35px;
-  height: 35px;
-  margin: 5px;
+  width: 40%;
+  height: 80%;
 }
 
 .red_bg {
@@ -27,13 +26,18 @@
   background-color: rgb(6, 150, 51);
 }
 
+.blue_bg {
+  background-color: rgb(31, 10, 188);
+}
+
+.yellow_bg {
+  background-color: yellow;
+}
+
 .color_box_wrapper {
   margin-top: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
-  height: 90px;
   display: grid;
-  grid-template-columns: 5% 5%;
+  grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10%;
 }
 
 .circle {
@@ -62,6 +66,11 @@
 }
 
 .draw_tools_wrapper {
-  grid-template-columns: 70% 20% 10%;
+  grid-template-columns: 50% 20% 10%;
   display: grid;
+}
+
+.brushes_wrapper {
+  display: grid;
+  grid-template-columns: 10% 20% 30% 40%;
 }
