@@ -136,6 +136,10 @@ function changeBrushColor()
         current_painting_color = "#FFFF00";
     }
 
+    orange_color_box.onclick = function() {
+        current_painting_color = "rgb(255, 165, 0)";
+    }
+
 
 }
 
@@ -170,6 +174,7 @@ red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg
 green_color_box = createDiv("green-color-box", colors_wrapper, ["color_box", "green_bg"]);
 blue_color_box = createDiv("blue-color-box", colors_wrapper, ["color_box", "blue_bg"]);
 yellow_color_box = createDiv("yellow-color-box", colors_wrapper, ["color_box", "yellow_bg"]);
+orange_color_box = createDiv("orange-color-box", colors_wrapper, ["color_box", "orange_bg"]);
 
 
 red_color_box.addEventListener('click', changeBrushColor);
@@ -177,6 +182,7 @@ black_color_box.addEventListener('click', changeBrushColor);
 green_color_box.addEventListener('click', changeBrushColor);
 blue_color_box.addEventListener('click', changeBrushColor);
 yellow_color_box.addEventListener('click', changeBrushColor);
+orange_color_box.addEventListener('click', changeBrushColor);
 
 //brush size creation and event handlers
 brushes_wrapper_div = createDiv("brushes-wrapper-div", draw_tools_wrapper, ["brushes_wrapper"]);
