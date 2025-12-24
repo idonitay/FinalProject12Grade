@@ -151,8 +151,10 @@ canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas_wrapper_
 canvas = createCanvas("canvas", canvas_wrapper_div, []);
 canvas.addEventListener('mousedown', playerDrawHandler)
 
+draw_tools_wrapper = createDiv("draw-tools-wrapper", body_div, ["draw_tools_wrapper"]);
+
 //colors creation and event handlers
-colors_wrapper = createDiv("colors-wrapper-div", body_div, ["color_box_wrapper"]);
+colors_wrapper = createDiv("colors-wrapper-div", draw_tools_wrapper, ["color_box_wrapper"]);
 black_color_box = createDiv("black-color-box", colors_wrapper, ["color_box", "black_bg"]);
 red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg"]);
 green_color_box = createDiv("green-color-box", colors_wrapper, ["color_box", "green_bg"]);
@@ -163,7 +165,7 @@ black_color_box.addEventListener('click', changeBrushColor)
 green_color_box.addEventListener('click', changeBrushColor)
 
 //brush size creation and event handlers
-brushes_wrapper_div = createDiv("brushes-wrapper-div", body_div, []);
+brushes_wrapper_div = createDiv("brushes-wrapper-div", draw_tools_wrapper, []);
 small_brush = createDiv("small-brush", brushes_wrapper_div, ["circle", "small_circle"]);
 big_brush = createDiv("big-brush", brushes_wrapper_div, ["circle", "big_circle"]);
 
@@ -171,14 +173,14 @@ small_brush.addEventListener("click", changeBrushSize);
 big_brush.addEventListener("click", changeBrushSize);
 
 //eraser creation
-eraser_wrapper = createDiv("eraser-wrapper", body_div, ["eraser_wrapper"]);
-const eraser = document.createElement('img');
-eraser.src = '../assets/eraser.png'; // Replace with your image path or URL
+reset_board_wrapper = createDiv("eraser-wrapper", draw_tools_wrapper, ["eraser_wrapper"]);
+const trash_can = document.createElement('img');
+trash_can.src = '../assets/trash_can.png'; // Replace with your image path or URL
 
-eraser_wrapper.appendChild(eraser);
-eraser.classList.add("eraser");
+reset_board_wrapper.appendChild(trash_can);
+trash_can.classList.add("trash_can");
 
-eraser.addEventListener("click", clearCanvas)
+trash_can.addEventListener("click", clearCanvas)
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
 // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
 

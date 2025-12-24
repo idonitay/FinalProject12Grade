@@ -12,8 +12,7 @@
   border: 1px solid black;
   width: 35px;
   height: 35px;
-  margin-left: 500px;
-  margin-top: 5px;
+  margin: 5px;
 }
 
 .red_bg {
@@ -33,11 +32,8 @@
   padding-left: 10px;
   padding-right: 10px;
   height: 90px;
-  border: 1px solid black;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two equal columns */
-  grid-template-rows: auto auto; /* Two rows */
-  gap: 10px;
+  grid-template-columns: 5% 5%;
 }
 
 .circle {
@@ -60,7 +56,12 @@
   margin-left: 20%;
 }
 
-.eraser {
+.trash_can {
   max-width: 100%;
   height: auto;
+}
+
+.draw_tools_wrapper {
+  grid-template-columns: 70% 20% 10%;
+  display: grid;
 }

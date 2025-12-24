@@ -7,7 +7,7 @@ let server_2_client = {
 
 
 let client_2_server = {
-    "login": 0,
+    "login0": 0,
     "Message sent": 1,
     "Error": 2,
     "Connection closed": 3
