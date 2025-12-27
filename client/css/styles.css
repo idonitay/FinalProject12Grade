@@ -3,6 +3,11 @@ body {
   background-image: "../assets/pastel_background.jpg";
 }
 
+h1 {
+  margin: 0 auto;
+  text-align: center;
+}
+
 .canvas_wrapper_div {
   border: 1px solid black;
   width: 400px;

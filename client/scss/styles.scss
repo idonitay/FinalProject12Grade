@@ -7,7 +7,10 @@ body {
 $width:400px;
 $height: 400px;
 
-
+h1 {
+    margin: 0 auto;
+    text-align: center;
+}
 
 .canvas_wrapper_div {
     border: 1px solid black;
