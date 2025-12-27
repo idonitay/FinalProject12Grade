@@ -1,20 +1,29 @@
+body {
+    background-color:#dcdef4;
+    background-image: "../assets/pastel_background.jpg";
+}
+
+
+$width:400px;
+$height: 400px;
+
 
 
 .canvas_wrapper_div {
     border: 1px solid black;
-    width: 400px;
-    height: 400px;
+    width: $width;
+    height: $height;
     display: block;
     position: relative;
-    margin-left: 400px;
-    margin-right: 50px;
+    margin: 0 auto;
+    background-color: white;
 }
 
 
 .color_box {
     border: 1px solid black;
-    width: 40%;
-    height: 80%;
+    width: 1.5em;
+    height: 1.5em;
     // background-color: red;
     // margin-left: 500px;
     // padding-top: 10px;
@@ -52,12 +61,12 @@
 
 .color_box_wrapper {
     margin-top: 20px;
-    // padding-left: 10px;
-    // padding-right: 10px;
-    // height: 90px;
 
     display: grid;
+
     grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    width: 100%;
+    grid-row-gap: 0.5em;
     
     // gap: 10px;
 }
@@ -89,11 +98,27 @@
 }
 
 .draw_tools_wrapper {
-    grid-template-columns: 50% 20% 10%;
-    display: grid;
+    // grid-template-columns: 50% 20% 10%;
+    // display: grid;
+    margin:0 auto;
+    width: $width;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+
+}
+
+.row_break {
+    width: 100%;
 }
 
 .brushes_wrapper {
-    display: grid;
-    grid-template-columns: 10% 20% 30% 40%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.sw_button {
+    cursor: pointer;
 }

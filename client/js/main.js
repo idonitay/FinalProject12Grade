@@ -114,34 +114,6 @@ function playerDrawHandler() {
     
 }
 
-function changeBrushColor()
-{
-    red_color_box.onclick = function() {
-        current_painting_color = "#FF0000";
-    }
-
-    black_color_box.onclick = function() {
-        current_painting_color = "#000000";
-    }
-
-    green_color_box.onclick = function() {
-        current_painting_color = "rgb(6, 150, 51)";
-    }
-
-    blue_color_box.onclick = function() {
-        current_painting_color = "rgb(31, 10, 188)";
-    }
-
-    yellow_color_box.onclick = function() {
-        current_painting_color = "#FFFF00";
-    }
-
-    orange_color_box.onclick = function() {
-        current_painting_color = "rgb(255, 165, 0)";
-    }
-
-
-}
 
 function changeBrushSize() 
 {
@@ -169,36 +141,64 @@ draw_tools_wrapper = createDiv("draw-tools-wrapper", body_div, ["draw_tools_wrap
 
 //colors creation and event handlers
 colors_wrapper = createDiv("colors-wrapper-div", draw_tools_wrapper, ["color_box_wrapper"]);
-black_color_box = createDiv("black-color-box", colors_wrapper, ["color_box", "black_bg"]);
-red_color_box = createDiv("red-color-box", colors_wrapper, ["color_box", "red_bg"]);
-green_color_box = createDiv("green-color-box", colors_wrapper, ["color_box", "green_bg"]);
-blue_color_box = createDiv("blue-color-box", colors_wrapper, ["color_box", "blue_bg"]);
-yellow_color_box = createDiv("yellow-color-box", colors_wrapper, ["color_box", "yellow_bg"]);
-orange_color_box = createDiv("orange-color-box", colors_wrapper, ["color_box", "orange_bg"]);
 
+let draw_colors = [
+    "#000000", // Black
+    "#FF0000", // Red
+    "rgb(6, 150, 51)", // green
+    "rgb(31, 10, 188)", // blue
+    "#FFFF00", // Yellow
+    "rgb(255, 165, 0)", // Orange
+    "rgba(217, 0, 255, 1)", // Magenta
+    "rgba(0, 225, 255, 1)", // Teal
+    "rgba(93, 102, 103, 1)", // gray
+    "rgba(151, 159, 160, 1)", // light gray
+    "rgba(124, 100, 197, 1)", // lilach
+    "rgba(91, 13, 13, 1)", // Maroon
+    "rgba(255, 255, 255, 1)", // white
+    "rgba(10, 65, 2, 1)", // dark green
+    "rgba(13, 2, 65, 1)", // dark blue
+    "rgba(71, 51, 6, 1)", // brown
+    "rgba(255, 0, 221, 1)", // pink
+    "rgba(98, 205, 226, 1)", // sky
 
-red_color_box.addEventListener('click', changeBrushColor);
-black_color_box.addEventListener('click', changeBrushColor);
-green_color_box.addEventListener('click', changeBrushColor);
-blue_color_box.addEventListener('click', changeBrushColor);
-yellow_color_box.addEventListener('click', changeBrushColor);
-orange_color_box.addEventListener('click', changeBrushColor);
+]
+
+for (let draw_color of draw_colors)
+{
+    let box = createDiv("", colors_wrapper, ["color_box", "sw_button"]);
+    box.style.backgroundColor = draw_color;
+    box.addEventListener('click', function() {
+        current_painting_color = draw_color;
+    });
+}
+
+createDiv("", draw_tools_wrapper, ["row_break"]);
 
 //brush size creation and event handlers
 brushes_wrapper_div = createDiv("brushes-wrapper-div", draw_tools_wrapper, ["brushes_wrapper"]);
-small_brush = createDiv("small-brush", brushes_wrapper_div, ["circle", "small_circle"]);
-big_brush = createDiv("big-brush", brushes_wrapper_div, ["circle", "big_circle"]);
+for (let brush_size = 1; brush_size <= 7; brush_size++)
+{
+    let brush = createDiv("", brushes_wrapper_div, ["circle", "sw_button"]);
+    brush.style.width = brush_size * 5 + "px";
+    brush.style.height = brush.style.width;
+    brush.addEventListener("click", function() {
+        current_brush_size = brush_size;
+    });
 
-small_brush.addEventListener("click", changeBrushSize);
-big_brush.addEventListener("click", changeBrushSize);
+}
 
-//eraser creation
+createDiv("", draw_tools_wrapper, ["row_break"]);
+
+
+//Board reset creation
 reset_board_wrapper = createDiv("eraser-wrapper", draw_tools_wrapper, ["eraser_wrapper"]);
 const trash_can = document.createElement('img');
 trash_can.src = '../assets/trash_can.png'; // Replace with your image path or URL
 
 reset_board_wrapper.appendChild(trash_can);
 trash_can.classList.add("trash_can");
+trash_can.classList.add("sw_button");
 
 trash_can.addEventListener("click", clearCanvas)
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
