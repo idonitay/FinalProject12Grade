@@ -6,19 +6,7 @@ current_brush_size = 2;
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 
-function createDiv(id, parent, styles)
-{
-    let newDiv = document.createElement('div');
-    newDiv.id = id;
 
-    for (const style of styles)
-    {
-        newDiv.classList.add(style);
-    }
-
-    parent.appendChild(newDiv);
-    return newDiv;
-}
 
 function createCanvas(id, parent, styles) {
     // Create a canvas element
@@ -201,6 +189,9 @@ trash_can.classList.add("trash_can");
 trash_can.classList.add("sw_button");
 
 trash_can.addEventListener("click", clearCanvas)
+
+chatbox = new chat(body_div);
+chatbox.createChatWrapper(["chat_box_wrapper"]);
 // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
 // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
 
