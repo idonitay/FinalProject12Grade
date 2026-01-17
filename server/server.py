@@ -22,9 +22,13 @@ async def handle_user_message(user_message: dict) -> dict:
     # await ws.send_str(f"opcode: {opcodes.server_2_client['Connection Established']}, message: Connection Established")
     #
     if opcode == opcodes.client_2_server['login']:
-        return {'opcode': opcodes.server_2_client["Connection Established"], 'message': {'a':2, 'b':4}}
+        return {
+            'opcode': opcodes.server_2_client["Connection Established"],
+            'message': "connection established"
+        }
     elif opcode == 6:
-        return {'opcode': 1, 'message': "crap"}
+        return {'opcode': 1,
+                'message': "crap"}
     return {'opcode': "unknown"}
 
 # --- WebSocket handler ---
@@ -34,12 +38,12 @@ async def websocket_handler(request):
 
     print("WebSocket connected")
 
-
     async for msg in ws:
         if msg.type == web.WSMsgType.TEXT:
             user_message_as_dict = json.loads(msg.data)
             response_as_dict = await handle_user_message(user_message_as_dict)
             response_as_str = json.dumps(response_as_dict)
+            print(response_as_str)
             await ws.send_str(response_as_str)
 
         elif msg.type == web.WSMsgType.ERROR:
