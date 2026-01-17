@@ -7,14 +7,58 @@ class chat
 
     createChatWrapper(classes)
     {
-        createDiv("chat-wrapper", this.parent, classes);
+        return createDiv("chat-wrapper", this.parent, classes);
     }
 
      displayMassage(sender, data, message_div) 
     {
-        message = sender;
+        let message = sender;
         message += ": ";
         message += data ;
         message_div.innerHTML = message;  
     }
+
+    createChatInput() 
+    {
+        let inputbox = createTextInput("", this.parent, []);
+        inputbox.addEventListener('keydown', (event) => {
+            this.handleChatInputEvents(event, inputbox);
+        });
+    }
+
+    handleChatInputEvents(event, input) 
+    {
+
+        if (event.key === 'Enter')
+        {
+            console.log('Enter key pressed!');
+            this.sendChatMessage();
+            this.clearChatInput(input);
+        }
+    }
+
+
+    sendChatMessage()
+    {
+
+    }
+
+    clearChatInput(input) 
+    {
+        input.value = "";
+
+    }
+
+    clearChatHistory()
+    {
+
+    }
+
+    createChat()
+    {
+        let chat_box_wrapper = this.createChatWrapper([]);
+        let chat_box_input = this.createChatInput();
+
+    }
+
 }
