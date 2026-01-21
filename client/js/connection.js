@@ -25,7 +25,7 @@ socket.addEventListener("message", (event) => {
         case server_2_client['Connection Established']:
             console.log(response["message"]);
             break;
-            
+
         default:
             console.error("Unindentified message:", response['opcode']);
     }
@@ -46,4 +46,47 @@ function send_message_to_server(json_obj)
     console.log(json_obj);
     let message_as_str = JSON.stringify(json_obj);
     socket.send(message_as_str);
+}
+
+
+class encryptor_decryptor
+{
+    constructor()
+    {
+        self.keys = crypto.subtle.generateKey(
+        { name: "RSA-OAEP",
+             modulusLength: 2048,
+              publicExponent: new Uint8Array([1,0,1]),
+               hash: "SHA-256" },
+        true,
+        ["encrypt", "decrypt"]
+        );
+
+        }
+            
+    encodeMsg(msg)
+    {
+        let encrypted = crypto.subtle.encrypt(
+            { name: "RSA-OAEP" },
+            self.keys.publicKey,
+            new TextEncoder().encode(msg)
+        );
+        return encrypted;
+    }
+
+    decodeMsg()
+    {
+        let decrypted = crypto.subtle.decrypt(
+            { name: "RSA-OAEP" },
+            self.keys.privateKey,
+            encrypted
+        );
+
+        console.log(new TextDecoder().decode(decrypted));
+
+        return decrypted;
+        // Hi!
+
+    }
+
 }
