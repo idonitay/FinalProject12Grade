@@ -113,3 +113,9 @@ h1 {
 #canvas-and-chat-wrapper-div {
   display: flex;
 }
+
+#chat-wrapper {
+  border: 1px solid black;
+  width: 200px;
+  height: 200px;
+}

@@ -20,7 +20,7 @@ class chat
 
     createChatInput() 
     {
-        let inputbox = createTextInput("", this.parent, []);
+        let inputbox = createTextInput("chatbox-input", this.parent, []);
         inputbox.addEventListener('keydown', (event) => {
             this.handleChatInputEvents(event, inputbox);
         });
@@ -46,7 +46,7 @@ class chat
     clearChatInput(input) 
     {
         input.value = "";
-
+        
     }
 
     clearChatHistory()
@@ -54,11 +54,19 @@ class chat
 
     }
 
+    createChatHistory(classes)
+    {
+        return createDiv("chat-history", document.getElementById("chat-wrapper"), classes);
+    }
+
     createChat()
     {
         let chat_box_wrapper = this.createChatWrapper([]);
         let chat_box_input = this.createChatInput();
+        let chat_box_history = this.clearChatHistory([])
 
     }
+
+    
 
 }

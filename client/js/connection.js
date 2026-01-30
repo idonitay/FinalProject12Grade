@@ -24,6 +24,7 @@ socket.addEventListener("message", (event) => {
     {
         case server_2_client['Connection Established']:
             console.log(response["message"]);
+            chatbox.displayMassage("server", response["message"], document.getElementById("chat-wrapper"));
             break;
 
         default:
