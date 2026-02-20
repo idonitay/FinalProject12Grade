@@ -137,6 +137,8 @@ h1 {
 
 #chat-wrapper {
     border: 1px solid black;
-    width: $width / 2;
-    height: $height / 2;
+    width: $width * 0.75;
+    height: $height ;
+    background-color: #b4b8df;
+    padding: 1em;
 }

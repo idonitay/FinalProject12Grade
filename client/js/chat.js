@@ -13,9 +13,10 @@ class chat
      displayMassage(sender, data, message_div) 
     {
         let message = sender;
+        let row = createDiv("", message_div, [])
         message += ": ";
         message += data ;
-        message_div.innerHTML = message;  
+        row.innerHTML = message;  
     }
 
     createChatInput() 
@@ -31,16 +32,22 @@ class chat
 
         if (event.key === 'Enter')
         {
-            console.log('Enter key pressed!');
-            this.sendChatMessage();
+
+            this.sendChatMessage(input.value);
             this.clearChatInput(input);
         }
     }
 
 
-    sendChatMessage()
+    sendChatMessage(data)
     {
+        let message_as_dict = {
+            'opcode': client_2_server["Message sent"], 
+            'message': data
+        };
 
+        send_message_to_server(message_as_dict); 
+        chatbox.displayMassage("player", data, document.getElementById("chat-wrapper"));
     }
 
     clearChatInput(input) 

@@ -18,13 +18,21 @@ socket.addEventListener("open", () => {
 socket.addEventListener("message", (event) => {
     console.log(event.data);
     let response = JSON.parse(event.data);
-    console.log(response)
     console.log(`opcode: ${response.opcode} message: ${response.message}`);
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
-            console.log(response["message"]);
             chatbox.displayMassage("server", response["message"], document.getElementById("chat-wrapper"));
+            break;
+
+        case server_2_client["Message sent"]:
+            console.log(response["message"]);
+            chatbox.displayMassage("player", response["message"], document.getElementById("chat-wrapper"));
+            break;
+
+        case client_2_server["Message sent"]:
+            console.log(response["message"]);
+            //chatbox already displays message
             break;
 
         default:
