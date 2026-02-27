@@ -26,10 +26,19 @@ async def handle_user_message(user_message: dict) -> dict:
             'opcode': opcodes.server_2_client["Connection Established"],
             'message': "connection established"
         }
+
+    elif opcode == opcodes.client_2_server['Message sent']:
+        return {
+            'opcode': opcodes.client_2_server['Message sent'],
+            'message': user_message['message']
+        }
+
     elif opcode == 6:
         return {'opcode': 1,
                 'message': "crap"}
-    return {'opcode': "unknown"}
+
+    else:
+        return {'opcode': "unknown"}
 
 # --- WebSocket handler ---
 async def websocket_handler(request):

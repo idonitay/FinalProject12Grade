@@ -27,13 +27,10 @@ socket.addEventListener("message", (event) => {
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
-            chatbox.displayMassage("player", response["message"], document.getElementById("chat-wrapper"));
+            //chatbox already displays message
+            //chatbox.displayMassage("player", response["message"], document.getElementById("chat-wrapper"));
             break;
 
-        case client_2_server["Message sent"]:
-            console.log(response["message"]);
-            //chatbox already displays message
-            break;
 
         default:
             console.error("Unindentified message:", response['opcode']);
