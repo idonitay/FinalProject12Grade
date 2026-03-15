@@ -58,7 +58,7 @@ class chat
 
     clearChatHistory()
     {
-
+        chatbox.innerHTML = "";
     }
 
     createChatHistory(classes)
@@ -70,7 +70,7 @@ class chat
     {
         let chat_box_wrapper = this.createChatWrapper([]);
         let chat_box_input = this.createChatInput();
-        let chat_box_history = this.clearChatHistory([])
+        let chat_box_history = this.createChatHistory([]);
 
     }
 

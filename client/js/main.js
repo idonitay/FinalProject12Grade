@@ -194,6 +194,9 @@ function create_ui()
     
     chatbox = new chat(canvas_and_chat_wrapper_div);
     chatbox.createChat();
+
+    score_board = new scoreboard(canvas_and_chat_wrapper_div);
+    //score_board.createScoreboard();
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
     
