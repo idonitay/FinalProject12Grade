@@ -6,6 +6,8 @@ import json
 import opcodes
 
 STATIC_DIR = "../client"
+web_sockets_array = []
+
 
 # --- HTTP handler ---
 async def http_handler(request):
@@ -43,6 +45,7 @@ async def handle_user_message(user_message: dict) -> dict:
 # --- WebSocket handler ---
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
+    web_sockets_array.append(ws)
     await ws.prepare(request)
 
     print("WebSocket connected")
@@ -59,6 +62,7 @@ async def websocket_handler(request):
             print("WebSocket error:", ws.exception())
 
     print("WebSocket closed")
+    web_sockets_array.remove(ws)
     return ws
 
 def main():
