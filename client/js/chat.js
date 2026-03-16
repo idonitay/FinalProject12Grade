@@ -43,11 +43,14 @@ class chat
     {
         let message_as_dict = {
             'opcode': client_2_server["Message sent"], 
-            'message': data
+            'message': data,
+            'src': "player",
+            'dst': "broadcast"
+            
         };
 
         send_message_to_server(message_as_dict); 
-        chatbox.displayMassage("player", data, document.getElementById("chat-wrapper"));
+        //chatbox.displayMassage("player", data, document.getElementById("chat-wrapper"));
     }
 
     clearChatInput(input) 

@@ -7,7 +7,9 @@ socket.addEventListener("open", () => {
 
     let message_as_dict = {
         'opcode':client_2_server['login'], 
-        'message': 'hi from Ido'
+        'message': 'hi from Ido',
+        'src': "player",
+        'dst': "server"
     };
 
     // Send a message to the server
@@ -16,9 +18,9 @@ socket.addEventListener("open", () => {
 
 // Fired when a message comes from the server
 socket.addEventListener("message", (event) => {
-    console.log(event.data);
+    //console.log(event.data);
     let response = JSON.parse(event.data);
-    console.log(`opcode: ${response.opcode} message: ${response.message}`);
+    //console.log(`opcode: ${response.opcode}, message: ${response.message}`);
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
@@ -27,8 +29,10 @@ socket.addEventListener("message", (event) => {
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
-            //chatbox already displays message
-            //chatbox.displayMassage("player", response["message"], document.getElementById("chat-wrapper"));
+            chatbox.displayMassage("player", response["message"], document.getElementById("chat-wrapper"));
+            break;
+
+        case server_2_client["Pong"]:
             break;
 
 
@@ -46,10 +50,25 @@ socket.addEventListener("close", () => {
     console.log("Disconnected from server");
 });
 
+function PingPong() {
+  
+  let message_as_dict = {
+        'opcode': client_2_server['Ping'], 
+        'message': 'ping',
+        'src': "player",
+        'dst': "server"
+    };
+
+    // Send a message to the server
+    send_message_to_server(message_as_dict);
+}
+
+// Call the function every 1000 milliseconds (1 second)
+
 
 function send_message_to_server(json_obj)
 {
-    console.log(json_obj);
+    //console.log(json_obj);
     let message_as_str = JSON.stringify(json_obj);
     socket.send(message_as_str);
 }

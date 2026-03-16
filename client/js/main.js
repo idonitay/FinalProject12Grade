@@ -200,6 +200,8 @@ function create_ui()
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
     
+
+    const intervalId = setInterval(PingPong, 10000);
 }
 
 

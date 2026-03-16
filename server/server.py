@@ -31,11 +31,17 @@ async def handle_user_message(user_message: dict) -> dict:
 
     elif opcode == opcodes.client_2_server['Message sent']:
         return {
-            'opcode': opcodes.client_2_server['Message sent'],
+            'opcode': opcodes.server_2_client['Message sent'],
             'message': user_message['message']
         }
 
-    elif opcode == 6:
+    elif opcode == opcodes.client_2_server['Ping']:
+        return {
+            'opcode': opcodes.server_2_client['Pong'],
+            'message': "pong"
+        }
+
+    elif opcode == 30:
         return {'opcode': 1,
                 'message': "crap"}
 
