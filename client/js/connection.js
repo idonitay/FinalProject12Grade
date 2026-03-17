@@ -24,12 +24,12 @@ socket.addEventListener("message", (event) => {
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
-            chatbox.displayMassage("server", response["message"], document.getElementById("chat-wrapper"));
+            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-wrapper"));
             break;
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
-            chatbox.displayMassage("player", response["message"], document.getElementById("chat-wrapper"));
+            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-wrapper"));
             break;
 
         case server_2_client["Pong"]:

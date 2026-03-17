@@ -26,19 +26,22 @@ async def handle_user_message(user_message: dict) -> dict:
     if opcode == opcodes.client_2_server['login']:
         return {
             'opcode': opcodes.server_2_client["Connection Established"],
-            'message': "connection established"
+            'message': "connection established",
+            'src': user_message['src']
         }
 
     elif opcode == opcodes.client_2_server['Message sent']:
         return {
             'opcode': opcodes.server_2_client['Message sent'],
-            'message': user_message['message']
+            'message': user_message['message'],
+            'src': user_message['src']
         }
 
     elif opcode == opcodes.client_2_server['Ping']:
         return {
             'opcode': opcodes.server_2_client['Pong'],
-            'message': "pong"
+            'message': "pong",  
+            'src': user_message['src']
         }
 
     elif opcode == 30:
@@ -62,7 +65,12 @@ async def websocket_handler(request):
             response_as_dict = await handle_user_message(user_message_as_dict)
             response_as_str = json.dumps(response_as_dict)
             print(response_as_str)
-            await ws.send_str(response_as_str)
+            if user_message_as_dict['dst'] == "broadcast":
+                for dst in web_sockets_array:
+                    await dst.send_str(response_as_str)
+
+            elif user_message_as_dict['dst'] == "server":
+                await ws.send_str(response_as_str)
 
         elif msg.type == web.WSMsgType.ERROR:
             print("WebSocket error:", ws.exception())
