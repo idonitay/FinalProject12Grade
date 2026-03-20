@@ -35,6 +35,12 @@ socket.addEventListener("message", (event) => {
         case server_2_client["Pong"]:
             break;
 
+        case server_2_client["Draw"]:
+            console.log("afasd");
+            draw_dict_on_canvas(canvas, response["message"]);
+
+            break;
+
 
         default:
             console.error("Unindentified message:", response['opcode']);
@@ -61,6 +67,19 @@ function PingPong() {
 
     // Send a message to the server
     send_message_to_server(message_as_dict);
+}
+
+function send_drawing_to_players()
+{
+    let message_as_dict = {
+        'opcode': client_2_server['Draw'], 
+        'message': turn_canvas_to_dict(canvas),
+        'src': "player",
+        'dst': "broadcast"
+    };
+
+    send_message_to_server(message_as_dict);
+
 }
 
 // Call the function every 1000 milliseconds (1 second)

@@ -44,6 +44,13 @@ async def handle_user_message(user_message: dict) -> dict:
             'src': user_message['src']
         }
 
+    elif opcode == opcodes.client_2_server['Draw']:
+        return {
+            'opcode': opcodes.server_2_client['Draw'],
+            'message': user_message['message'],
+            'src': user_message['src']
+        }
+
     elif opcode == 30:
         return {'opcode': 1,
                 'message': "crap"}

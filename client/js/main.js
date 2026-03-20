@@ -34,7 +34,7 @@ function createCanvas(id, parent, styles) {
 
 function drawLine(canvasOrId, p1, p2, able2draw, color, brush_size) {
     if (able2draw)
-        {
+    {
         // Find the canvas element
         const canvas =
         typeof canvasOrId === "string"
@@ -51,6 +51,7 @@ function drawLine(canvasOrId, p1, p2, able2draw, color, brush_size) {
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
+        
     }
 }
 
@@ -75,17 +76,20 @@ function playerDrawHandler() {
             pointa = {x, y};
             
             drawLine("canvas", pointa, pointb, canDraw, current_painting_color, current_brush_size);
-            
+
+
             canvas.mouseleave = function () 
             {
                 canvas.onmousemove = null;
                 canDraw = false
+                send_drawing_to_players();
             };
             
             canvas.onmouseup = function () 
             {
                 canvas.onmousemove = null;
                 canDraw = false
+                send_drawing_to_players();
             };
         };
     };
@@ -94,6 +98,7 @@ function playerDrawHandler() {
     {
         canvas.onmousemove = null;
         canDraw = false;
+        send_drawing_to_players();
     };
     
     
@@ -115,6 +120,7 @@ function clearCanvas()
 {
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
+    send_drawing_to_players();
 }
 
 function create_ui()

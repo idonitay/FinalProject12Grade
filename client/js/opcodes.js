@@ -3,7 +3,8 @@ let server_2_client = {
     "Message sent": 1,
     "Error": 2,
     "Connection closed": 3,
-    "Pong": 4
+    "Pong": 4,
+    "Draw": 5
 }
 
 
@@ -12,5 +13,6 @@ let client_2_server = {
     "Message sent": 1,
     "Error": 2,
     "Connection closed": 3,
-    "Ping": 4
+    "Ping": 4,
+    "Draw": 5
 }
