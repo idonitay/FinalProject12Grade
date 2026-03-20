@@ -6,9 +6,9 @@ socket.addEventListener("open", () => {
     console.log("Connected to server!");
 
     let message_as_dict = {
-        'opcode':client_2_server['login'], 
+        'opcode': client_2_server['login'], 
         'message': 'hi from Ido',
-        'src': "player",
+        'src': "server",
         'dst': "server"
     };
 
@@ -24,12 +24,12 @@ socket.addEventListener("message", (event) => {
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
-            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-wrapper"));
+            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
             break;
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
-            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-wrapper"));
+            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
             break;
 
         case server_2_client["Pong"]:

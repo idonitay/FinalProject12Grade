@@ -13,7 +13,7 @@ class chat
      displayMassage(sender, data, message_div) 
     {
         let message = sender;
-        let row = createDiv("", message_div, [])
+        let row = createDiv("", message_div, ["chat_history_message"])
         message += ": ";
         message += data ;
         row.innerHTML = message;  
@@ -21,7 +21,8 @@ class chat
 
     createChatInput() 
     {
-        let inputbox = createTextInput("chatbox-input", this.parent, []);
+        let input_wrapper = createDiv("input-wrapper", document.getElementById("chat-wrapper"), [])
+        let inputbox = createTextInput("chatbox-input", input_wrapper, ["chat_input"]);
         inputbox.addEventListener('keydown', (event) => {
             this.handleChatInputEvents(event, inputbox);
         });
@@ -71,9 +72,9 @@ class chat
 
     createChat()
     {
-        let chat_box_wrapper = this.createChatWrapper([]);
-        let chat_box_input = this.createChatInput();
+        let chat_box_wrapper = this.createChatWrapper([]);      
         let chat_box_history = this.createChatHistory([]);
+        let chat_box_input = this.createChatInput();
 
     }
 

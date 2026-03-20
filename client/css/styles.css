@@ -110,6 +110,20 @@ h1 {
   height: 400px;
 }
 
+.chat_input {
+  width: 94%;
+  height: 6%;
+  margin: 0.2em;
+  position: absolute;
+  /* Aligns the bottom edge of the child with the bottom edge of the parent */
+  bottom: 0.5em;
+  /* Optional: ensures the child spans the full width */
+}
+
+.chat_history_message {
+  margin-left: 1em;
+}
+
 #canvas-and-chat-wrapper-div {
   display: flex;
 }
@@ -119,5 +133,5 @@ h1 {
   width: 300px;
   height: 400px;
   background-color: #b4b8df;
-  padding: 1em;
+  position: relative;
 }

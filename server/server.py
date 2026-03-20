@@ -40,7 +40,7 @@ async def handle_user_message(user_message: dict) -> dict:
     elif opcode == opcodes.client_2_server['Ping']:
         return {
             'opcode': opcodes.server_2_client['Pong'],
-            'message': "pong",  
+            'message': "pong",
             'src': user_message['src']
         }
 
