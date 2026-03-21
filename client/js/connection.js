@@ -36,8 +36,11 @@ socket.addEventListener("message", (event) => {
             break;
 
         case server_2_client["Draw"]:
-            console.log("afasd");
-            draw_dict_on_canvas(canvas, response["message"]);
+            let stroke_dict = response["message"]    
+
+            drawLine(canvas, stroke_dict["pointA"],
+                 stroke_dict["pointB"], true, stroke_dict["color"],
+                  stroke_dict["size"])
 
             break;
 

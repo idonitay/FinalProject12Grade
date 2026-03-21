@@ -76,20 +76,27 @@ function playerDrawHandler() {
             pointa = {x, y};
             
             drawLine("canvas", pointa, pointb, canDraw, current_painting_color, current_brush_size);
+            let stroke_dict = turn_brushstroke_to_dict(pointa, pointb, current_painting_color, current_brush_size);
+            let message_as_dict = 
+            {
+            'opcode': client_2_server['Draw'], 
+            'message': stroke_dict,
+            'src': "player",
+            'dst': "broadcast"
+            };
 
+            send_message_to_server(message_as_dict);
 
             canvas.mouseleave = function () 
             {
                 canvas.onmousemove = null;
                 canDraw = false
-                send_drawing_to_players();
             };
             
             canvas.onmouseup = function () 
             {
                 canvas.onmousemove = null;
                 canDraw = false
-                send_drawing_to_players();
             };
         };
     };
@@ -98,7 +105,6 @@ function playerDrawHandler() {
     {
         canvas.onmousemove = null;
         canDraw = false;
-        send_drawing_to_players();
     };
     
     

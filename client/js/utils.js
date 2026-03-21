@@ -53,3 +53,13 @@ function draw_dict_on_canvas(canvas, dict) {
         ctx.drawImage(img, 0, 0);
     };
 }
+
+function turn_brushstroke_to_dict(pointa, pointb, color, size)
+{
+    return {
+        "pointA": pointa,
+        "pointB": pointb,
+        "color": color,
+        "size": size
+    }
+}
