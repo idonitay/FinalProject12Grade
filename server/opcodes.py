@@ -4,7 +4,8 @@ server_2_client = {
     "Error": 2,
     "Connection closed": 3,
     "Pong": 4,
-    "Draw": 5
+    "Draw": 5,
+    "Delete canvas": 6
 }
 
 client_2_server = {
@@ -13,5 +14,6 @@ client_2_server = {
     "Error": 2,
     "Connection closed": 3,
     "Ping": 4,
-    "Draw": 5
+    "Draw": 5,
+    "Delete canvas": 6
 }

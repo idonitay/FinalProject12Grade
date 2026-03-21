@@ -43,6 +43,11 @@ socket.addEventListener("message", (event) => {
                   stroke_dict["size"])
 
             break;
+        
+        case server_2_client["Delete canvas"]:
+            clearCanvas();
+
+            break;
 
 
         default:

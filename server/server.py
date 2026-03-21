@@ -51,6 +51,13 @@ async def handle_user_message(user_message: dict) -> dict:
             'src': user_message['src']
         }
 
+    elif opcode == opcodes.client_2_server['Delete canvas']:
+        return {
+            'opcode': opcodes.server_2_client['Delete canvas'],
+            'message': user_message['message'],
+            'src': user_message['src']
+        }
+
     elif opcode == 30:
         return {'opcode': 1,
                 'message': "crap"}

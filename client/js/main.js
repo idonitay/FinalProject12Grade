@@ -107,9 +107,7 @@ function playerDrawHandler() {
         canDraw = false;
     };
     
-    
 }
-
 
 function changeBrushSize() 
 {
@@ -126,7 +124,6 @@ function clearCanvas()
 {
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    send_drawing_to_players();
 }
 
 function create_ui()
@@ -202,7 +199,18 @@ function create_ui()
     trash_can.classList.add("trash_can");
     trash_can.classList.add("sw_button");
     
-    trash_can.addEventListener("click", clearCanvas)
+    trash_can.addEventListener("click", function() {
+            clearCanvas();
+            let message_as_dict = 
+            {
+            'opcode': client_2_server['Delete canvas'], 
+            'message': "",
+            'src': "player",
+            'dst': "broadcast"
+            };
+            
+            send_message_to_server(message_as_dict);
+        });
     
     chatbox = new chat(canvas_and_chat_wrapper_div);
     chatbox.createChat();
