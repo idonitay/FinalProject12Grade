@@ -29,6 +29,8 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
     #
     if opcode == opcodes.client_2_server['login']:
         source_wrapper.params['username'] = user_message['src']
+        source_wrapper.params['id'] = user_message['id']
+
         return {
             'opcode': opcodes.server_2_client["Connection Established"],
             'message': "connection established",

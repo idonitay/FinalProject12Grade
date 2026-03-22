@@ -11,7 +11,8 @@ socket.addEventListener("open", () => {
         'opcode': client_2_server['login'], 
         'message': 'hi from Ido',
         'src': username,
-        'dst': "server"
+        'dst': "server",
+        "id": Math.floor(Math.random() * 2000000)
     };
 
     // Send a message to the server
