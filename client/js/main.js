@@ -83,7 +83,6 @@ function playerDrawHandler() {
             {
             'opcode': client_2_server['Draw'], 
             'message': stroke_dict,
-            'src': "player",
             'dst': "broadcast"
             };
 
@@ -208,7 +207,6 @@ function create_ui()
             {
             'opcode': client_2_server['Delete canvas'], 
             'message': "",
-            'src': "player",
             'dst': "broadcast"
             };
             

@@ -10,7 +10,7 @@ class chat
         return createDiv("chat-wrapper", this.parent, classes);
     }
 
-     displayMassage(sender, data, message_div) 
+     displayMessage(sender, data, message_div) 
     {
         let message = sender;
         let row = createDiv("", message_div, ["chat_history_message"])
@@ -45,13 +45,12 @@ class chat
         let message_as_dict = {
             'opcode': client_2_server["Message sent"], 
             'message': data,
-            'src': "player",
             'dst': "broadcast"
             
         };
 
         send_message_to_server(message_as_dict); 
-        //chatbox.displayMassage("player", data, document.getElementById("chat-wrapper"));
+        //chatbox.displayMessage("player", data, document.getElementById("chat-wrapper"));
     }
 
     clearChatInput(input) 

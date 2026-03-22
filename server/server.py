@@ -39,28 +39,28 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         return {
             'opcode': opcodes.server_2_client['Message sent'],
             'message': user_message['message'],
-            'src': user_message['src']
+            'src': source_wrapper.params['username']
         }
 
     elif opcode == opcodes.client_2_server['Ping']:
         return {
             'opcode': opcodes.server_2_client['Pong'],
             'message': "pong",
-            'src': user_message['src']
+            'src': source_wrapper.params['username']
         }
 
     elif opcode == opcodes.client_2_server['Draw']:
         return {
             'opcode': opcodes.server_2_client['Draw'],
             'message': user_message['message'],
-            'src': user_message['src']
+            'src': source_wrapper.params['username']
         }
 
     elif opcode == opcodes.client_2_server['Delete canvas']:
         return {
             'opcode': opcodes.server_2_client['Delete canvas'],
             'message': user_message['message'],
-            'src': user_message['src']
+            'src': source_wrapper.params['username']
         }
 
     elif opcode == 30:

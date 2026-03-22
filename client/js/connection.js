@@ -1,6 +1,8 @@
 // Create a WebSocket connection to your server
 const socket = new WebSocket("ws://localhost:8080/ws");
 
+const username = navigator.userAgent.indexOf('Chrome') === -1 ? "safari" : "chrome";
+
 // Fired when the connection is opened
 socket.addEventListener("open", () => {
     console.log("Connected to server!");
@@ -8,7 +10,7 @@ socket.addEventListener("open", () => {
     let message_as_dict = {
         'opcode': client_2_server['login'], 
         'message': 'hi from Ido',
-        'src': "server",
+        'src': username,
         'dst': "server"
     };
 
@@ -24,12 +26,12 @@ socket.addEventListener("message", (event) => {
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
-            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             break;
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
-            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             break;
 
         case server_2_client["Pong"]:
@@ -51,12 +53,12 @@ socket.addEventListener("message", (event) => {
 
         case server_2_client["Word was chosen"]:
             console.log(response["message"]);
-            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             canDraw = false;
             break;
 
         case server_2_client["You are current player"]:
-            //chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
+            //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             display_current_word(response["message"]);
             canDraw = true;
             break;
@@ -81,7 +83,6 @@ function PingPong() {
   let message_as_dict = {
         'opcode': client_2_server['Ping'], 
         'message': 'ping',
-        'src': "player",
         'dst': "server"
     };
 
@@ -99,7 +100,6 @@ function send_drawing_to_players()
     let message_as_dict = {
         'opcode': client_2_server['Draw'], 
         'message': turn_canvas_to_dict(canvas),
-        'src': "player",
         'dst': "broadcast"
     };
 
