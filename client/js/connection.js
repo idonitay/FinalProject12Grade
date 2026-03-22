@@ -49,6 +49,18 @@ socket.addEventListener("message", (event) => {
 
             break;
 
+        case server_2_client["Word was chosen"]:
+            console.log(response["message"]);
+            chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
+            canDraw = false;
+            break;
+
+        case server_2_client["You are current player"]:
+            //chatbox.displayMassage(response["src"], response["message"], document.getElementById("chat-history"));
+            display_current_word(response["message"]);
+            canDraw = true;
+            break;
+
 
         default:
             console.error("Unindentified message:", response['opcode']);
@@ -75,6 +87,11 @@ function PingPong() {
 
     // Send a message to the server
     send_message_to_server(message_as_dict);
+}
+
+function display_current_word(word)
+{
+    document.getElementById("word-div").innerHTML = word;
 }
 
 function send_drawing_to_players()

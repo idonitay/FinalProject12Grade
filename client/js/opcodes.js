@@ -5,7 +5,9 @@ let server_2_client = {
     "Connection closed": 3,
     "Pong": 4,
     "Draw": 5,
-    "Delete canvas": 6
+    "Delete canvas": 6,
+    "Word was chosen": 7,
+    "You are current player": 8,
 }
 
 
@@ -16,5 +18,7 @@ let client_2_server = {
     "Connection closed": 3,
     "Ping": 4,
     "Draw": 5,
-    "Delete canvas": 6
+    "Delete canvas": 6,
+    "Word was chosen": 7,
+    "You are current player": 8,
 }

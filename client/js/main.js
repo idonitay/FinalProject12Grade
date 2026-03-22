@@ -3,6 +3,8 @@
 let body_div = document.getElementById("body");
 let current_painting_color = "#000000";
 let current_brush_size = 2;
+canDraw = false;
+
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 function createCanvas(id, parent, styles) {
@@ -58,13 +60,13 @@ function drawLine(canvasOrId, p1, p2, able2draw, color, brush_size) {
 
 function playerDrawHandler() {
     
-    let canDraw = false;
+    
     canvas.onmousedown = function (e) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        canDraw = true;
+        
         let pointa = {x, y};
         
         canvas.onmousemove = function (moveEvent) {
@@ -129,6 +131,7 @@ function clearCanvas()
 function create_ui()
 {
     //canvas creation and event handler
+    let word_div = createDiv("word-div", body_div, []);
     
     let canvas_and_chat_wrapper_div = createDiv("canvas-and-chat-wrapper-div", body_div, [])
     
