@@ -19,6 +19,8 @@ socket.addEventListener("open", () => {
     send_message_to_server(message_as_dict);
 });
 
+
+
 // Fired when a message comes from the server
 socket.addEventListener("message", (event) => {
     //console.log(event.data);
@@ -81,10 +83,22 @@ socket.addEventListener("close", () => {
 
 function PingPong() {
   
-  let message_as_dict = {
+    let message_as_dict = {
         'opcode': client_2_server['Ping'], 
         'message': 'ping',
         'dst': "server"
+    };
+
+    // Send a message to the server
+    send_message_to_server(message_as_dict);
+}
+
+function requestWordFromServer()
+{
+    let message_as_dict = {
+        'opcode': client_2_server['I am current player'], 
+        'message': '',
+        'dst': "broadcast"
     };
 
     // Send a message to the server

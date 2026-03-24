@@ -93,6 +93,12 @@ h1 {
   width: 100%;
 }
 
+.start_game_button {
+  width: 9em;
+  height: 3.5em;
+  background-color: rgb(23, 222, 23);
+}
+
 .brushes_wrapper {
   display: flex;
   justify-content: space-evenly;

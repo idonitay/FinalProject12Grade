@@ -20,5 +20,5 @@ let client_2_server = {
     "Draw": 5,
     "Delete canvas": 6,
     "Word was chosen": 7,
-    "You are current player": 8,
+    "I am current player": 8,
 }

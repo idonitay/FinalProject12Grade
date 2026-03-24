@@ -65,6 +65,13 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
             'src': source_wrapper.params['username']
         }
 
+    elif opcode == opcodes.client_2_server['I am current player']:
+        return {
+            'opcode': opcodes.server_2_client['Word was chosen'],
+            'message': source_wrapper.params['username'] + " is current player",
+            'src': "server"
+        }
+
     elif opcode == 30:
         return {'opcode': 1,
                 'message': "crap"}
@@ -114,6 +121,7 @@ async def websocket_handler(request):
             print(response_as_str)
             if user_message_as_dict['dst'] == "broadcast":
                 await broadcast_message(response_as_str)
+
             elif user_message_as_dict['dst'] == "server":
                 await send_message_to_player_wrapper(response_as_str, wrapper)
 

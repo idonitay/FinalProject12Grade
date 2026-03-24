@@ -33,6 +33,21 @@ function createInput(id, parent, styles, input_type)
     return new_text_input;
 }
 
+function createButton(id, parent, text, styles)
+{
+    let new_button = document.createElement('button');
+    new_button.id = id;
+    new_button.innerText = text;
+
+    for (const style of styles)
+    {
+        new_button.classList.add(style);
+    }
+
+    parent.appendChild(new_button);
+    return new_button;
+}
+
 function turn_canvas_to_dict(canvas_obj)
 {
    return {
