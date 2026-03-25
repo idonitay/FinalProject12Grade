@@ -18,7 +18,7 @@ client_2_server = {
     "Ping": 4,
     "Draw": 5,
     "Delete canvas": 6,
-    "Word was chosen": 7,
+    "Request word": 7,
     "I am current player": 8,
 
 }

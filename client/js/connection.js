@@ -56,13 +56,13 @@ socket.addEventListener("message", (event) => {
 
         case server_2_client["Word was chosen"]:
             console.log(response["message"]);
-            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
+            display_current_word(response["message"]);
             canDraw = false;
             break;
 
         case server_2_client["You are current player"]:
-            //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
-            display_current_word(response["message"]);
+            //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             canDraw = true;
             break;
 
@@ -96,6 +96,18 @@ function PingPong() {
 function requestWordFromServer()
 {
     let message_as_dict = {
+        'opcode': client_2_server['Request word'], 
+        'message': '',
+        'dst': "server"
+    };
+
+    // Send a message to the server
+    send_message_to_server(message_as_dict);
+}
+
+function DeclareCurrentPlayer()
+{
+    let message_as_dict = {
         'opcode': client_2_server['I am current player'], 
         'message': '',
         'dst': "broadcast"
@@ -104,6 +116,7 @@ function requestWordFromServer()
     // Send a message to the server
     send_message_to_server(message_as_dict);
 }
+
 
 function display_current_word(word)
 {

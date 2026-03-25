@@ -67,8 +67,16 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
 
     elif opcode == opcodes.client_2_server['I am current player']:
         return {
+            'opcode': opcodes.server_2_client['You are current player'],
+            'message': source_wrapper.params['username'] + " is the current player",
+            'src': "server"
+        }
+
+    elif opcode == opcodes.client_2_server['Request word']:
+        word = random.choice(words)
+        return {
             'opcode': opcodes.server_2_client['Word was chosen'],
-            'message': source_wrapper.params['username'] + " is current player",
+            'message': word,
             'src': "server"
         }
 
@@ -124,6 +132,7 @@ async def websocket_handler(request):
 
             elif user_message_as_dict['dst'] == "server":
                 await send_message_to_player_wrapper(response_as_str, wrapper)
+
 
         elif msg.type == web.WSMsgType.ERROR:
             print("WebSocket error:", ws.exception())
