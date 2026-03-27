@@ -110,7 +110,7 @@ function playerDrawHandler() {
     canvas.onmouseleave = function () 
     {
         canvas.onmousemove = null;
-        canDraw = false;
+        //canDraw = false;
     };
     
 }
