@@ -67,7 +67,7 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
 
     elif opcode == opcodes.client_2_server['I am current player']:
         return {
-            'opcode': opcodes.server_2_client['You are current player'],
+            'opcode': opcodes.server_2_client['There is a new current player'],
             'message': source_wrapper.params['username'] + " is the current player",
             'src': "server"
         }
@@ -75,7 +75,7 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
     elif opcode == opcodes.client_2_server['Request word']:
         word = random.choice(words)
         return {
-            'opcode': opcodes.server_2_client['Word was chosen'],
+            'opcode': opcodes.server_2_client['You got a word'],
             'message': word,
             'src': "server"
         }

@@ -20,7 +20,6 @@ socket.addEventListener("open", () => {
 });
 
 
-
 // Fired when a message comes from the server
 socket.addEventListener("message", (event) => {
     //console.log(event.data);
@@ -54,16 +53,16 @@ socket.addEventListener("message", (event) => {
 
             break;
 
-        case server_2_client["Word was chosen"]:
+        case server_2_client["You got a word"]:
             console.log(response["message"]);
             display_current_word(response["message"]);
-            canDraw = false;
+            canDraw = true;
             break;
 
-        case server_2_client["You are current player"]:
+        case server_2_client["There is a new current player"]:
             //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
-            canDraw = true;
+            canDraw = false;
             break;
 
 
@@ -103,6 +102,7 @@ function requestWordFromServer()
 
     // Send a message to the server
     send_message_to_server(message_as_dict);
+
 }
 
 function DeclareCurrentPlayer()
@@ -116,7 +116,6 @@ function DeclareCurrentPlayer()
     // Send a message to the server
     send_message_to_server(message_as_dict);
 }
-
 
 function display_current_word(word)
 {
@@ -136,7 +135,6 @@ function send_drawing_to_players()
 }
 
 // Call the function every 1000 milliseconds (1 second)
-
 
 function send_message_to_server(json_obj)
 {

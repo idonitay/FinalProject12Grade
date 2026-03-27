@@ -7,7 +7,8 @@ let server_2_client = {
     "Draw": 5,
     "Delete canvas": 6,
     "Word was chosen": 7,
-    "You are current player": 8,
+    "There is a new current player": 8,
+    "You got a word": 9,
 }
 
 

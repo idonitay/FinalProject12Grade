@@ -3,7 +3,7 @@
 let body_div = document.getElementById("body");
 let current_painting_color = "#000000";
 let current_brush_size = 2;
-canDraw = false;
+let canDraw = false;
 
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
@@ -34,7 +34,9 @@ function createCanvas(id, parent, styles) {
     return canvas;
 }
 
-function drawLine(canvasOrId, p1, p2, able2draw, color, brush_size) {
+function drawLine(canvasOrId, p1, p2, able2draw, color, brush_size) 
+{
+
     if (able2draw)
     {
         // Find the canvas element
@@ -86,18 +88,21 @@ function playerDrawHandler() {
             'dst': "broadcast"
             };
 
-            send_message_to_server(message_as_dict);
+            if (canDraw)
+            {
+                send_message_to_server(message_as_dict);
+            }
 
             canvas.mouseleave = function () 
             {
                 canvas.onmousemove = null;
-                canDraw = false
+                // canDraw = false
             };
             
             canvas.onmouseup = function () 
             {
                 canvas.onmousemove = null;
-                canDraw = false
+                // canDraw = false
             };
         };
     };
@@ -219,8 +224,11 @@ function create_ui()
     let score_board = new scoreboard(canvas_and_chat_wrapper_div);
     let start_game_button = createButton("start-game-button", body_div, "start game", ["start_game_button"]);
     start_game_button.addEventListener("click", function() {
-            requestWordFromServer();
             DeclareCurrentPlayer();
+            requestWordFromServer();
+            
+            clearCanvas();
+            canDraw = true;
         });
     //score_board.createScoreboard();
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
