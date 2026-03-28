@@ -41,7 +41,8 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         return {
             'opcode': opcodes.server_2_client['Message sent'],
             'message': user_message['message'],
-            'src': source_wrapper.params['username']
+            'src': source_wrapper.params['username'],
+            'id': source_wrapper.params['id']
         }
 
     elif opcode == opcodes.client_2_server['Ping']:
@@ -69,7 +70,8 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         return {
             'opcode': opcodes.server_2_client['There is a new current player'],
             'message': source_wrapper.params['username'] + " is the current player",
-            'src': "server"
+            'src': "server",
+            'id': source_wrapper.params['id']
         }
 
     elif opcode == opcodes.client_2_server['Request word']:

@@ -89,6 +89,14 @@ h1 {
   gap: 0.5em;
 }
 
+.server_message {
+  color: rgb(242, 242, 39);
+}
+
+.my_message_in_chat {
+  color: rgb(23, 101, 237);
+}
+
 .row_break {
   width: 100%;
 }
@@ -128,6 +136,7 @@ h1 {
 
 .chat_history_message {
   margin-left: 1em;
+  font-size: 1.1em;
 }
 
 #canvas-and-chat-wrapper-div {

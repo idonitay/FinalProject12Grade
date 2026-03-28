@@ -2,6 +2,7 @@
 const socket = new WebSocket("ws://localhost:8080/ws");
 
 const username = navigator.userAgent.indexOf('Chrome') === -1 ? "safari" : "chrome";
+const user_id = Math.floor(Math.random() * 2000000);
 
 // Fired when the connection is opened
 socket.addEventListener("open", () => {
@@ -12,7 +13,7 @@ socket.addEventListener("open", () => {
         'message': 'hi from Ido',
         'src': username,
         'dst': "server",
-        "id": Math.floor(Math.random() * 2000000)
+        "id": user_id
     };
 
     // Send a message to the server
@@ -33,7 +34,7 @@ socket.addEventListener("message", (event) => {
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
-            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"), response['id']);
             break;
 
         case server_2_client["Pong"]:

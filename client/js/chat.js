@@ -10,13 +10,22 @@ class chat
         return createDiv("chat-wrapper", this.parent, classes);
     }
 
-     displayMessage(sender, data, message_div) 
+     displayMessage(sender, data, message_div, id) 
     {
         let message = sender;
         let row = createDiv("", message_div, ["chat_history_message"])
         message += ": ";
         message += data ;
         row.innerHTML = message;  
+        if (sender == "server")
+        {
+            row.classList.add("server_message");
+        }
+
+        else if (id == user_id)
+        {
+            row.classList.add("my_message_in_chat");
+        }
     }
 
     createChatInput() 
