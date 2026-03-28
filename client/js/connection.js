@@ -60,6 +60,7 @@ socket.addEventListener("message", (event) => {
             break;
 
         case server_2_client["There is a new current player"]:
+            display_current_word("");
             //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             canDraw = false;

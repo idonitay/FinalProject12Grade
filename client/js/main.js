@@ -5,7 +5,6 @@ let current_painting_color = "#000000";
 let current_brush_size = 2;
 let canDraw = false;
 
-
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 function createCanvas(id, parent, styles) {
     // Create a canvas element
@@ -14,7 +13,7 @@ function createCanvas(id, parent, styles) {
     
     // Apply styles if needed
     for (const style of styles) 
-        {
+    {
         canvas.classList.add(style);
     }
     canvas.width = 400;
@@ -234,7 +233,6 @@ function create_ui()
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
     
-
     const intervalId = setInterval(PingPong, 10000);
 }
 
