@@ -226,7 +226,7 @@ function create_ui()
             DeclareCurrentPlayer();
             requestWordFromServer();
             
-            clearCanvas();
+            clear_everybody_canvas();
             canDraw = true;
         });
     //score_board.createScoreboard();

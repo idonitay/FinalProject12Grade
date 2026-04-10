@@ -136,6 +136,17 @@ function send_drawing_to_players()
 
 }
 
+function clear_everybody_canvas()
+{
+    let message_as_dict = {
+        'opcode': client_2_server['Delete canvas'], 
+        'message': '',
+        'dst': "broadcast"
+    };
+
+    send_message_to_server(message_as_dict);
+}
+
 // Call the function every 1000 milliseconds (1 second)
 
 function send_message_to_server(json_obj)
