@@ -9,6 +9,7 @@ server_2_client = {
     "Word was chosen": 7,
     "There is a new current player": 8,
     "You got a word": 9,
+    "A word was guessed": 10,
 }
 
 client_2_server = {

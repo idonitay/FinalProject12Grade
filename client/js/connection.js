@@ -67,6 +67,11 @@ socket.addEventListener("message", (event) => {
             canDraw = false;
             break;
 
+        case server_2_client["A word was guessed"]:
+            console.log("hello")
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
+            break;
+
 
         default:
             console.error("Unindentified message:", response['opcode']);

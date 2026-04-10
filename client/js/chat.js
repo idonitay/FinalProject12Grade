@@ -17,15 +17,23 @@ class chat
         message += ": ";
         message += data ;
         row.innerHTML = message;  
-        if (sender == "server")
+
+        if (data.includes("has guessed the word correctly"))
         {
-            row.classList.add("server_message");
+            row.classList.add("correct_guess");
+        }
+
+        else if (sender == "server")
+        {
+            row.classList.add("server_message");   
         }
 
         else if (id == user_id)
         {
             row.classList.add("my_message_in_chat");
         }
+
+        
     }
 
     createChatInput() 

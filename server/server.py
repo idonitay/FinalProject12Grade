@@ -6,12 +6,15 @@ from pathlib import Path
 import json
 import opcodes
 import random
+import hashlib
+import hmac
 
 from web_socket_wrapper import WebSocketWrapper
 
 STATIC_DIR = "../client"
 web_socket_wrappers_array = []
 words = ["cat", "dog", "bomb", "egg", "love"]
+word = ""
 
 # --- HTTP handler ---
 async def http_handler(request):
@@ -24,6 +27,7 @@ async def index(request):
 async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dict) -> dict:
     print(user_message)
     opcode = user_message['opcode']
+    global word
 
     # await ws.send_str(f"opcode: {opcodes.server_2_client['Connection Established']}, message: Connection Established")
     #
@@ -38,12 +42,23 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         }
 
     elif opcode == opcodes.client_2_server['Message sent']:
-        return {
-            'opcode': opcodes.server_2_client['Message sent'],
-            'message': user_message['message'],
-            'src': source_wrapper.params['username'],
-            'id': source_wrapper.params['id']
-        }
+        hash1 = hashlib.sha256(user_message["message"].encode()).digest()
+        hash2 = hashlib.sha256(word.encode()).digest()
+        if hmac.compare_digest(hash1, hash2):
+            return {
+                'opcode': opcodes.server_2_client["A word was guessed"],
+                'message': source_wrapper.params['username'] + " has guessed the word correctly",
+                'src': "server",
+                'id': source_wrapper.params['id']
+                }
+
+        else:
+            return {
+                'opcode': opcodes.server_2_client['Message sent'],
+                'message': user_message['message'],
+                'src': source_wrapper.params['username'],
+                'id': source_wrapper.params['id']
+            }
 
     elif opcode == opcodes.client_2_server['Ping']:
         return {
