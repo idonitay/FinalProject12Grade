@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+    mysql-server:
+        container_name: mysql-server
+        image: mysql:latest        
+        environment:
+            - MYSQL_ROOT_PASSWORD=mypass
+            - MYSQL_DATABASE=scribble
+            - MYSQL_ROOT_HOST=%  # This allows root (and often others) from any host
+            - MYSQL_USER=ido
+            - MYSQL_PASSWORD=idoido
+        ports:
+            - "3306:3306"
+        volumes:
+            # Added :delegated for better macOS performance
+            - /Users/idonitay/scribble-db:/var/lib/mysql:delegated
+        networks:
+            - mynetwork
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+            timeout: 5s
+            retries: 10
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        restart: always
+        depends_on:
+        - mysql-server
+        ports:
+        - "8070:80"
+        environment:
+            PMA_HOST: mysql-server
+            PMA_PORT: 3306
+            MYSQL_ROOT_PASSWORD: mypass
+        networks:
+            - mynetwork
+
+    # python-server:
+    #     container_name: websocket-server
+    #     image: adir-python:latest
+    #     depends_on:
+    #         mysql-server:
+    #             condition: service_healthy
+    #     volumes:
+    #         - /opt/Sites/odmila.co.il/webSocketServer:/server
+    #     ports:
+    #         - "8082:8082"
+    #         - "80:80"
+    #     networks:
+    #         - mynetwork
+    #     hostname: websocket-test
+    #     domainname: eini
+    #     entrypoint: ["/bin/sh", "/server/run_odmila_server.sh"]
+
+networks:
+    mynetwork:
+        driver: bridge   

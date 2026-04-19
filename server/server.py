@@ -8,12 +8,13 @@ import opcodes
 import random
 import hashlib
 import hmac
+from db_conn import get_words_from_db
 
 from web_socket_wrapper import WebSocketWrapper
 
 STATIC_DIR = "../client"
 web_socket_wrappers_array = []
-words = ["cat", "dog", "bomb", "egg", "love"]
+words = get_words_from_db()
 word = ""
 
 # --- HTTP handler ---

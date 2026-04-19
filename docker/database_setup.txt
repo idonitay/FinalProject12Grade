@@ -1,0 +1,8 @@
+create database scribble;
+use scribble;
+% CREATE USER 'ido'@'localhost' identified by 'idoido';
+GRANT ALL PRIVILEGES on scribble TO 'ido'@'localhost' WITH GRANT OPTION;
+
+GRANT ALL PRIVILEGES on * TO 'ido'@'localhost' WITH GRANT OPTION;
+
+GRANT ALL PRIVILEGES on *.* TO 'ido'@'localhost' WITH GRANT OPTION;
