@@ -32,8 +32,8 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
     # await ws.send_str(f"opcode: {opcodes.server_2_client['Connection Established']}, message: Connection Established")
     #
     if opcode == opcodes.client_2_server['login']:
-        source_wrapper.params['username'] = user_message['src']
-        source_wrapper.params['id'] = user_message['id']
+        source_wrapper.username = user_message['src']
+        source_wrapper.id = user_message['id']
 
         return {
             'opcode': opcodes.server_2_client["Connection Established"],
@@ -45,48 +45,51 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         hash1 = hashlib.sha256(user_message["message"].encode()).digest()
         hash2 = hashlib.sha256(word.encode()).digest()
         if hmac.compare_digest(hash1, hash2):
+            source_wrapper.answered = True
             return {
                 'opcode': opcodes.server_2_client["A word was guessed"],
-                'message': source_wrapper.params['username'] + " has guessed the word correctly",
+                'message': source_wrapper.username + " has guessed the word correctly",
                 'src': "server",
-                'id': source_wrapper.params['id']
+                'id': source_wrapper.id
                 }
 
         else:
             return {
                 'opcode': opcodes.server_2_client['Message sent'],
                 'message': user_message['message'],
-                'src': source_wrapper.params['username'],
-                'id': source_wrapper.params['id']
+                'src': source_wrapper.username,
+                'id': source_wrapper.id
             }
 
     elif opcode == opcodes.client_2_server['Ping']:
         return {
             'opcode': opcodes.server_2_client['Pong'],
             'message': "pong",
-            'src': source_wrapper.params['username']
+            'src': source_wrapper.username
         }
 
     elif opcode == opcodes.client_2_server['Draw']:
         return {
             'opcode': opcodes.server_2_client['Draw'],
             'message': user_message['message'],
-            'src': source_wrapper.params['username']
+            'src': source_wrapper.username
         }
 
     elif opcode == opcodes.client_2_server['Delete canvas']:
         return {
             'opcode': opcodes.server_2_client['Delete canvas'],
             'message': user_message['message'],
-            'src': source_wrapper.params['username']
+            'src': source_wrapper.username
         }
 
     elif opcode == opcodes.client_2_server['I am current player']:
+        source_wrapper.current_player = True
+        source_wrapper.answered = True
         return {
             'opcode': opcodes.server_2_client['There is a new current player'],
-            'message': source_wrapper.params['username'] + " is the current player",
+            'message': source_wrapper.username + " is the current player",
             'src': "server",
-            'id': source_wrapper.params['id']
+            'id': source_wrapper.id
         }
 
     elif opcode == opcodes.client_2_server['Request word']:
@@ -104,11 +107,61 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
     else:
         return {'opcode': "unknown"}
 
+
+def check_if_everyone_answered():
+    global web_socket_wrappers_array
+    for wrapper in web_socket_wrappers_array:
+        if not wrapper.answered:
+            return False
+
+    return True
+
+def reset_answered():
+    global web_socket_wrappers_array
+    for wrapper in web_socket_wrappers_array:
+        wrapper.answered = False
+
+def choose_next_player():
+    global web_socket_wrappers_array
+    global words
+    global word
+    current_player_index = 0
+    for i in range(0, len(web_socket_wrappers_array)):
+        if web_socket_wrappers_array[i].current_player:
+            current_player_index = i
+
+    if current_player_index == len(web_socket_wrappers_array) - 1:
+        web_socket_wrappers_array[current_player_index].current_player = True
+
+    else:
+        web_socket_wrappers_array[current_player_index].current_player = False
+        web_socket_wrappers_array[current_player_index + 1].current_player = True
+        web_socket_wrappers_array[current_player_index + 1].answered = True
+
+
+        message_to_players = {
+                'opcode': opcodes.server_2_client['There is a new current player'],
+                'message': web_socket_wrappers_array[current_player_index + 1].username + " is the current player",
+                'src': "server",
+                'id': web_socket_wrappers_array[current_player_index + 1].id
+            }
+
+        broadcast_message(message_to_players)
+
+        word = random.choice(words)
+        new_word_message = {
+                'opcode': opcodes.server_2_client['You got a word'],
+                'message': word,
+                'src': "server"
+            }
+        send_message_to_player_wrapper(new_word_message, web_socket_wrappers_array[current_player_index + 1])
+
+
 # --- WebSocket handler ---
 async def websocket_handler(request):
     global web_socket_wrappers_array
     ws = web.WebSocketResponse()
-    wrapper = WebSocketWrapper(ws, {})
+    wrapper = WebSocketWrapper(ws)
     web_socket_wrappers_array.append(wrapper)
     await ws.prepare(request)
 
@@ -150,6 +203,9 @@ async def websocket_handler(request):
             elif user_message_as_dict['dst'] == "server":
                 await send_message_to_player_wrapper(response_as_str, wrapper)
 
+            if check_if_everyone_answered():
+                reset_answered()
+                choose_next_player()
 
         elif msg.type == web.WSMsgType.ERROR:
             print("WebSocket error:", ws.exception())
