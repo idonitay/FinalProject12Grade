@@ -25,7 +25,7 @@ socket.addEventListener("open", () => {
 socket.addEventListener("message", (event) => {
     //console.log(event.data);
     let response = JSON.parse(event.data);
-    //console.log(`opcode: ${response.opcode}, message: ${response.message}`);
+    console.log(`opcode: ${response.opcode}, message: ${response.message}`);
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
