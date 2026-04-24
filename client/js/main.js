@@ -135,6 +135,7 @@ function create_ui()
 {
     //canvas creation and event handler
     let word_div = createDiv("word-div", body_div, []);
+    let timer_div = createDiv("timer-div", body_div, []);
     
     let canvas_and_chat_wrapper_div = createDiv("canvas-and-chat-wrapper-div", body_div, [])
     
@@ -233,7 +234,7 @@ function create_ui()
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
     
-    const intervalId = setInterval(PingPong, 10000);
+    //const intervalId = setInterval(PingPong, 10000);
 }
 
 

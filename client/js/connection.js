@@ -55,6 +55,7 @@ socket.addEventListener("message", (event) => {
             break;
 
         case server_2_client["You got a word"]:
+            console.log("*********")
             console.log(response["message"]);
             display_current_word(response["message"]);
             canDraw = true;
@@ -72,6 +73,9 @@ socket.addEventListener("message", (event) => {
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             break;
 
+        case server_2_client["Time left"]:
+            display_timer(Math.floor(response["message"]));
+            break;
 
         default:
             console.error("Unindentified message:", response['opcode']);
@@ -127,6 +131,11 @@ function DeclareCurrentPlayer()
 function display_current_word(word)
 {
     document.getElementById("word-div").innerHTML = word;
+}
+
+function display_timer(time)
+{
+    document.getElementById("timer-div").innerHTML = time;
 }
 
 function send_drawing_to_players()

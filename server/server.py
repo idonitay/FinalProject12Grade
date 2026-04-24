@@ -4,10 +4,15 @@ from http.client import responses
 from aiohttp import web
 from pathlib import Path
 import json
+
+#from mysql.connector.django.base import adapt_datetime_with_timezone_support
+
 import opcodes
 import random
 import hashlib
 import hmac
+import threading
+import time
 from db_conn import get_words_from_db
 
 from web_socket_wrapper import WebSocketWrapper
@@ -16,6 +21,8 @@ STATIC_DIR = "../client"
 web_socket_wrappers_array = []
 words = get_words_from_db()
 word = ""
+duration = 60  # seconds
+end_time = 0
 
 # --- HTTP handler ---
 async def http_handler(request):
@@ -95,6 +102,7 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
 
     elif opcode == opcodes.client_2_server['Request word']:
         word = random.choice(words)
+        await timer_func()
         return {
             'opcode': opcodes.server_2_client['You got a word'],
             'message': word,
@@ -108,6 +116,25 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
     else:
         return {'opcode': "unknown"}
 
+
+async def send_time_to_players(time):
+    timer_message = {
+        'opcode': opcodes.server_2_client['Time left'],
+        'message': time,
+        'src': "server"
+    }
+    await broadcast_message(timer_message)
+
+async def timer_func():
+    global end_time
+    end_time = time.time() + duration
+    timer = threading.Timer(duration, await finish_turn())
+    timer.start()
+
+    while timer.is_alive():
+        remaining = end_time - time.time()
+        await send_time_to_players(remaining)
+        time.sleep(1)
 
 def check_if_everyone_answered():
     global web_socket_wrappers_array
@@ -203,8 +230,7 @@ async def websocket_handler(request):
                 await send_message_to_player_wrapper(response_as_dict, wrapper)
 
             if check_if_everyone_answered():
-                reset_answered()
-                await choose_next_player()
+                await finish_turn()
 
         elif msg.type == web.WSMsgType.ERROR:
             print("WebSocket error:", ws.exception())
@@ -212,6 +238,10 @@ async def websocket_handler(request):
     print("WebSocket closed")
     web_socket_wrappers_array.remove(wrapper)
     return ws
+
+async def finish_turn():
+    reset_answered()
+    await choose_next_player()
 
 async def broadcast_message(message: dict):
     global web_socket_wrappers_array
