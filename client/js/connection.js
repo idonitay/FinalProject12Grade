@@ -63,6 +63,8 @@ socket.addEventListener("message", (event) => {
 
         case server_2_client["There is a new current player"]:
             display_current_word("");
+            console.log("sdfalj")
+            start_timer();
             //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             canDraw = false;
@@ -73,8 +75,9 @@ socket.addEventListener("message", (event) => {
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             break;
 
-        case server_2_client["Time left"]:
-            display_timer(Math.floor(response["message"]));
+        case server_2_client['Start timer']:
+            start_timer();
+            clearCanvas();
             break;
 
         default:
@@ -136,6 +139,18 @@ function display_current_word(word)
 function display_timer(time)
 {
     document.getElementById("timer-div").innerHTML = time;
+}
+
+function send_timer_ended_message()
+{
+    let message_as_dict = {
+        'opcode': client_2_server['Timer ended'], 
+        'message': '',
+        'dst': "broadcast"
+    };
+
+    // Send a message to the server
+    send_message_to_server(message_as_dict);
 }
 
 function send_drawing_to_players()

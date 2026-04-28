@@ -4,6 +4,8 @@ let body_div = document.getElementById("body");
 let current_painting_color = "#000000";
 let current_brush_size = 2;
 let canDraw = false;
+let seconds_amount = 60;
+let duration = seconds_amount * 1000;
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 function createCanvas(id, parent, styles) {
@@ -129,6 +131,25 @@ function clearCanvas()
 {
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function start_timer()
+{   
+    let endTime = Date.now() + duration;
+
+    const interval = setInterval(() => {
+        timeLeft = endTime - Date.now();
+
+
+        if (timeLeft <= 0) {
+            console.log("Finished!");
+            clearInterval(interval);
+            send_timer_ended_message();
+            return;
+        }
+
+        display_timer(Math.ceil(timeLeft / 1000));
+    }, 1000);
 }
 
 function create_ui()

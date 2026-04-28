@@ -11,8 +11,6 @@ import opcodes
 import random
 import hashlib
 import hmac
-import threading
-import time
 from db_conn import get_words_from_db
 
 from web_socket_wrapper import WebSocketWrapper
@@ -102,12 +100,18 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
 
     elif opcode == opcodes.client_2_server['Request word']:
         word = random.choice(words)
-        await timer_func()
         return {
             'opcode': opcodes.server_2_client['You got a word'],
             'message': word,
             'src': "server"
         }
+
+    elif opcode == opcodes.client_2_server['Timer ended']:
+        if source_wrapper.current_player:
+            await finish_turn()
+
+        return {}
+
 
     elif opcode == 30:
         return {'opcode': 1,
@@ -117,24 +121,6 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         return {'opcode': "unknown"}
 
 
-async def send_time_to_players(time):
-    timer_message = {
-        'opcode': opcodes.server_2_client['Time left'],
-        'message': time,
-        'src': "server"
-    }
-    await broadcast_message(timer_message)
-
-async def timer_func():
-    global end_time
-    end_time = time.time() + duration
-    timer = threading.Timer(duration, await finish_turn())
-    timer.start()
-
-    while timer.is_alive():
-        remaining = end_time - time.time()
-        await send_time_to_players(remaining)
-        time.sleep(1)
 
 def check_if_everyone_answered():
     global web_socket_wrappers_array
@@ -149,7 +135,7 @@ def reset_answered():
     for wrapper in web_socket_wrappers_array:
         wrapper.answered = False
 
-async def choose_next_player():
+async def   choose_next_player():
     global web_socket_wrappers_array
     global words
     global word
@@ -239,9 +225,20 @@ async def websocket_handler(request):
     web_socket_wrappers_array.remove(wrapper)
     return ws
 
-async def finish_turn():
+async def finish_turn() -> None:
     reset_answered()
     await choose_next_player()
+    await send_start_timer_message()
+
+
+async def send_start_timer_message():
+    message_to_players = {
+        'opcode': opcodes.server_2_client['Start timer'],
+        'message': '',
+        'src': "server",
+    }
+
+    await broadcast_message(message_to_players)
 
 async def broadcast_message(message: dict):
     global web_socket_wrappers_array
