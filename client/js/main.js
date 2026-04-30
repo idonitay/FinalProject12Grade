@@ -4,8 +4,9 @@ let body_div = document.getElementById("body");
 let current_painting_color = "#000000";
 let current_brush_size = 2;
 let canDraw = false;
-let seconds_amount = 60;
+let seconds_amount = 100;
 let duration = seconds_amount * 1000;
+let currentTimer = null;
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 function createCanvas(id, parent, styles) {
@@ -133,23 +134,32 @@ function clearCanvas()
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function start_timer()
-{   
-    let endTime = Date.now() + duration;
+function start_timer(duration_param)
+{
+    duration_param = Number(duration_param);
 
-    const interval = setInterval(() => {
-        timeLeft = endTime - Date.now();
+    let endTime = Date.now() + duration_param;
 
+    currentTimer = setInterval(() => {
+
+        let timeLeft = endTime - Date.now();
+
+        display_timer(Math.ceil(timeLeft / 1000));
 
         if (timeLeft <= 0) {
             console.log("Finished!");
-            clearInterval(interval);
+            clearInterval(currentTimer);
             send_timer_ended_message();
-            return;
         }
 
-        display_timer(Math.ceil(timeLeft / 1000));
     }, 1000);
+}
+
+function stop_timer()
+{
+    clearInterval(currentTimer);
+    currentTimer = null;
+
 }
 
 function create_ui()

@@ -55,28 +55,29 @@ socket.addEventListener("message", (event) => {
             break;
 
         case server_2_client["You got a word"]:
-            console.log("*********")
-            console.log(response["message"]);
             display_current_word(response["message"]);
             canDraw = true;
             break;
 
         case server_2_client["There is a new current player"]:
             display_current_word("");
-            console.log("sdfalj")
-            start_timer();
             //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             canDraw = false;
             break;
 
         case server_2_client["A word was guessed"]:
-            console.log("hello")
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             break;
 
-        case server_2_client['Start timer']:
-            start_timer();
+        case server_2_client["Start timer"]:
+            seconds_amount = response['duration'];
+            duration = seconds_amount * 1000;
+            if (currentTimer != null)
+            {
+                stop_timer();
+            }
+            start_timer(duration);
             clearCanvas();
             break;
 

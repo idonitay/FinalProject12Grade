@@ -91,6 +91,7 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
     elif opcode == opcodes.client_2_server['I am current player']:
         source_wrapper.current_player = True
         source_wrapper.answered = True
+        await send_start_timer_message(60)
         return {
             'opcode': opcodes.server_2_client['There is a new current player'],
             'message': source_wrapper.username + " is the current player",
@@ -135,7 +136,7 @@ def reset_answered():
     for wrapper in web_socket_wrappers_array:
         wrapper.answered = False
 
-async def   choose_next_player():
+async def choose_next_player():
     global web_socket_wrappers_array
     global words
     global word
@@ -160,6 +161,7 @@ async def   choose_next_player():
         }
 
     await broadcast_message(message_to_players)
+
 
     word = random.choice(words)
     new_word_message = {
@@ -228,13 +230,14 @@ async def websocket_handler(request):
 async def finish_turn() -> None:
     reset_answered()
     await choose_next_player()
-    await send_start_timer_message()
+    await send_start_timer_message(60)
 
 
-async def send_start_timer_message():
+async def send_start_timer_message(time: int):
     message_to_players = {
         'opcode': opcodes.server_2_client['Start timer'],
         'message': '',
+        'duration': time,
         'src': "server",
     }
 
