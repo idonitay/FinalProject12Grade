@@ -14,6 +14,8 @@ import hmac
 from db_conn import get_words_from_db
 
 from web_socket_wrapper import WebSocketWrapper
+from encryption_decryption import encrypt_message
+from encryption_decryption import decrypt_message
 
 STATIC_DIR = "../client"
 web_socket_wrappers_array = []
@@ -32,6 +34,7 @@ async def index(request):
 
 async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dict) -> dict:
     print(user_message)
+
     opcode = user_message['opcode']
     global word
 
@@ -205,7 +208,16 @@ async def websocket_handler(request):
 
     async for msg in ws:
         if msg.type == web.WSMsgType.TEXT:
-            user_message_as_dict = json.loads(msg.data)
+
+            payload = json.loads(msg.data)
+
+            # 2. Access the keys from the dictionary
+            decrypted = decrypt_message(
+                payload["iv"],
+                payload["data"]
+            )
+
+            user_message_as_dict = json.loads(decrypted)
 
             response_as_dict = await handle_user_message(wrapper, user_message_as_dict)
             # if response_as_dict["message"] == current_word:

@@ -73,7 +73,7 @@ function playerDrawHandler() {
         
         let pointa = {x, y};
         
-        canvas.onmousemove = function (moveEvent) {
+        canvas.onmousemove = async function (moveEvent) {
             const rect = canvas.getBoundingClientRect();
             const x = moveEvent.clientX - rect.left;
             const y = moveEvent.clientY - rect.top;
@@ -92,7 +92,7 @@ function playerDrawHandler() {
 
             if (canDraw)
             {
-                send_message_to_server(message_as_dict);
+                await send_message_to_server(message_as_dict);
             }
 
             canvas.mouseleave = function () 
@@ -134,13 +134,13 @@ function clearCanvas()
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function start_timer(duration_param)
+async function start_timer(duration_param)
 {
     duration_param = Number(duration_param);
 
     let endTime = Date.now() + duration_param;
 
-    currentTimer = setInterval(() => {
+    currentTimer = setInterval(async () => {
 
         let timeLeft = endTime - Date.now();
 
@@ -149,7 +149,7 @@ function start_timer(duration_param)
         if (timeLeft <= 0) {
             console.log("Finished!");
             clearInterval(currentTimer);
-            send_timer_ended_message();
+            await send_timer_ended_message();
         }
 
     }, 1000);
@@ -237,7 +237,7 @@ function create_ui()
     trash_can.classList.add("trash_can");
     trash_can.classList.add("sw_button");
     
-    trash_can.addEventListener("click", function() {
+    trash_can.addEventListener("click", async function() {
             clearCanvas();
             let message_as_dict = 
             {
@@ -246,7 +246,7 @@ function create_ui()
                 'dst': "broadcast"
             };
             
-            send_message_to_server(message_as_dict);
+            await send_message_to_server(message_as_dict);
         });
     
     chatbox = new chat(canvas_and_chat_wrapper_div);

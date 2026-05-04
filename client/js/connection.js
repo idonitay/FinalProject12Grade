@@ -5,7 +5,7 @@ const username = navigator.userAgent.indexOf('Chrome') === -1 ? "safari" : "chro
 const user_id = Math.floor(Math.random() * 2000000);
 
 // Fired when the connection is opened
-socket.addEventListener("open", () => {
+socket.addEventListener("open", async () => {
     console.log("Connected to server!");
 
     let message_as_dict = {
@@ -17,14 +17,18 @@ socket.addEventListener("open", () => {
     };
 
     // Send a message to the server
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 });
 
 
 // Fired when a message comes from the server
-socket.addEventListener("message", (event) => {
+socket.addEventListener("message", async (event) => {
     //console.log(event.data);
-    let response = JSON.parse(event.data);
+    // let encryptedObject = JSON.parse(event.data);
+    // let decryptedText = await decryptMessage(encryptedObject);
+    // let response = JSON.parse(decryptedText);
+    let response = JSON.parse(event.data)
+    
     console.log(`opcode: ${response.opcode}, message: ${response.message}`);
     switch(response['opcode'])
     {
@@ -77,7 +81,7 @@ socket.addEventListener("message", (event) => {
             {
                 stop_timer();
             }
-            start_timer(duration);
+            await start_timer(duration);
             clearCanvas();
             break;
 
@@ -91,11 +95,11 @@ socket.addEventListener("error", (error) => {
 });
 
 // Fired when the connection closes
-socket.addEventListener("close", () => {
+socket.addEventListener("close", (event) => {
     console.log("Disconnected from server");
 });
 
-function PingPong() {
+async function PingPong() {
   
     let message_as_dict = {
         'opcode': client_2_server['Ping'], 
@@ -104,10 +108,10 @@ function PingPong() {
     };
 
     // Send a message to the server
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 }
 
-function requestWordFromServer()
+async function requestWordFromServer()
 {
     let message_as_dict = {
         'opcode': client_2_server['Request word'], 
@@ -116,11 +120,11 @@ function requestWordFromServer()
     };
 
     // Send a message to the server
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 
 }
 
-function DeclareCurrentPlayer()
+async function DeclareCurrentPlayer()
 {
     let message_as_dict = {
         'opcode': client_2_server['I am current player'], 
@@ -129,7 +133,7 @@ function DeclareCurrentPlayer()
     };
 
     // Send a message to the server
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 }
 
 function display_current_word(word)
@@ -142,7 +146,7 @@ function display_timer(time)
     document.getElementById("timer-div").innerHTML = time;
 }
 
-function send_timer_ended_message()
+async function send_timer_ended_message()
 {
     let message_as_dict = {
         'opcode': client_2_server['Timer ended'], 
@@ -151,10 +155,10 @@ function send_timer_ended_message()
     };
 
     // Send a message to the server
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 }
 
-function send_drawing_to_players()
+async function send_drawing_to_players()
 {
     let message_as_dict = {
         'opcode': client_2_server['Draw'], 
@@ -162,11 +166,11 @@ function send_drawing_to_players()
         'dst': "broadcast"
     };
 
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 
 }
 
-function clear_everybody_canvas()
+async function clear_everybody_canvas()
 {
     let message_as_dict = {
         'opcode': client_2_server['Delete canvas'], 
@@ -174,57 +178,67 @@ function clear_everybody_canvas()
         'dst': "broadcast"
     };
 
-    send_message_to_server(message_as_dict);
+    await send_message_to_server(message_as_dict);
 }
 
 // Call the function every 1000 milliseconds (1 second)
 
-function send_message_to_server(json_obj)
-{
-    //console.log(json_obj);
-    let message_as_str = JSON.stringify(json_obj);
-    socket.send(message_as_str);
+async function send_message_to_server(json_obj) {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        console.error("WebSocket is not open.");
+        return;
+    }
+
+    try {
+        // Encrypt the stringified JSON object
+        let encryptedPayload = await encryptMessage(JSON.stringify(json_obj));
+        
+        // Send the payload
+        socket.send(JSON.stringify(encryptedPayload));
+        console.log("Encrypted message sent successfully.");
+    } catch (error) {
+        console.error("Failed to encrypt or send message:", error);
+    }
 }
 
+// class encryptor_decryptor
+// {
+//     constructor()
+//     {
+//         self.keys = crypto.subtle.generateKey(
+//         { name: "RSA-OAEP",
+//              modulusLength: 2048,
+//               publicExponent: new Uint8Array([1,0,1]),
+//                hash: "SHA-256" },
+//         true,
+//         ["encrypt", "decrypt"]
+//         );
 
-class encryptor_decryptor
-{
-    constructor()
-    {
-        self.keys = crypto.subtle.generateKey(
-        { name: "RSA-OAEP",
-             modulusLength: 2048,
-              publicExponent: new Uint8Array([1,0,1]),
-               hash: "SHA-256" },
-        true,
-        ["encrypt", "decrypt"]
-        );
-
-        }
+//         }
             
-    encodeMsg(msg)
-    {
-        let encrypted = crypto.subtle.encrypt(
-            { name: "RSA-OAEP" },
-            self.keys.publicKey,
-            new TextEncoder().encode(msg)
-        );
-        return encrypted;
-    }
+//     encodeMsg(msg)
+//     {
+//         let encrypted = crypto.subtle.encrypt(
+//             { name: "RSA-OAEP" },
+//             self.keys.publicKey,
+//             new TextEncoder().encode(msg)
+//         );
+//         return encrypted;
+//     }
 
-    decodeMsg()
-    {
-        let decrypted = crypto.subtle.decrypt(
-            { name: "RSA-OAEP" },
-            self.keys.privateKey,
-            encrypted
-        );
+//     decodeMsg()
+//     {
+//         let decrypted = crypto.subtle.decrypt(
+//             { name: "RSA-OAEP" },
+//             self.keys.privateKey,
+//             encrypted
+//         );
 
-        console.log(new TextDecoder().decode(decrypted));
+//         console.log(new TextDecoder().decode(decrypted));
 
-        return decrypted;
-        // Hi!
+//         return decrypted;
+//         // Hi!
 
-    }
+//     }
 
-}
+// }

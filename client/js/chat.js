@@ -50,14 +50,13 @@ class chat
 
         if (event.key === 'Enter')
         {
-
             this.sendChatMessage(input.value);
             this.clearChatInput(input);
         }
     }
 
 
-    sendChatMessage(data)
+    async sendChatMessage(data)
     {
         let message_as_dict = {
             'opcode': client_2_server["Message sent"], 
@@ -66,7 +65,7 @@ class chat
             
         };
 
-        send_message_to_server(message_as_dict); 
+        await send_message_to_server(message_as_dict); 
         //chatbox.displayMessage("player", data, document.getElementById("chat-wrapper"));
     }
 
