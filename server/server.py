@@ -237,10 +237,16 @@ async def websocket_handler(request):
 
     print("WebSocket closed")
     web_socket_wrappers_array.remove(wrapper)
-    return ws
+    return ws   
 
 async def finish_turn() -> None:
     reset_answered()
+    message_to_players = {
+        'opcode': opcodes.server_2_client['Reveal word'],
+        'message': "The word was " + word,
+        'src': "server",
+    }
+    await broadcast_message(message_to_players)
     await choose_next_player()
     await send_start_timer_message(60)
 

@@ -85,6 +85,10 @@ socket.addEventListener("message", async (event) => {
             clearCanvas();
             break;
 
+        case server_2_client["Reveal word"]:
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history")); 
+            break;
+
         default:
             console.error("Unindentified message:", response['opcode']);
     }

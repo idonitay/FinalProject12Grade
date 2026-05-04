@@ -23,8 +23,14 @@ class chat
             row.classList.add("correct_guess");
         }
 
+        else if (data.includes("The word was "))
+        {
+            row.classList.add("reveal_word");
+        }
+
         else if (sender == "server")
         {
+            
             row.classList.add("server_message");   
         }
 
