@@ -19,7 +19,6 @@ async function getKey() {
         );
         return key;
     } catch (error) {
-        console.error("Failed to import key:", error);
         throw error;
     }
 }
@@ -74,7 +73,6 @@ function fromBase64(base64String) {
 
 async function decryptMessage(encryptedObject) {
     const key = await getKey();
-    console.trace("decryptMessage was triggered by:");
 
     const decrypted = await crypto.subtle.decrypt(
         {

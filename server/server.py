@@ -55,12 +55,15 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         hash2 = hashlib.sha256(word.encode()).digest()
         if hmac.compare_digest(hash1, hash2):
             source_wrapper.answered = True
-            return {
-                'opcode': opcodes.server_2_client["A word was guessed"],
-                'message': source_wrapper.username + " has guessed the word correctly",
-                'src': "server",
-                'id': source_wrapper.id
-                }
+            if source_wrapper.current_player == False:
+                return {
+                    'opcode': opcodes.server_2_client["A word was guessed"],
+                    'message': source_wrapper.username + " has guessed the word correctly",
+                    'src': "server",
+                    'id': source_wrapper.id
+                    }
+
+            return {}
 
         else:
             return {

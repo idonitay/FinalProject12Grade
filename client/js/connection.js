@@ -199,7 +199,7 @@ async function send_message_to_server(json_obj) {
         
         // Send the payload
         socket.send(JSON.stringify(encryptedPayload));
-        console.log("Encrypted message sent successfully.");
+        //console.log("Encrypted message sent successfully.");
     } catch (error) {
         console.error("Failed to encrypt or send message:", error);
     }
