@@ -253,6 +253,30 @@ function create_ui()
     chatbox.createChat();
 
     let score_board = new scoreboard(canvas_and_chat_wrapper_div);
+    let username_wrapper = createDiv("username-wrapper", body_div, []);
+    let username_data = createDiv("", username_wrapper, [])
+    username_data.innerHTML = "Enter Username:"
+    let user_name_input = createTextInput("username-input", username_wrapper, []);
+
+    user_name_input.addEventListener('keydown', async function(event) {
+        if (event.key === 'Enter') {
+            // Use event.target to get the input element
+            let inputValue = event.target.value;
+
+            let message_as_dict = {
+                'opcode': client_2_server["Change username"], 
+                'message': inputValue,
+                'dst': "server"
+            };
+
+            username = inputValue;
+            
+            await send_message_to_server(message_as_dict);
+
+            event.target.value = ""; 
+        }
+    });
+
     let start_game_button = createButton("start-game-button", body_div, "start game", ["start_game_button"]);
     start_game_button.addEventListener("click", function() {
             DeclareCurrentPlayer();

@@ -116,6 +116,10 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
 
         return {}
 
+    elif opcode == opcodes.client_2_server['Change username']:
+        source_wrapper.username = user_message['message'];
+        return {}
+
 
     elif opcode == 30:
         return {'opcode': 1,

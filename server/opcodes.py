@@ -25,4 +25,5 @@ client_2_server = {
     "Request word": 7,
     "I am current player": 8,
     "Timer ended": 9,
+    "Change username": 10,
 }
