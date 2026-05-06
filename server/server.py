@@ -237,7 +237,7 @@ async def websocket_handler(request):
 
     print("WebSocket closed")
     web_socket_wrappers_array.remove(wrapper)
-    return ws   
+    return ws
 
 async def finish_turn() -> None:
     reset_answered()
@@ -261,19 +261,39 @@ async def send_start_timer_message(time: int):
 
     await broadcast_message(message_to_players)
 
-async def broadcast_message(message: dict):
+
+async def broadcast_message(message_dict: dict):
     global web_socket_wrappers_array
-    message_as_str = json.dumps(message)
+
+    # 1. Convert the original message dictionary to a string
+    raw_json_string = json.dumps(message_dict)
+
+    # 2. Encrypt that string using your function
+    # This returns a dict like: {"iv": "...", "data": "..."}
+    encrypted_package = encrypt_message(raw_json_string)
+
+    # 3. Convert the encrypted package to a JSON string
+    message_to_send = json.dumps(encrypted_package)
+
+    # 4. Send the encrypted string to everyone
     for dst in web_socket_wrappers_array:
-        await dst.ws.send_str(message_as_str)
+        await dst.ws.send_str(message_to_send)
 
 async def send_message_to_player_name(message, player_name: str):
     ws_wrapper = find_ws_from_username(player_name)
     await ws_wrapper.ws.send_str(message)
 
 async def send_message_to_player_wrapper(message: dict, wrapper):
+
+    #convert the dict to a string
     message_as_str = json.dumps(message)
-    await wrapper.ws.send_str(message_as_str)
+
+    #Encrypt the string
+    encrytped_message = encrypt_message(message_as_str)
+
+    #Turn the encrypted message to a JSON string
+    message_to_send = json.dumps(encrytped_message)
+    await wrapper.ws.send_str(message_to_send)
 
 def find_ws_from_username(username):
     global web_socket_wrappers_array

@@ -23,7 +23,7 @@ def decrypt_message(iv_b64: str, data_b64: str) -> str:
     return decrypted.decode()
 
 
-def encrypt_message(key: bytes, message_str: str) -> dict:
+def encrypt_message(message_str: str) -> dict:
     """
     Encrypts a message using AES-GCM and returns a dictionary
     containing the IV and the encrypted data, both in Base64.
@@ -32,7 +32,7 @@ def encrypt_message(key: bytes, message_str: str) -> dict:
     iv = os.urandom(12)
 
     # Initialize the AESGCM cipher with your 16, 24, or 32-byte key
-    aesgcm = AESGCM(key)
+    aesgcm = AESGCM(SECRET_KEY)
 
     # Encrypt the message
     encrypted_bytes = aesgcm.encrypt(iv, message_str.encode('utf-8'), None)

@@ -24,10 +24,10 @@ socket.addEventListener("open", async () => {
 // Fired when a message comes from the server
 socket.addEventListener("message", async (event) => {
     //console.log(event.data);
-    // let encryptedObject = JSON.parse(event.data);
-    // let decryptedText = await decryptMessage(encryptedObject);
-    // let response = JSON.parse(decryptedText);
-    let response = JSON.parse(event.data)
+    let encryptedObject = JSON.parse(event.data);
+    let decryptedText = await decryptMessage(encryptedObject);
+    let response = JSON.parse(decryptedText);
+    //let response = JSON.parse(event.data)
     
     console.log(`opcode: ${response.opcode}, message: ${response.message}`);
     switch(response['opcode'])
