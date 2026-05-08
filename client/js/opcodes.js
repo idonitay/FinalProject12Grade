@@ -12,6 +12,7 @@ let server_2_client = {
     "A word was guessed": 10,
     "Start timer": 11,
     "Reveal word": 12,
+    "Update score": 13,
 }
 
 

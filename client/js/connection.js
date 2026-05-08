@@ -29,7 +29,7 @@ socket.addEventListener("message", async (event) => {
     let response = JSON.parse(decryptedText);
     //let response = JSON.parse(event.data)
     
-    console.log(`opcode: ${response.opcode}, message: ${response.message}`);
+    //console.log(`opcode: ${response.opcode}, message: ${response.message}`);
     switch(response['opcode'])
     {
         case server_2_client['Connection Established']:
@@ -87,6 +87,10 @@ socket.addEventListener("message", async (event) => {
 
         case server_2_client["Reveal word"]:
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history")); 
+            break;
+
+        case server_2_client["Update score"]:
+            score_board.updateScoreLineByIndex(response["index"], response["score"], response["player_name"]);
             break;
 
         default:

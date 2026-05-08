@@ -8,3 +8,4 @@ class WebSocketWrapper:
         self.id = ""
         self.answered = False
         self.current_player = False
+        self.score = 0

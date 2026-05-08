@@ -54,6 +54,11 @@ async def handle_user_message(source_wrapper:WebSocketWrapper, user_message: dic
         hash1 = hashlib.sha256(user_message["message"].encode()).digest()
         hash2 = hashlib.sha256(word.encode()).digest()
         if hmac.compare_digest(hash1, hash2):
+            if source_wrapper.answered == False:
+                source_wrapper.score += 100
+                index = find_index_based_on_ws(source_wrapper)
+                await send_updated_score_message(index, source_wrapper.score, source_wrapper.username)
+
             source_wrapper.answered = True
             if source_wrapper.current_player == False:
                 return {
@@ -192,26 +197,6 @@ async def websocket_handler(request):
 
     print("WebSocket connected")
 
-    # for player in web_sockets_array:
-    #     current_word = random.choice(words)
-    #     for dst in web_sockets_array:
-    #
-    #         if dst != player:
-    #             response_as_str = json.dumps({
-    #                 "opcode": opcodes.server_2_client["Word was chosen"],
-    #                 "message": "A word was chosen",
-    #                 "src": "server",
-    #             })
-    #             await dst.send_str(response_as_str)
-    #
-    #         elif dst == player:
-    #             response_as_str = json.dumps({
-    #                 "opcode": opcodes.server_2_client["Word was chosen"],
-    #                 "message": current_word,
-    #                 "src": "server",
-    #             })
-    #             await dst.send_str(response_as_str)
-
 
     async for msg in ws:
         if msg.type == web.WSMsgType.TEXT:
@@ -268,6 +253,25 @@ async def send_start_timer_message(time: int):
 
     await broadcast_message(message_to_players)
 
+async def send_updated_score_message(i: int, score: int, player_name: str):
+    message_to_players = {
+        'opcode': opcodes.server_2_client['Update score'],
+        'score': score,
+        'index': i,
+        'player_name': player_name,
+        'src': "server",
+    }
+
+    await broadcast_message(message_to_players)
+
+
+def find_index_based_on_ws(ws: WebSocketWrapper) -> int:
+    global web_socket_wrappers_array
+    for i in range (0, len(web_socket_wrappers_array)):
+        if web_socket_wrappers_array[i] == ws:
+            return i
+
+    return -1
 
 async def broadcast_message(message_dict: dict):
     global web_socket_wrappers_array
