@@ -94,7 +94,7 @@ class chat
     createChat()
     {
         let chat_box_wrapper = this.createChatWrapper([]);      
-        let chat_box_history = this.createChatHistory([]);
+        let chat_box_history = this.createChatHistory(["scroll_history_wheel"]);
         let chat_box_input = this.createChatInput();
 
     }

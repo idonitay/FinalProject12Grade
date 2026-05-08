@@ -18,7 +18,8 @@ async function getKey() {
             ["encrypt", "decrypt"]
         );
         return key;
-    } catch (error) {
+    } 
+    catch (error) {
         throw error;
     }
 }
