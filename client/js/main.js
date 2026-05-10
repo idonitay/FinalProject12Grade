@@ -218,7 +218,8 @@ function create_ui()
 
     for (let i = 0; i < 5; i++)
     {
-        chatbox.displayMessage("אדיר", "בדיקה של הודעה", document.getElementById("chat-history"));
+        chatbox.displayMessage("אדיר", "בדיקה של הודעה", document.getElementById("chat-history"), user_id);
+        chatbox.displayMessage("עידו", "בדיקה של תשובה", document.getElementById("chat-history"), 7);
     }
     
 }

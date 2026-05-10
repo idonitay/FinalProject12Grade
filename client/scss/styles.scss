@@ -100,8 +100,8 @@ h1 {
     height: 25px;
 }
 
-.eraser_wrapper {
-    // width: 50px;
+.chat_history_sender
+{
     
 }
 
@@ -111,6 +111,8 @@ h1 {
     overflow-x: hidden;
     padding-bottom: 20px; /* This creates the "gap" you wanted at the bottom */
     border-bottom: 1px solid #ccc; /* Separator between chat and input */
+         display: flex;
+    flex-direction: column;
 }
 
 .trash_can {
@@ -138,6 +140,12 @@ h1 {
 
 .my_message_in_chat {
     color: rgb(23, 101, 237)
+    
+}
+
+.not_my_message_in_chat_sender_title {
+     align-self: flex-end;
+     padding-left: 1em;
 }
 
 .correct_guess {
@@ -177,6 +185,7 @@ h1 {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+   
 }
 
 .chat_input {
@@ -202,8 +211,30 @@ h1 {
 }
 
 .chat_history_message {
-    margin-left: 1em;
-    font-size: 1.1em;
+    
+
+    margin-left: 0.3em;
+    font-size: 1.1em;    
+    border-radius: 1em;
+    margin-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 0.3em;
+    padding-top: 0.3em;
+    width:70%;
+
+}
+
+.my_message_in_chat
+{
+    background-color: white;
+
+}
+
+.peer_chat_history_message
+{
+    background-color: rgb(161, 161, 255);
+    align-self: flex-end;
 }
 
 .sivuv_counter_wrapper

@@ -3,6 +3,7 @@ class chat
     constructor(parent)
     {
         this.parent = parent;
+        this.last_sender = "";
     }
 
     createChatWrapper(classes)
@@ -13,10 +14,22 @@ class chat
     displayMessage(sender, data, message_div, id) 
     {
         let message = sender;
+
+        
+
+        if (sender != this.last_sender)
+        {
+            let sender_div = createDiv("", message_div, ["chat_history_sender"])
+            sender_div.innerHTML = sender;
+            if (id != user_id)
+            {
+                sender_div.classList.add("not_my_message_in_chat_sender_title");
+            }
+        }
+        
         let row = createDiv("", message_div, ["chat_history_message"])
-        message += ": ";
-        message += data ;
-        row.innerHTML = message;  
+
+        row.innerHTML = data;  
 
         if (data.includes("has guessed the word correctly"))
         {
@@ -30,16 +43,21 @@ class chat
 
         else if (sender == "server")
         {
-            
             row.classList.add("server_message");   
         }
 
         else if (id == user_id)
         {
             row.classList.add("my_message_in_chat");
+            
+        }
+        else
+        {
+            row.classList.add("peer_chat_history_message");
+            //sender_div.classList.add("not_my_message_in_chat_sender_title");
         }
 
-        
+        this.last_sender = sender;
     }
 
     createChatInput() 
@@ -62,7 +80,7 @@ class chat
     }
 
 
-    async sendChatMessage(data)
+    sendChatMessage(data)
     {
         let message_as_dict = {
             'opcode': client_2_server["Message sent"], 
@@ -71,7 +89,7 @@ class chat
             
         };
 
-        await send_message_to_server(message_as_dict); 
+        send_message_to_server(message_as_dict); 
         //chatbox.displayMessage("player", data, document.getElementById("chat-wrapper"));
     }
 
