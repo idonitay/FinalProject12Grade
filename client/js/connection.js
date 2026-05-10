@@ -8,33 +8,65 @@ const user_id = Math.floor(Math.random() * 2000000);
 socket.addEventListener("open", async () => {
     console.log("Connected to server!");
 
+    // 1. Generate local DH keys for this session
+    const clientKeyPair = await window.crypto.subtle.generateKey(
+        { name: "ECDH", namedCurve: "P-256" },
+        true, 
+        ["deriveBits"]
+    );
+
+    // 2. Export the public part to send to the server
+    const publicRaw = await window.crypto.subtle.exportKey("raw", clientKeyPair.publicKey);
+    const publicBase64 = toBase64(publicRaw);
+
+    // 3. Add the key to your existing login message
     let message_as_dict = {
         'opcode': client_2_server['login'], 
         'message': 'hi from Ido',
         'src': username,
         'dst': "server",
-        "id": user_id
+        "id": user_id,
+        "public_key": publicBase64 // <-- Your "Paint Mix" goes here
     };
 
-    // Send a message to the server
+    // 4. Temporarily store the private key so we can use it when the server responds
+    window.pendingPrivateKey = clientKeyPair.privateKey;
+
     await send_message_to_server(message_as_dict);
 });
 
 
 // Fired when a message comes from the server
 socket.addEventListener("message", async (event) => {
-    //console.log(event.data);
-    let encryptedObject = JSON.parse(event.data);
-    let decryptedText = await decryptMessage(encryptedObject);
-    let response = JSON.parse(decryptedText);
-    //let response = JSON.parse(event.data)
+    let response;
+    let rawData = JSON.parse(event.data);
+
+    // 1. Check if this is the "Login Success/Handshake" response
+    // These arrive as plain JSON because keys aren't finished yet
+    if (rawData.opcode === server_2_client['Connection Established'] || rawData.server_public_key) {
+        response = rawData;
+
+        // If the server sent a public key, finish the Handshake
+        if (rawData.server_public_key) {
+            await finishHandshake(rawData.server_public_key);
+        }
+    } 
+    else {
+        // 2. For all other messages, Decrypt and Verify
+        try {
+            const { aesKey, hmacKey } = await getStoredKeys();
+            
+            // This calls your new verifyAndDecryptMessage function
+            const decryptedText = await verifyAndDecryptMessage(rawData, aesKey, hmacKey);
+            response = JSON.parse(decryptedText);
+        } catch (error) {
+            console.error("Security Error:", error.message);
+            return; // Drop the message if it's tampered or keys are missing
+        }
+    }
     
-    //console.log(`opcode: ${response.opcode}, message: ${response.message}`);
-    switch(response['opcode'])
+    switch(response['opcode']) 
     {
-        case server_2_client['Connection Established']:
-            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
-            break;
 
         case server_2_client["Message sent"]:
             console.log(response["message"]);
@@ -119,6 +151,32 @@ async function PingPong() {
     await send_message_to_server(message_as_dict);
 }
 
+// Helper function to keep the listener clean
+async function finishHandshake(serverPublicBase64) 
+{
+    const serverPublicRaw = fromBase64(serverPublicBase64);
+    const serverPublicKey = await window.crypto.subtle.importKey(
+        "raw", serverPublicRaw, { name: "ECDH", namedCurve: "P-256" }, true, []
+    );
+
+    const sharedBits = await window.crypto.subtle.deriveBits(
+        { name: "ECDH", public: serverPublicKey },
+        window.pendingPrivateKey, 
+        512 
+    );
+
+    const aesKey = await crypto.subtle.importKey(
+        "raw", sharedBits.slice(0, 32), "AES-GCM", false, ["encrypt", "decrypt"]
+    );
+    const hmacKey = await crypto.subtle.importKey(
+        "raw", sharedBits.slice(32, 64), "HMAC", false, ["sign", "verify"]
+    );
+
+    await saveKeys(aesKey, hmacKey);
+    delete window.pendingPrivateKey;
+    console.log("Secure session keys saved to IndexedDB.");
+}
+
 async function requestWordFromServer()
 {
     let message_as_dict = {
@@ -191,22 +249,32 @@ async function clear_everybody_canvas()
 
 // Call the function every 1000 milliseconds (1 second)
 
-async function send_message_to_server(json_obj) {
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-        console.error("WebSocket is not open.");
+async function send_message_to_server(message_as_dict) 
+{
+    // 1. If this is the LOGIN message, send it as plain JSON (no keys exist yet!)
+    if (message_as_dict.opcode === client_2_server['login']) {
+        socket.send(JSON.stringify(message_as_dict));
         return;
     }
 
-    try {
-        // Encrypt the stringified JSON object
-        let encryptedPayload = await encryptMessage(JSON.stringify(json_obj));
-        
-        // Send the payload
-        socket.send(JSON.stringify(encryptedPayload));
-        //console.log("Encrypted message sent successfully.");
-    } catch (error) {
-        console.error("Failed to encrypt or send message:", error);
+    // 2. For ALL other messages, get the keys from the vault
+    const { aesKey, hmacKey } = await getStoredKeys();
+
+    if (!aesKey || !hmacKey) {
+        console.error("No secure session found. Please login first.");
+        return;
     }
+
+    // 3. Encrypt and Sign the message
+    // We stringify the dict first so we can encrypt the whole thing
+    const securePacket = await encryptAndSignMessage(
+        JSON.stringify(message_as_dict), 
+        aesKey, 
+        hmacKey
+    );
+
+    // 4. Send the secure packet (iv, data, signature)
+    socket.send(JSON.stringify(securePacket));
 }
 
 // class encryptor_decryptor
