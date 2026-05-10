@@ -1,6 +1,6 @@
 body {
-  background-color: #dcdef4;
-  background-image: "../assets/pastel_background.jpg";
+  background-image: url("../assets/background_28p.png");
+  direction: rtl;
 }
 
 h1 {
@@ -9,19 +9,22 @@ h1 {
 }
 
 .canvas_wrapper_div {
-  border: 1px solid black;
-  width: 400px;
   height: 400px;
   display: block;
   position: relative;
-  margin: 0 auto;
   background-color: white;
+}
+
+.title {
+  font-family: arial;
+  font-size: 2em;
+  text-align: center;
 }
 
 .color_box {
   border: 1px solid black;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1em;
+  height: 1em;
 }
 
 .red_bg {
@@ -49,11 +52,11 @@ h1 {
 }
 
 .color_box_wrapper {
-  margin-top: 20px;
   display: grid;
-  grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10%;
-  width: 100%;
-  grid-row-gap: 0.5em;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-row-gap: 0.2em;
+  grid-column-gap: 0.2em;
+  align-content: start;
 }
 
 .circle {
@@ -71,11 +74,6 @@ h1 {
   height: 25px;
 }
 
-.eraser_wrapper {
-  width: 50px;
-  margin-left: 20%;
-}
-
 .scroll_history_wheel {
   flex-grow: 1; /* Takes up all available space */
   overflow-y: auto; /* Adds the scroll wheel */
@@ -85,16 +83,15 @@ h1 {
 }
 
 .trash_can {
-  max-width: 100%;
+  width: 4em;
   height: auto;
 }
 
 .draw_tools_wrapper {
-  margin: 0 auto;
-  width: 400px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
+  grid-template-columns: 17% 43% 40%;
+  display: grid;
+  align-items: center;
+  justify-items: start;
 }
 
 .server_message {
@@ -135,8 +132,6 @@ h1 {
 }
 
 .chat_box_wrapper {
-  border: 1px solid black;
-  width: 400px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -153,18 +148,42 @@ h1 {
   /* Optional: ensures the child spans the full width */
 }
 
+.box {
+  border: 0.2em solid rgb(31, 10, 96);
+  padding: 0.4em;
+}
+
+.chat_box_wrapper {
+  background-color: white;
+}
+
 .chat_history_message {
   margin-left: 1em;
   font-size: 1.1em;
 }
 
-#canvas-and-chat-wrapper-div {
+.sivuv_counter_wrapper {
   display: flex;
+  justify-content: center;
+}
+
+.sivuv_counter_placeholder {
+  align-self: center;
+  font-size: 2em;
+  font-family: Arial;
+}
+
+#canvas-and-chat-wrapper-div {
+  display: grid;
+  grid-template-columns: 25% 45% 30%;
+  width: 1200px;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.5em;
+  margin: 0 auto;
+  margin-top: 2em;
 }
 
 #chat-wrapper {
-  border: 1px solid black;
-  width: 300px;
   height: 400px;
   background-color: #b4b8df;
   position: relative;

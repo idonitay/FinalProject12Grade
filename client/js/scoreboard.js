@@ -32,7 +32,7 @@ class scoreboard
 
     createScoreboard()
     {
-        let scoreboard_wrapper = this.createScoreboardWrapper(["chat_box_wrapper"]);
+        let scoreboard_wrapper = this.createScoreboardWrapper(["chat_box_wrapper", "box"]);
     }
 
 }

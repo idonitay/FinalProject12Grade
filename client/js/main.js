@@ -168,17 +168,87 @@ function create_ui()
     let word_div = createDiv("word-div", body_div, []);
     let timer_div = createDiv("timer-div", body_div, []);
     
-    let canvas_and_chat_wrapper_div = createDiv("canvas-and-chat-wrapper-div", body_div, [])
-    
-    let canvas_wrapper_div = createDiv("canvas-wrapper-div", canvas_and_chat_wrapper_div, ["canvas_wrapper_div"])
+    let canvas_and_chat_wrapper_div = createDiv("canvas-and-chat-wrapper-div", body_div, []);
+
+    createDiv("", canvas_and_chat_wrapper_div, ["title"]).innerHTML = "צ׳אט";
+    createDiv("", canvas_and_chat_wrapper_div, ["title"]).innerHTML = "לוח ציור";
+    createDiv("", canvas_and_chat_wrapper_div, ["title"]).innerHTML = "לוח תוצאות";
+
+    chatbox = new chat(canvas_and_chat_wrapper_div);
+    chatbox.createChat();
+
+
+    let canvas_wrapper_div = createDiv("canvas-wrapper-div", canvas_and_chat_wrapper_div, ["canvas_wrapper_div", "box"])
     let canvas = createCanvas("canvas", canvas_wrapper_div, []);
     canvas.addEventListener('mousedown', playerDrawHandler)
     
-    let draw_tools_wrapper = createDiv("draw-tools-wrapper", body_div, ["draw_tools_wrapper"]);
+    score_board = new scoreboard(canvas_and_chat_wrapper_div);
+    score_board.createScoreboard();
+    
+    
+
+
+    let sivuv_1_from_3_wrapper = createDiv("", canvas_and_chat_wrapper_div, ["sivuv_counter_wrapper", "box"]);
+    let sivuv_1_from_3_placeholder = createDiv("sivuv_placeholder", sivuv_1_from_3_wrapper, ["sivuv_counter_placeholder"]);
+    sivuv_1_from_3_placeholder.innerHTML = "סיבוב 1 מתוך 3";
+
+
+    let draw_tools_wrapper = createDiv("draw-tools-wrapper", canvas_and_chat_wrapper_div, ["draw_tools_wrapper", "box"]);
+
+    create_change_username(canvas_and_chat_wrapper_div);    
     
     //colors creation and event handlers
-    let colors_wrapper = createDiv("colors-wrapper-div", draw_tools_wrapper, ["color_box_wrapper"]);
+    create_drawing_tools_panel(draw_tools_wrapper);
+
     
+
+    let start_game_button = createButton("start-game-button", body_div, "start game", ["start_game_button"]);
+    start_game_button.addEventListener("click", function() {
+            DeclareCurrentPlayer();
+            requestWordFromServer();
+            
+            clear_everybody_canvas();
+            canDraw = true;
+        });
+    
+    // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
+    // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
+    
+    //const intervalId = setInterval(PingPong, 10000);
+
+    for (let i = 0; i < 5; i++)
+    {
+        chatbox.displayMessage("אדיר", "בדיקה של הודעה", document.getElementById("chat-history"));
+    }
+    
+}
+
+
+function create_drawing_tools_panel(draw_tools_wrapper) {
+    function create_trash_can() {
+        let reset_board_wrapper = createDiv("eraser-wrapper", draw_tools_wrapper, ["eraser_wrapper"]);
+        const trash_can = document.createElement('img');
+        trash_can.src = '../assets/trash_can.png'; // Replace with your image path or URL
+
+        reset_board_wrapper.appendChild(trash_can);
+        trash_can.classList.add("trash_can");
+        trash_can.classList.add("sw_button");
+
+        trash_can.addEventListener("click", function () {
+            clearCanvas();
+            let message_as_dict = {
+                'opcode': client_2_server['Delete canvas'],
+                'message': "",
+                'dst': "broadcast"
+            };
+
+            send_message_to_server(message_as_dict);
+        });
+    }
+
+    create_trash_can();
+    let colors_wrapper = createDiv("colors-wrapper-div", draw_tools_wrapper, ["color_box_wrapper"]);
+
     let draw_colors = [
         "#000000", // Black
         "#FF0000", // Red
@@ -198,101 +268,59 @@ function create_ui()
         "rgba(71, 51, 6, 1)", // brown
         "rgba(255, 0, 221, 1)", // pink
         "rgba(98, 205, 226, 1)", // sky
-        
-    ]
-    
-    for (let draw_color of draw_colors)
-        {
+    ];
+
+    for (let draw_color of draw_colors) {
         let box = createDiv("", colors_wrapper, ["color_box", "sw_button"]);
         box.style.backgroundColor = draw_color;
-        box.addEventListener('click', function() {
+        box.addEventListener('click', function () {
             current_painting_color = draw_color;
         });
     }
-    
-    createDiv("", draw_tools_wrapper, ["row_break"]);
-    
+
+    // createDiv("", draw_tools_wrapper, ["row_break"]);
     //brush size creation and event handlers
     brushes_wrapper_div = createDiv("brushes-wrapper-div", draw_tools_wrapper, ["brushes_wrapper"]);
-    for (let brush_size = 1; brush_size <= 7; brush_size++)
-        {
+    for (let brush_size = 1; brush_size <= 7; brush_size++) {
         let brush = createDiv("", brushes_wrapper_div, ["circle", "sw_button"]);
         brush.style.width = brush_size * 5 + "px";
         brush.style.height = brush.style.width;
-        brush.addEventListener("click", function() {
+        brush.addEventListener("click", function () {
             current_brush_size = brush_size;
         });
-        
+
     }
-    
-    createDiv("", draw_tools_wrapper, ["row_break"]);
-    
-    
+
+    // createDiv("", draw_tools_wrapper, ["row_break"]);
     //Board reset creation
-    let reset_board_wrapper = createDiv("eraser-wrapper", draw_tools_wrapper, ["eraser_wrapper"]);
-    const trash_can = document.createElement('img');
-    trash_can.src = '../assets/trash_can.png'; // Replace with your image path or URL
-    
-    reset_board_wrapper.appendChild(trash_can);
-    trash_can.classList.add("trash_can");
-    trash_can.classList.add("sw_button");
-    
-    trash_can.addEventListener("click", async function() {
-            clearCanvas();
-            let message_as_dict = 
-            {
-                'opcode': client_2_server['Delete canvas'], 
-                'message': "",
-                'dst': "broadcast"
-            };
-            
-            await send_message_to_server(message_as_dict);
-        });
-    
-    chatbox = new chat(canvas_and_chat_wrapper_div);
-    chatbox.createChat();
+    // create_trash_can();
 
-    score_board = new scoreboard(canvas_and_chat_wrapper_div);
-    score_board.createScoreboard();
+    
+}
 
-
-    let username_wrapper = createDiv("username-wrapper", body_div, []);
-    let username_data = createDiv("", username_wrapper, [])
-    username_data.innerHTML = "Enter Username:"
+function create_change_username(canvas_and_chat_wrapper_div) {
+    let username_wrapper = createDiv("username-wrapper", canvas_and_chat_wrapper_div, ["box"]);
+    let username_data = createDiv("", username_wrapper, []);
+    username_data.innerHTML = "Enter Username:";
     let user_name_input = createTextInput("username-input", username_wrapper, []);
 
-    user_name_input.addEventListener('keydown', async function(event) {
+    user_name_input.addEventListener('keydown', async function (event) {
         if (event.key === 'Enter') {
             // Use event.target to get the input element
             let inputValue = event.target.value;
 
             let message_as_dict = {
-                'opcode': client_2_server["Change username"], 
+                'opcode': client_2_server["Change username"],
                 'message': inputValue,
                 'dst': "server"
             };
 
             username = inputValue;
-            
+
             await send_message_to_server(message_as_dict);
 
-            event.target.value = ""; 
+            event.target.value = "";
         }
     });
-
-    let start_game_button = createButton("start-game-button", body_div, "start game", ["start_game_button"]);
-    start_game_button.addEventListener("click", function() {
-            DeclareCurrentPlayer();
-            requestWordFromServer();
-            
-            clear_everybody_canvas();
-            canDraw = true;
-        });
-    
-    // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
-    // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
-    
-    //const intervalId = setInterval(PingPong, 10000);
 }
-
 

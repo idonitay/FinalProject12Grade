@@ -10,7 +10,7 @@ class chat
         return createDiv("chat-wrapper", this.parent, classes);
     }
 
-     displayMessage(sender, data, message_div, id) 
+    displayMessage(sender, data, message_div, id) 
     {
         let message = sender;
         let row = createDiv("", message_div, ["chat_history_message"])
@@ -93,7 +93,7 @@ class chat
 
     createChat()
     {
-        let chat_box_wrapper = this.createChatWrapper([]);      
+        let chat_box_wrapper = this.createChatWrapper(["box"]);      
         let chat_box_history = this.createChatHistory(["scroll_history_wheel"]);
         let chat_box_input = this.createChatInput();
 
