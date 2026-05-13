@@ -8,31 +8,37 @@ const user_id = Math.floor(Math.random() * 2000000);
 socket.addEventListener("open", async () => {
     console.log("Connected to server!");
 
-    // 1. Generate local DH keys for this session
+    // 1. Check if we already have keys (to handle potential reconnects)
+    const keys = await getStoredKeys();
+    
+    // 2. We always generate a NEW keypair for a NEW socket connection
+    // because the Python server clears keys when a socket closes.
     const clientKeyPair = await window.crypto.subtle.generateKey(
         { name: "ECDH", namedCurve: "P-256" },
         true, 
         ["deriveBits"]
     );
 
-    // 2. Export the public part to send to the server
+    // 3. Save the private key to the window so finishHandshake can find it
+    window.pendingPrivateKey = clientKeyPair.privateKey;
+
+    // 4. Export the public part to send to the server
     const publicRaw = await window.crypto.subtle.exportKey("raw", clientKeyPair.publicKey);
     const publicBase64 = toBase64(publicRaw);
 
-    // 3. Add the key to your existing login message
+    // 5. Construct the login message
     let message_as_dict = {
         'opcode': client_2_server['login'], 
-        'message': 'hi from Ido',
+        'message': 'Handshake request',
         'src': username,
         'dst': "server",
         "id": user_id,
-        "public_key": publicBase64 // <-- Your "Paint Mix" goes here
+        "public_key": toBase64(publicRaw), 
     };
 
-    // 4. Temporarily store the private key so we can use it when the server responds
-    window.pendingPrivateKey = clientKeyPair.privateKey;
-
-    await send_message_to_server(message_as_dict);
+    // 6. Send the plain JSON login/handshake message
+    // We don't encrypt this because the server doesn't have our keys yet!
+    socket.send(JSON.stringify(message_as_dict));
 });
 
 
@@ -44,30 +50,30 @@ socket.addEventListener("message", async (event) => {
     // 1. Check if this is the "Login Success/Handshake" response
     // These arrive as plain JSON because keys aren't finished yet
     if (rawData.opcode === server_2_client['Connection Established'] || rawData.server_public_key) {
-        response = rawData;
-
-        // If the server sent a public key, finish the Handshake
         if (rawData.server_public_key) {
             await finishHandshake(rawData.server_public_key);
         }
+        console.log("Handshake Success:", rawData.message);
+        return; // <--- CRITICAL: Stop here so we don't hit the switch below!
     } 
-    else {
-        // 2. For all other messages, Decrypt and Verify
-        try {
-            const { aesKey, hmacKey } = await getStoredKeys();
-            
-            // This calls your new verifyAndDecryptMessage function
-            const decryptedText = await verifyAndDecryptMessage(rawData, aesKey, hmacKey);
-            response = JSON.parse(decryptedText);
-        } catch (error) {
-            console.error("Security Error:", error.message);
-            return; // Drop the message if it's tampered or keys are missing
-        }
+
+    // 2. Secure Phase
+    try {
+        const { aesKey, hmacKey } = await getStoredKeys();
+        if (!aesKey || !hmacKey) throw new Error("No keys found");
+        
+        const decryptedText = await verifyAndDecryptMessage(rawData, aesKey, hmacKey);
+        response = JSON.parse(decryptedText);
+    } 
+    catch (error) 
+    {
+        console.error("Security Error:", error.message);
+        return;
     }
-    
+
     switch(response['opcode']) 
     {
-
+        
         case server_2_client["Message sent"]:
             console.log(response["message"]);
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"), response['id']);
@@ -152,43 +158,81 @@ async function PingPong() {
 }
 
 // Helper function to keep the listener clean
-async function finishHandshake(serverPublicBase64) 
-{
-    const serverPublicRaw = fromBase64(serverPublicBase64);
-    const serverPublicKey = await window.crypto.subtle.importKey(
-        "raw", serverPublicRaw, { name: "ECDH", namedCurve: "P-256" }, true, []
-    );
+async function finishHandshake(serverPublicBase64) {
+    try {
+        if (!window.pendingPrivateKey) {
+            throw new Error("Private key missing. Handshake cannot proceed.");
+        }
 
-    const sharedBits = await window.crypto.subtle.deriveBits(
-        { name: "ECDH", public: serverPublicKey },
-        window.pendingPrivateKey, 
-        512 
-    );
+        const serverPublicRaw = fromBase64(serverPublicBase64);
 
-    const aesKey = await crypto.subtle.importKey(
-        "raw", sharedBits.slice(0, 32), "AES-GCM", false, ["encrypt", "decrypt"]
-    );
-    const hmacKey = await crypto.subtle.importKey(
-        "raw", sharedBits.slice(32, 64), "HMAC", false, ["sign", "verify"]
-    );
+        // 1. Import the Server's Public Key
+        const serverPublicKey = await window.crypto.subtle.importKey(
+            "raw",
+            serverPublicRaw,
+            { name: "ECDH", namedCurve: "P-256" },
+            true,
+            []
+        );
 
-    await saveKeys(aesKey, hmacKey);
-    delete window.pendingPrivateKey;
-    console.log("Secure session keys saved to IndexedDB.");
+        // 2. Derive the base Shared Secret (256 bits)
+        const sharedSecret = await window.crypto.subtle.deriveBits(
+            { name: "ECDH", public: serverPublicKey },
+            window.pendingPrivateKey,
+            256
+        );
+
+        // 3. Use HKDF to expand the secret (Matching Python's HKDF)
+        const extractKey = await window.crypto.subtle.importKey(
+            "raw", 
+            sharedSecret, 
+            "HKDF", 
+            false, 
+            ["deriveBits"]
+        );
+
+        const derivedBits = await window.crypto.subtle.deriveBits(
+            {
+                name: "HKDF",
+                hash: "SHA-256",
+                salt: new Uint8Array(), // Matching Python's salt=None
+                info: new TextEncoder().encode("handshake data") // Matching Python's info
+            },
+            extractKey,
+            512 // We need 64 bytes total (32 for AES, 32 for HMAC)
+        );
+
+        // 4. Import the specific keys
+        const aesKey = await window.crypto.subtle.importKey(
+            "raw",
+            derivedBits.slice(0, 32),
+            { name: "AES-GCM" },
+            false,
+            ["encrypt", "decrypt"]
+        );
+
+        const hmacKey = await window.crypto.subtle.importKey(
+            "raw",
+            derivedBits.slice(32, 64),
+            { name: "HMAC", hash: "SHA-256" },
+            false,
+            ["sign", "verify"]
+        );
+
+        // 5. SAVE THE KEYS (The missing step)
+        await saveKeys(aesKey, hmacKey);
+
+        // Cleanup
+        delete window.pendingPrivateKey;
+        console.log("Secure session established and keys saved!");
+
+    } 
+    catch (e) 
+    {
+        console.error("Handshake Error:", e.message);
+    }
 }
 
-async function requestWordFromServer()
-{
-    let message_as_dict = {
-        'opcode': client_2_server['Request word'], 
-        'message': '',
-        'dst': "server"
-    };
-
-    // Send a message to the server
-    await send_message_to_server(message_as_dict);
-
-}
 
 async function DeclareCurrentPlayer()
 {
@@ -196,6 +240,18 @@ async function DeclareCurrentPlayer()
         'opcode': client_2_server['I am current player'], 
         'message': '',
         'dst': "broadcast"
+    };
+
+    // Send a message to the server
+    await send_message_to_server(message_as_dict);
+}
+
+async function requestWordFromServer() 
+{
+    let message_as_dict = {
+        'opcode': client_2_server['Request word'], 
+        'message': '',
+        'dst': "server"
     };
 
     // Send a message to the server
@@ -274,6 +330,7 @@ async function send_message_to_server(message_as_dict)
     );
 
     // 4. Send the secure packet (iv, data, signature)
+    
     socket.send(JSON.stringify(securePacket));
 }
 

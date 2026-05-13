@@ -9,3 +9,5 @@ class WebSocketWrapper:
         self.answered = False
         self.current_player = False
         self.score = 0
+        self.aes_key = None
+        self.hmac_key = None

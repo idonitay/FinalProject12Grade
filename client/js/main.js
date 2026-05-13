@@ -215,12 +215,6 @@ function create_ui()
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
     
     //const intervalId = setInterval(PingPong, 10000);
-
-    for (let i = 0; i < 5; i++)
-    {
-        chatbox.displayMessage("אדיר", "בדיקה של הודעה", document.getElementById("chat-history"), user_id);
-        chatbox.displayMessage("עידו", "בדיקה של תשובה", document.getElementById("chat-history"), 7);
-    }
     
 }
 
