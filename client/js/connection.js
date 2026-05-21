@@ -76,6 +76,7 @@ socket.addEventListener("message", async (event) => {
         
         case server_2_client["Message sent"]:
             console.log(response["message"]);
+            console.log(response["src"])
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"), response['id']);
             break;
 

@@ -14,7 +14,7 @@ class chat
     displayMessage(sender, data, message_div, id) 
     {
         let message = sender;
-
+        console.log(sender  )
         
 
         if (sender != this.last_sender)
@@ -113,7 +113,7 @@ class chat
     {
         let chat_box_wrapper = this.createChatWrapper(["box"]);      
         let chat_box_history = this.createChatHistory(["scroll_history_wheel"]);
-        let chat_box_input = this.createChatInput();
+        this.createChatInput();
 
     }
 

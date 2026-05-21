@@ -299,10 +299,12 @@ function create_change_username(canvas_and_chat_wrapper_div) {
     username_data.innerHTML = "Enter Username:";
     let user_name_input = createTextInput("username-input", username_wrapper, []);
 
-    user_name_input.addEventListener('keydown', async function (event) {
+    user_name_input.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
+            console.log("username changed")
             // Use event.target to get the input element
             let inputValue = event.target.value;
+            console.log(inputValue)
 
             let message_as_dict = {
                 'opcode': client_2_server["Change username"],
@@ -311,8 +313,9 @@ function create_change_username(canvas_and_chat_wrapper_div) {
             };
 
             username = inputValue;
+            console.log(username)
 
-            await send_message_to_server(message_as_dict);
+            send_message_to_server(message_as_dict);
 
             event.target.value = "";
         }

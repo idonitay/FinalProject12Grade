@@ -10,24 +10,21 @@ async function openKeyDB() {
     });
 }
 
+// --- 1. LOCAL MEMORY KEY VAULT (Isolates separate browser tabs) ---
 async function saveKeys(aesKey, hmacKey) {
-    const db = await openKeyDB();
-    const tx = db.transaction("secure_keys", "readwrite");
-    const store = tx.objectStore("secure_keys");
-    store.put(aesKey, "active_aes");
-    store.put(hmacKey, "active_hmac");
-    return new Promise((resolve) => tx.oncomplete = resolve);
+    // Save keys directly to the current tab's execution window context 
+    // instead of writing to a shared global IndexedDB database instance!
+    window.activeSessionAesKey = aesKey;
+    window.activeSessionHmacKey = hmacKey;
+    return Promise.resolve();
 }
 
 async function getStoredKeys() {
-    const db = await openKeyDB();
-    const tx = db.transaction("secure_keys", "readonly");
-    const store = tx.objectStore("secure_keys");
-    const aesReq = store.get("active_aes");
-    const hmacReq = store.get("active_hmac");
-    return new Promise((resolve) => {
-        tx.oncomplete = () => resolve({ aesKey: aesReq.result, hmacKey: hmacReq.result });
-    });
+    // Fetch clean isolated references that cannot be overwritten by other tabs
+    return { 
+        aesKey: window.activeSessionAesKey, 
+        hmacKey: window.activeSessionHmacKey 
+    };
 }
 
 // --- 2. HELPERS ---
