@@ -118,6 +118,16 @@ h1 {
 
 }
 
+.logo {
+    width: 20%;
+    height: auto;
+}
+
+.logo_wrapper_div {
+    display: flex;
+    justify-content: center;
+}
+
 .draw_tools_wrapper {
     grid-template-columns: 17% 43% 40%;
     display: grid;
