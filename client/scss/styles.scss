@@ -148,11 +148,15 @@ h1 {
 }
 
 .correct_guess {
-    color: rgb(30, 157, 15)
+    color: rgb(66, 246, 46);
+    background-color: rgb(106, 106, 195);
+    align-self: flex-end;
 }
 
 .reveal_word {
-    color: rgb(137, 5, 93)
+    color: rgb(164, 6, 112);
+    background-color: rgb(106, 106, 195);
+    align-self: flex-end;
 }
 
 

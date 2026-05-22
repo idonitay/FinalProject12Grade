@@ -21,6 +21,7 @@ STATIC_DIR = "../client"
 web_socket_wrappers_array = []
 words = get_words_from_db()
 word = ""
+duration_in_seconds = 60
 
 
 # --- HTTP handlers ---
@@ -103,11 +104,17 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
         return {}
 
     elif opcode == opcodes.client_2_server['I am current player']:
+        await send_start_timer_message()
+        source_wrapper.answered = True
         return {
             'opcode': opcodes.server_2_client['There is a new current player'],
             'src': "server",
             'message': f"{source_wrapper.username} is the current player",
         }
+
+    elif opcode == opcodes.client_2_server['Timer ended']:
+        await finish_turn()
+        return {}
 
     return {
         'opcode': "unknown",
@@ -185,6 +192,10 @@ async def websocket_handler(request):
                             else:
                                 await send_message_to_player_wrapper(response_dict, wrapper)
 
+                        if check_if_everyone_answered():
+                            await finish_turn()
+
+
                     except Exception as msg_error:
                         print(f"Error handling secure messaging packet: {msg_error}")
                         continue
@@ -214,6 +225,54 @@ async def broadcast_message(message_dict: dict):
             continue
 
 
+async def choose_next_player():
+    global web_socket_wrappers_array
+    global word
+    global words
+
+    current_player_index = 0
+    for i in range(0, len(web_socket_wrappers_array)):
+        if web_socket_wrappers_array[i].current_player:
+            current_player_index = i
+            break
+
+    web_socket_wrappers_array[current_player_index].current_player = False
+    new_player_index = (current_player_index + 1) % len(web_socket_wrappers_array)
+    web_socket_wrappers_array[new_player_index].current_player = True
+    web_socket_wrappers_array[new_player_index].answered = True
+
+    message_to_players = {
+        'opcode': opcodes.server_2_client['There is a new current player'],
+        'message': web_socket_wrappers_array[new_player_index].username + " is the current player",
+        'src': "server",
+        'id': web_socket_wrappers_array[new_player_index].id
+    }
+
+    await broadcast_message(message_to_players)
+
+    word = random.choice(words)
+    new_word_message = {
+            'opcode': opcodes.server_2_client['You got a word'],
+            'message': word,
+            'src': "server"
+        }
+
+    await send_message_to_player_wrapper(new_word_message, web_socket_wrappers_array[new_player_index])
+
+def check_if_everyone_answered():
+    global web_socket_wrappers_array
+    for wrapper in web_socket_wrappers_array:
+        if not wrapper.answered:
+            return False
+
+    return True
+
+def reset_answered():
+    global web_socket_wrappers_array
+    for wrapper in web_socket_wrappers_array:
+        wrapper.answered = False
+
+
 async def send_message_to_player_wrapper(message: dict, wrapper):
     try:
         if hasattr(wrapper, 'aes_key') and wrapper.aes_key and hasattr(wrapper, 'ws') and wrapper.ws:
@@ -224,6 +283,33 @@ async def send_message_to_player_wrapper(message: dict, wrapper):
     except Exception as e:
         print(f"Direct transmission delivery crash: {e}")
 
+async def finish_turn():
+    reset_answered()
+    await reveal_word()
+    await choose_next_player()
+    await send_start_timer_message()
+
+async def reveal_word():
+    global word
+
+    message = {
+        'opcode': opcodes.server_2_client['Reveal word'],
+        'message': f"The word was {word}",
+        'src': "server",
+    }
+
+    await broadcast_message(message)
+
+async def send_start_timer_message():
+    global duration_in_seconds
+
+    message = {
+        'opcode': opcodes.server_2_client['Start timer'],
+        'duration': duration_in_seconds,
+        'src': "server",
+    }
+
+    await broadcast_message(message)
 
 async def send_updated_score_message(i: int, score: int, player_name: str):
     message = {
