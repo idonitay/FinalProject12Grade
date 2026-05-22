@@ -99,6 +99,7 @@ socket.addEventListener("message", async (event) => {
 
         case server_2_client["You got a word"]:
             display_current_word(response["message"]);
+            console.log("word: " + response["message"])
             canDraw = true;
             break;
 
@@ -249,6 +250,7 @@ async function DeclareCurrentPlayer()
 
 async function requestWordFromServer() 
 {
+    console.log("request word")
     let message_as_dict = {
         'opcode': client_2_server['Request word'], 
         'message': '',

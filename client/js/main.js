@@ -185,13 +185,10 @@ function create_ui()
     score_board = new scoreboard(canvas_and_chat_wrapper_div);
     score_board.createScoreboard();
     
-    
-
 
     let sivuv_1_from_3_wrapper = createDiv("", canvas_and_chat_wrapper_div, ["sivuv_counter_wrapper", "box"]);
     let sivuv_1_from_3_placeholder = createDiv("sivuv_placeholder", sivuv_1_from_3_wrapper, ["sivuv_counter_placeholder"]);
     sivuv_1_from_3_placeholder.innerHTML = "סיבוב 1 מתוך 3";
-
 
     let draw_tools_wrapper = createDiv("draw-tools-wrapper", canvas_and_chat_wrapper_div, ["draw_tools_wrapper", "box"]);
 
@@ -200,7 +197,6 @@ function create_ui()
     //colors creation and event handlers
     create_drawing_tools_panel(draw_tools_wrapper);
 
-    
 
     let start_game_button = createButton("start-game-button", body_div, "start game", ["start_game_button"]);
     start_game_button.addEventListener("click", function() {
@@ -304,7 +300,6 @@ function create_change_username(canvas_and_chat_wrapper_div) {
             console.log("username changed")
             // Use event.target to get the input element
             let inputValue = event.target.value;
-            console.log(inputValue)
 
             let message_as_dict = {
                 'opcode': client_2_server["Change username"],
@@ -313,7 +308,6 @@ function create_change_username(canvas_and_chat_wrapper_div) {
             };
 
             username = inputValue;
-            console.log(username)
 
             send_message_to_server(message_as_dict);
 

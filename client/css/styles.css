@@ -97,7 +97,9 @@ h1 {
 }
 
 .server_message {
-  color: rgb(242, 242, 39);
+  color: rgb(0, 0, 0);
+  background-color: rgb(241, 233, 14);
+  align-self: flex-end;
 }
 
 .my_message_in_chat {

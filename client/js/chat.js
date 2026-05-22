@@ -43,7 +43,7 @@ class chat
 
         else if (sender == "server")
         {
-            row.classList.add("server_message");   
+            row.classList.add("server_message");
         }
 
         else if (id == user_id)

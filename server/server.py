@@ -102,6 +102,13 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
         source_wrapper.username = user_message['message']
         return {}
 
+    elif opcode == opcodes.client_2_server['I am current player']:
+        return {
+            'opcode': opcodes.server_2_client['There is a new current player'],
+            'src': "server",
+            'message': f"{source_wrapper.username} is the current player",
+        }
+
     return {
         'opcode': "unknown",
         'received_opcode': opcode
@@ -177,6 +184,7 @@ async def websocket_handler(request):
                                 await broadcast_message(response_dict)
                             else:
                                 await send_message_to_player_wrapper(response_dict, wrapper)
+
                     except Exception as msg_error:
                         print(f"Error handling secure messaging packet: {msg_error}")
                         continue
@@ -220,7 +228,10 @@ async def send_message_to_player_wrapper(message: dict, wrapper):
 async def send_updated_score_message(i: int, score: int, player_name: str):
     message = {
         'opcode': opcodes.server_2_client['Update score'],
-        'score': score, 'index': i, 'player_name': player_name, 'src': "server"
+        'score': score,
+        'index': i,
+        'player_name': player_name,
+        'src': "server",
     }
     await broadcast_message(message)
 
