@@ -241,24 +241,25 @@ function create_drawing_tools_panel(draw_tools_wrapper) {
     let colors_wrapper = createDiv("colors-wrapper-div", draw_tools_wrapper, ["color_box_wrapper"]);
 
     let draw_colors = [
-        "#000000", // Black
-        "#FF0000", // Red
-        "rgb(6, 150, 51)", // green
-        "rgb(31, 10, 188)", // blue
-        "#FFFF00", // Yellow
-        "rgb(255, 165, 0)", // Orange
-        "rgba(217, 0, 255, 1)", // Magenta
-        "rgba(0, 225, 255, 1)", // Teal
-        "rgba(93, 102, 103, 1)", // gray
-        "rgba(151, 159, 160, 1)", // light gray
-        "rgba(124, 100, 197, 1)", // lilach
-        "rgba(91, 13, 13, 1)", // Maroon
-        "rgba(255, 255, 255, 1)", // white
-        "rgba(10, 65, 2, 1)", // dark green
-        "rgba(13, 2, 65, 1)", // dark blue
-        "rgba(71, 51, 6, 1)", // brown
-        "rgba(255, 0, 221, 1)", // pink
         "rgba(98, 205, 226, 1)", // sky
+        "rgb(31, 10, 188)", // blue
+        "rgba(124, 100, 197, 1)", // lilach
+        "rgba(217, 0, 255, 1)", // Magenta
+        "rgba(255, 0, 221, 1)", // pink
+        "#FF0000", // Red
+        "rgb(255, 165, 0)", // Orange
+        "#FFFF00", // Yellow
+        "rgba(255, 255, 255, 1)", // white
+        //Line break
+        "rgba(151, 159, 160, 1)", // light gray
+        "rgba(93, 102, 103, 1)", // gray
+        "#000000", // Black
+        "rgba(71, 51, 6, 1)", // brown
+        "rgba(91, 13, 13, 1)", // Maroon
+        "rgba(13, 2, 65, 1)", // dark blue
+        "rgba(10, 65, 2, 1)", // dark green
+        "rgb(6, 150, 51)", // green
+        "rgba(0, 225, 255, 1)", // Teal
     ];
 
     for (let draw_color of draw_colors) {
