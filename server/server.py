@@ -22,7 +22,9 @@ web_socket_wrappers_array = []
 words = get_words_from_db()
 word = ""
 duration_in_seconds = 60
-
+amount_of_rounds = 3
+amount_of_turns = len(web_socket_wrappers_array) * amount_of_rounds
+current_turn_index = 0
 
 # --- HTTP handlers ---
 async def index(request):
@@ -34,6 +36,7 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
     print(f"Processing message with opcode: {user_message.get('opcode')}")
     opcode = user_message.get('opcode')
     global word
+    global current_turn_index
 
     if opcode == opcodes.client_2_server['login']:
         source_wrapper.username = user_message.get('src', 'Unknown')
@@ -105,6 +108,7 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
 
     elif opcode == opcodes.client_2_server['I am current player']:
         await send_start_timer_message()
+        current_turn_index += 1
         source_wrapper.answered = True
         return {
             'opcode': opcodes.server_2_client['There is a new current player'],
@@ -125,12 +129,15 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
 # --- WebSocket handler ---
 async def websocket_handler(request):
     global web_socket_wrappers_array
+    global amount_of_turns
+
     ws = web.WebSocketResponse()
     await ws.prepare(request)
 
     wrapper = WebSocketWrapper(ws)
     wrapper.ws = ws
     web_socket_wrappers_array.append(wrapper)
+    amount_of_turns = amount_of_rounds * len(web_socket_wrappers_array)
     print(f"WebSocket connected. Total clients: {len(web_socket_wrappers_array)}")
 
     try:
@@ -206,6 +213,7 @@ async def websocket_handler(request):
         print("WebSocket disconnected")
         if wrapper in web_socket_wrappers_array:
             web_socket_wrappers_array.remove(wrapper)
+            amount_of_turns = amount_of_rounds * len(web_socket_wrappers_array)
     return ws
 
 
@@ -284,10 +292,49 @@ async def send_message_to_player_wrapper(message: dict, wrapper):
         print(f"Direct transmission delivery crash: {e}")
 
 async def finish_turn():
+    global current_turn_index
+
+
+
     reset_answered()
     await reveal_word()
     await choose_next_player()
     await send_start_timer_message()
+
+    current_turn_index += 1
+    if current_turn_index > amount_of_turns:
+        await send_endgame_message()
+        return
+
+async def send_endgame_message():
+
+    winners = find_winners()
+    winners_username = winners[0].username
+    for i in range(1, len(winners)):
+        winners_username = winners_username + ", " + winners[i].username
+
+    message = {
+        'opcode': opcodes.server_2_client['Game ended'],
+        'message': f"{winners_username} has won!",
+        'src': "server",
+    }
+
+    await broadcast_message(message)
+
+def find_winners():
+    global web_socket_wrappers_array
+    max_score = -1
+    current_winners = []
+    for wrapper in web_socket_wrappers_array:
+        if wrapper.score > max_score:
+            max_score = wrapper.score
+            current_winners = [wrapper]
+
+        elif wrapper.score == max_score:
+            current_winners.append(wrapper)
+
+    return current_winners
+
 
 async def reveal_word():
     global word

@@ -40,6 +40,11 @@ class chat
         {
             row.classList.add("reveal_word");
         }
+        
+        else if (data.includes("has won"))
+        {
+            row.classList.add("endgame_message");
+        }
 
         else if (sender == "server")
         {

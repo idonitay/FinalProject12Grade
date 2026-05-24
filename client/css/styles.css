@@ -133,6 +133,12 @@ h1 {
   align-self: flex-end;
 }
 
+.endgame_message {
+  color: rgb(241, 150, 48);
+  background-color: rgb(106, 106, 195);
+  align-self: flex-end;
+}
+
 .row_break {
   width: 100%;
 }

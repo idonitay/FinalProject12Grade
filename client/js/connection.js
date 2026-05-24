@@ -133,6 +133,11 @@ socket.addEventListener("message", async (event) => {
             score_board.updateScoreLineByIndex(response["index"], response["score"], response["player_name"]);
             break;
 
+        case server_2_client["Game ended"]:
+            chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history")); 
+            stop_timer();
+            break;
+
         default:
             console.error("Unindentified message:", response['opcode']);
     }

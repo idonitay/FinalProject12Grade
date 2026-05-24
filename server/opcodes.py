@@ -13,6 +13,7 @@ server_2_client = {
     "Start timer": 11,
     "Reveal word": 12,
     "Update score": 13,
+    "Game ended" : 14,
 }
 
 client_2_server = {
