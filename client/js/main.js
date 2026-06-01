@@ -7,6 +7,7 @@ let canDraw = false;
 let seconds_amount = 100;
 let duration = seconds_amount * 1000;
 let currentTimer = null;
+let current_round_number = 1
 
 // let canvas_wrapper_div = createDiv("canvas-wrapper-div", body_div, ["canvas"]);
 function createCanvas(id, parent, styles) {
@@ -186,9 +187,9 @@ function create_ui()
     score_board.createScoreboard();
     
 
-    let sivuv_1_from_3_wrapper = createDiv("", canvas_and_chat_wrapper_div, ["sivuv_counter_wrapper", "box"]);
-    let sivuv_1_from_3_placeholder = createDiv("sivuv_placeholder", sivuv_1_from_3_wrapper, ["sivuv_counter_placeholder"]);
-    sivuv_1_from_3_placeholder.innerHTML = "סיבוב 1 מתוך 3";
+    let sivuv_counter_wrapper = createDiv("", canvas_and_chat_wrapper_div, ["sivuv_counter_wrapper", "box"]);
+    let sivuv_counter = createDiv("sivuv_counter", sivuv_counter_wrapper, ["sivuv_counter_placeholder"]);
+    sivuv_counter.innerHTML = `סיבוב ${current_round_number} מתוך 3`;
 
     let draw_tools_wrapper = createDiv("draw-tools-wrapper", canvas_and_chat_wrapper_div, ["draw_tools_wrapper", "box"]);
 

@@ -109,6 +109,8 @@ socket.addEventListener("message", async (event) => {
 
         case server_2_client["There is a new current player"]:
             display_current_word("");
+            current_round_number = response["current_round_index"];
+            document.getElementById("sivuv_counter").innerHTML = `סיבוב ${current_round_number} מתוך 3`;
             //chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));     
             chatbox.displayMessage(response["src"], response["message"], document.getElementById("chat-history"));
             canDraw = false;

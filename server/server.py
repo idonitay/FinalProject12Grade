@@ -115,6 +115,7 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
             'opcode': opcodes.server_2_client['There is a new current player'],
             'src': "server",
             'message': f"{source_wrapper.username} is the current player",
+            "current_round_index": ((current_turn_index + 1) // amount_of_rounds) + 1,
         }
 
     elif opcode == opcodes.client_2_server['Ready']:
@@ -252,6 +253,7 @@ async def choose_next_player():
     global web_socket_wrappers_array
     global word
     global words
+    global amount_of_turns
 
     current_player_index = 0
     for i in range(0, len(web_socket_wrappers_array)):
@@ -268,7 +270,8 @@ async def choose_next_player():
         'opcode': opcodes.server_2_client['There is a new current player'],
         'message': web_socket_wrappers_array[new_player_index].username + " is the current player",
         'src': "server",
-        'id': web_socket_wrappers_array[new_player_index].id
+        'id': web_socket_wrappers_array[new_player_index].id,
+        "current_round_index": ((current_turn_index + 1) // amount_of_rounds) + 1,
     }
 
     await broadcast_message(message_to_players)
@@ -323,6 +326,7 @@ async def finish_turn():
 
 async def send_endgame_message():
 
+    global current_turn_index
     winners = find_winners()
     winners_username = winners[0].username
     for i in range(1, len(winners)):
@@ -335,7 +339,7 @@ async def send_endgame_message():
     }
 
     await broadcast_message(message)
-
+    current_turn_index = 0
     await send_first_player_message(web_socket_wrappers_array[0])
 
 def find_winners():
