@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="764" viewBox="0 0 1040 764" role="img" aria-labelledby="title desc">
+  <title id="title">Server draw message fields</title>
+  <desc id="desc">Field names and types for Server draw message fields.</desc>
+  <defs>
+    <style>
+      .background { fill: #ffffff; }
+      .outer { fill: #ffffff; stroke: #c9d1dd; stroke-width: 1.5; }
+      .head { fill: #f1f5f9; }
+      .line { stroke: #d7dde7; stroke-width: 1; }
+      .head-text { fill: #334155; font: 700 13px Arial, sans-serif; }
+      .name { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .type { fill: #1f2937; font: 14px Arial, sans-serif; }
+      .note { fill: #4b5563; font: 14px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1040" height="764"/>
+  <rect class="outer" x="24" y="24" width="992" height="716" rx="8"/>
+
+  <rect class="head" x="24" y="24" width="992" height="44" rx="8"/>
+  <line class="line" x1="24" y1="68" x2="1016" y2="68"/>
+
+  <text class="head-text" x="48" y="52">Name</text>
+  <text class="head-text" x="288" y="52">Type</text>
+  <text class="head-text" x="440" y="52">Required</text>
+  <text class="head-text" x="568" y="52">Value / Meaning</text>
+
+  <line class="line" x1="264" y1="24" x2="264" y2="740"/>
+  <line class="line" x1="416" y1="24" x2="416" y2="740"/>
+  <line class="line" x1="544" y1="24" x2="544" y2="740"/>
+
+  <text class="name" x="48" y="102">opcode</text>
+  <text class="type" x="288" y="102">number</text>
+  <text class="type" x="440" y="102">yes</text>
+  <text class="note" x="568" y="102">server_2_client["Draw"] (5)</text>
+  <line class="line" x1="24" y1="124" x2="1016" y2="124"/>
+
+  <text class="name" x="48" y="158">message</text>
+  <text class="type" x="288" y="158">object</text>
+  <text class="type" x="440" y="158">yes</text>
+  <text class="note" x="568" y="158">brush stroke payload</text>
+  <line class="line" x1="24" y1="180" x2="1016" y2="180"/>
+
+  <text class="name" x="48" y="214">message.pointA</text>
+  <text class="type" x="288" y="214">object</text>
+  <text class="type" x="440" y="214">yes</text>
+  <text class="note" x="568" y="214">first point</text>
+  <line class="line" x1="24" y1="236" x2="1016" y2="236"/>
+
+  <text class="name" x="48" y="270">message.pointA.x</text>
+  <text class="type" x="288" y="270">number</text>
+  <text class="type" x="440" y="270">yes</text>
+  <text class="note" x="568" y="270">x coordinate</text>
+  <line class="line" x1="24" y1="292" x2="1016" y2="292"/>
+
+  <text class="name" x="48" y="326">message.pointA.y</text>
+  <text class="type" x="288" y="326">number</text>
+  <text class="type" x="440" y="326">yes</text>
+  <text class="note" x="568" y="326">y coordinate</text>
+  <line class="line" x1="24" y1="348" x2="1016" y2="348"/>
+
+  <text class="name" x="48" y="382">message.pointB</text>
+  <text class="type" x="288" y="382">object</text>
+  <text class="type" x="440" y="382">yes</text>
+  <text class="note" x="568" y="382">second point</text>
+  <line class="line" x1="24" y1="404" x2="1016" y2="404"/>
+
+  <text class="name" x="48" y="438">message.pointB.x</text>
+  <text class="type" x="288" y="438">number</text>
+  <text class="type" x="440" y="438">yes</text>
+  <text class="note" x="568" y="438">x coordinate</text>
+  <line class="line" x1="24" y1="460" x2="1016" y2="460"/>
+
+  <text class="name" x="48" y="494">message.pointB.y</text>
+  <text class="type" x="288" y="494">number</text>
+  <text class="type" x="440" y="494">yes</text>
+  <text class="note" x="568" y="494">y coordinate</text>
+  <line class="line" x1="24" y1="516" x2="1016" y2="516"/>
+
+  <text class="name" x="48" y="550">message.color</text>
+  <text class="type" x="288" y="550">string</text>
+  <text class="type" x="440" y="550">yes</text>
+  <text class="note" x="568" y="550">CSS color value</text>
+  <line class="line" x1="24" y1="572" x2="1016" y2="572"/>
+
+  <text class="name" x="48" y="606">message.size</text>
+  <text class="type" x="288" y="606">number</text>
+  <text class="type" x="440" y="606">yes</text>
+  <text class="note" x="568" y="606">brush size</text>
+  <line class="line" x1="24" y1="628" x2="1016" y2="628"/>
+
+  <text class="name" x="48" y="662">src</text>
+  <text class="type" x="288" y="662">string</text>
+  <text class="type" x="440" y="662">yes</text>
+  <text class="note" x="568" y="662">sender username</text>
+  <line class="line" x1="24" y1="684" x2="1016" y2="684"/>
+
+  <text class="name" x="48" y="718">dst</text>
+  <text class="type" x="288" y="718">string</text>
+  <text class="type" x="440" y="718">yes</text>
+  <text class="note" x="568" y="718">"broadcast"</text>
+
+</svg>
