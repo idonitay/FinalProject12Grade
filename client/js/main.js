@@ -197,21 +197,29 @@ function create_ui()
     //colors creation and event handlers
     create_drawing_tools_panel(draw_tools_wrapper);
 
+    let start_game_button_wrappper = createDiv("start_game_button_wrapper", body_div, [])
 
-    let start_game_button = createButton("start-game-button", body_div, "start game", ["start_game_button"]);
-    start_game_button.addEventListener("click", function() {
-            DeclareCurrentPlayer();
-            requestWordFromServer();
-            
-            clear_everybody_canvas();
-            canDraw = true;
-        });
     
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
     
     //const intervalId = setInterval(PingPong, 10000);
     
+}
+
+function create_start_game_button(parent) 
+{
+    let start_game_button = createButton("start-game-button", parent, "start game", ["start_game_button"]);
+    start_game_button.addEventListener("click", function() {
+            DeclareCurrentPlayer();
+            requestWordFromServer();
+            
+            clear_everybody_canvas();
+            canDraw = true;
+
+            start_game_button.remove();
+            parent.innerHTML = "";
+        });
 }
 
 

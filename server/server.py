@@ -33,10 +33,11 @@ async def index(request):
 
 
 async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: dict) -> dict:
-    print(f"Processing message with opcode: {user_message.get('opcode')}")
+    #print(f"Processing message with opcode: {user_message.get('opcode')}")
     opcode = user_message.get('opcode')
     global word
     global current_turn_index
+    global web_socket_wrappers_array
 
     if opcode == opcodes.client_2_server['login']:
         source_wrapper.username = user_message.get('src', 'Unknown')
@@ -116,6 +117,12 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
             'message': f"{source_wrapper.username} is the current player",
         }
 
+    elif opcode == opcodes.client_2_server['Ready']:
+        if len(web_socket_wrappers_array) == 1:
+            await send_first_player_message(source_wrapper)
+
+        return {}
+
     elif opcode == opcodes.client_2_server['Timer ended']:
         await finish_turn()
         return {}
@@ -138,7 +145,10 @@ async def websocket_handler(request):
     wrapper.ws = ws
     web_socket_wrappers_array.append(wrapper)
     amount_of_turns = amount_of_rounds * len(web_socket_wrappers_array)
+
+
     print(f"WebSocket connected. Total clients: {len(web_socket_wrappers_array)}")
+
 
     try:
         async for msg in ws:
@@ -151,7 +161,7 @@ async def websocket_handler(request):
 
                 # --- PHASE 1: THE HANDSHAKE (PLAIN TEXT) ---
                 if "public_key" in payload:
-                    print(f"Handshake initiated by: {payload.get('src', 'unknown')}")
+                    #print(f"Handshake initiated by: {payload.get('src', 'unknown')}")
 
                     server_private_key = ec.generate_private_key(ec.SECP256R1())
 
@@ -178,6 +188,9 @@ async def websocket_handler(request):
                     response["server_public_key"] = base64.b64encode(server_pub_bytes).decode('utf-8')
 
                     await ws.send_str(json.dumps(response))
+
+
+
                     continue
 
                 # --- PHASE 2: SECURE MESSAGING (ENCRYPTED) ---
@@ -214,6 +227,8 @@ async def websocket_handler(request):
         if wrapper in web_socket_wrappers_array:
             web_socket_wrappers_array.remove(wrapper)
             amount_of_turns = amount_of_rounds * len(web_socket_wrappers_array)
+            if len(web_socket_wrappers_array) == 1:
+                await send_first_player_message(web_socket_wrappers_array[0])
     return ws
 
 
@@ -321,6 +336,8 @@ async def send_endgame_message():
 
     await broadcast_message(message)
 
+    await send_first_player_message(web_socket_wrappers_array[0])
+
 def find_winners():
     global web_socket_wrappers_array
     max_score = -1
@@ -335,6 +352,15 @@ def find_winners():
 
     return current_winners
 
+
+async def send_first_player_message(wrapper):
+    print("first player")
+    message = {
+        'opcode': opcodes.server_2_client["First player"],
+        'src': "server",
+    }
+
+    await send_message_to_player_wrapper(message, wrapper)
 
 async def reveal_word():
     global word

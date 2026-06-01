@@ -14,6 +14,7 @@ server_2_client = {
     "Reveal word": 12,
     "Update score": 13,
     "Game ended" : 14,
+    "First player": 15,
 }
 
 client_2_server = {
@@ -28,4 +29,5 @@ client_2_server = {
     "I am current player": 8,
     "Timer ended": 9,
     "Change username": 10,
+    "Ready": 11,
 }

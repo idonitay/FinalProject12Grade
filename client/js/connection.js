@@ -49,10 +49,14 @@ socket.addEventListener("message", async (event) => {
 
     // 1. Check if this is the "Login Success/Handshake" response
     // These arrive as plain JSON because keys aren't finished yet
-    if (rawData.opcode === server_2_client['Connection Established'] || rawData.server_public_key) {
-        if (rawData.server_public_key) {
+    if (rawData.opcode === server_2_client['Connection Established'] || rawData.server_public_key) 
+    {
+        if (rawData.server_public_key) 
+        {
             await finishHandshake(rawData.server_public_key);
+            await send_server_ready_message();
         }
+
         console.log("Handshake Success:", rawData.message);
         return; // <--- CRITICAL: Stop here so we don't hit the switch below!
     } 
@@ -138,10 +142,15 @@ socket.addEventListener("message", async (event) => {
             stop_timer();
             break;
 
+        case server_2_client["First player"]:
+            create_start_game_button(document.getElementById("start_game_button_wrapper"));
+            break;
+
         default:
             console.error("Unindentified message:", response['opcode']);
     }
 });
+
 // Fired if an error happens
 socket.addEventListener("error", (error) => {
     console.error("WebSocket error:", error);
@@ -251,6 +260,18 @@ async function DeclareCurrentPlayer()
 
     // Send a message to the server
     await send_message_to_server(message_as_dict);
+}
+
+async function send_server_ready_message() 
+{
+      let message_as_dict = {
+        'opcode': client_2_server['Ready'], 
+        'message': '',
+        'dst': "server"
+    };
+
+    // Send a message to the server
+    await send_message_to_server(message_as_dict);  
 }
 
 async function requestWordFromServer() 
