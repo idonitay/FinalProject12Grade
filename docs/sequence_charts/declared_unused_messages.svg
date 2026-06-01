@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="460" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+  <title id="title">Declared messages without active sequence</title>
+  <desc id="desc">Opcodes that exist in the tables but are not produced by the current runtime paths.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1200" height="460"/>
+  <text class="title" x="600" y="36" text-anchor="middle">Declared messages without active sequence</text>
+  <text class="subtitle" x="600" y="60" text-anchor="middle">Opcodes that exist in the tables but are not produced by the current runtime paths.</text>
+
+  <rect class="participant" x="150" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="260" y="106" text-anchor="middle">Browser client</text>
+  <line class="lifeline" x1="260" y1="86" x2="260" y2="432"/>
+  <rect class="participant" x="830" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="940" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="940" y1="86" x2="940" y2="432"/>
+  <rect class="note-box" x="80" y="132" width="360" height="60" rx="8"/>
+  <text class="note-text" x="260" y="155" text-anchor="middle">Client Error and Connection closed opcodes</text>
+  <text class="note-text" x="260" y="171" text-anchor="middle">are declared, but no client code sends them.</text>
+  <rect class="note-box" x="760" y="216" width="360" height="92" rx="8"/>
+  <text class="note-text" x="940" y="239" text-anchor="middle">Server Error, Connection closed, Pong, Word</text>
+  <text class="note-text" x="940" y="255" text-anchor="middle">was chosen, and Delete canvas opcodes are</text>
+  <text class="note-text" x="940" y="271" text-anchor="middle">declared, but the current server code does</text>
+  <text class="note-text" x="940" y="287" text-anchor="middle">not emit them.</text>
+  <rect class="note-box" x="760" y="332" width="360" height="76" rx="8"/>
+  <text class="note-text" x="940" y="355" text-anchor="middle">Client Ping and Delete canvas messages</text>
+  <text class="note-text" x="940" y="371" text-anchor="middle">currently fall through to the unknown-</text>
+  <text class="note-text" x="940" y="387" text-anchor="middle">response path.</text>
+</svg>

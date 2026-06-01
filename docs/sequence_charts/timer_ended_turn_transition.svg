@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1369" viewBox="0 0 1400 1369" role="img" aria-labelledby="title desc">
+  <title id="title">Timer ended and turn transition sequence</title>
+  <desc id="desc">The timer ending triggers reveal word, next player selection, and possible endgame.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1400" height="1369"/>
+  <text class="title" x="700" y="36" text-anchor="middle">Timer ended and turn transition sequence</text>
+  <text class="subtitle" x="700" y="60" text-anchor="middle">The timer ending triggers reveal word, next player selection, and possible endgame.</text>
+
+  <rect class="participant" x="90" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="200" y="106" text-anchor="middle">Timer client</text>
+  <line class="lifeline" x1="200" y1="86" x2="200" y2="1341"/>
+  <rect class="participant" x="410" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="520" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="520" y1="86" x2="520" y2="1341"/>
+  <rect class="participant" x="750" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="860" y="106" text-anchor="middle">All connected clients</text>
+  <line class="lifeline" x1="860" y1="86" x2="860" y2="1341"/>
+  <rect class="participant" x="1110" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="1220" y="106" text-anchor="middle">Target player client</text>
+  <line class="lifeline" x1="1220" y1="86" x2="1220" y2="1341"/>
+  <rect class="step-box" x="25" y="132" width="350" height="84" rx="8"/>
+  <text class="label" x="200" y="151" text-anchor="middle">Timer reaches zero</text>
+  <text class="detail" x="200" y="177" text-anchor="middle">start_timer stops the interval and calls</text>
+  <text class="detail" x="200" y="192" text-anchor="middle">send_timer_ended_message.</text>
+  <text class="label secure-label" x="360" y="244" text-anchor="middle">Encrypted Timer ended packet</text>
+  <text class="detail" x="360" y="267" text-anchor="middle">Opcode 9, empty message, dst broadcast.</text>
+  <line class="arrow-secure" x1="222" y1="302" x2="492" y2="302" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="345" y="319" width="350" height="99" rx="8"/>
+  <text class="label" x="520" y="338" text-anchor="middle">Run finish_turn</text>
+  <text class="detail" x="520" y="364" text-anchor="middle">The server resets answered flags, reveals</text>
+  <text class="detail" x="520" y="379" text-anchor="middle">the word, chooses next player, starts</text>
+  <text class="detail" x="520" y="394" text-anchor="middle">timer, then checks endgame.</text>
+  <text class="label secure-label" x="690" y="446" text-anchor="middle">Encrypted Reveal word broadcast</text>
+  <text class="detail" x="690" y="469" text-anchor="middle">Opcode 12 sends "The word was ..." to chat history.</text>
+  <line class="arrow-secure" x1="542" y1="504" x2="832" y2="504" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="345" y="521" width="350" height="99" rx="8"/>
+  <text class="label" x="520" y="540" text-anchor="middle">Choose next player</text>
+  <text class="detail" x="520" y="566" text-anchor="middle">The old current player is cleared; the</text>
+  <text class="detail" x="520" y="581" text-anchor="middle">next wrapper becomes current_player and</text>
+  <text class="detail" x="520" y="596" text-anchor="middle">answered.</text>
+  <text class="label secure-label" x="690" y="648" text-anchor="middle">Encrypted new current-player broadcast</text>
+  <text class="detail" x="690" y="671" text-anchor="middle">Opcode 8 announces the next current player and current_round_index.</text>
+  <line class="arrow-secure" x1="542" y1="706" x2="832" y2="706" marker-end="url(#arrow-secure)"/>
+  <text class="label secure-label" x="870" y="741" text-anchor="middle">Encrypted You got a word direct message</text>
+  <text class="detail" x="870" y="764" text-anchor="middle">Opcode 9 sends the new word only to the new current player.</text>
+  <line class="arrow-secure" x1="542" y1="799" x2="1192" y2="799" marker-end="url(#arrow-secure)"/>
+  <text class="label secure-label" x="690" y="834" text-anchor="middle">Encrypted Start timer broadcast</text>
+  <text class="detail" x="690" y="857" text-anchor="middle">Opcode 11 starts the next turn timer for everyone.</text>
+  <line class="arrow-secure" x1="542" y1="892" x2="832" y2="892" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="345" y="909" width="350" height="84" rx="8"/>
+  <text class="label" x="520" y="928" text-anchor="middle">Increment turn index</text>
+  <text class="detail" x="520" y="954" text-anchor="middle">current_turn_index increments after the</text>
+  <text class="detail" x="520" y="969" text-anchor="middle">next timer has been sent.</text>
+  <rect class="group-box" x="104" y="1013" width="1192" height="320" rx="10"/>
+  <rect class="group-title-bg" x="104" y="1013" width="1192" height="34" rx="10"/>
+  <text class="group-title" x="126" y="1035" text-anchor="start">If current_turn_index is greater than amount_of_turns</text>
+  <text class="label secure-label" x="690" y="1073" text-anchor="middle">Encrypted Game ended broadcast</text>
+  <text class="detail" x="690" y="1096" text-anchor="middle">Opcode 14 announces the winner or winners.</text>
+  <line class="arrow-secure" x1="542" y1="1131" x2="832" y2="1131" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="345" y="1148" width="350" height="69" rx="8"/>
+  <text class="label" x="520" y="1167" text-anchor="middle">Reset game-start state</text>
+  <text class="detail" x="520" y="1193" text-anchor="middle">current_turn_index is reset to 0.</text>
+  <text class="label secure-label" x="870" y="1248" text-anchor="middle">Encrypted First player message</text>
+  <text class="detail" x="870" y="1271" text-anchor="middle">Opcode 15 is sent to web_socket_wrappers_array[0].</text>
+  <line class="arrow-secure" x1="542" y1="1306" x2="1192" y2="1306" marker-end="url(#arrow-secure)"/>
+</svg>

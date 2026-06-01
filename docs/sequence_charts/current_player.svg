@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="868" viewBox="0 0 1200 868" role="img" aria-labelledby="title desc">
+  <title id="title">Current player sequence</title>
+  <desc id="desc">A client declares itself as current player and the server starts the turn.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1200" height="868"/>
+  <text class="title" x="600" y="36" text-anchor="middle">Current player sequence</text>
+  <text class="subtitle" x="600" y="60" text-anchor="middle">A client declares itself as current player and the server starts the turn.</text>
+
+  <rect class="participant" x="70" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="180" y="106" text-anchor="middle">Current player client</text>
+  <line class="lifeline" x1="180" y1="86" x2="180" y2="840"/>
+  <rect class="participant" x="490" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="600" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="600" y1="86" x2="600" y2="840"/>
+  <rect class="participant" x="910" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="1020" y="106" text-anchor="middle">All connected clients</text>
+  <line class="lifeline" x1="1020" y1="86" x2="1020" y2="840"/>
+  <text class="label secure-label" x="390" y="150" text-anchor="middle">Encrypted I am current player packet</text>
+  <text class="detail" x="390" y="173" text-anchor="middle">Opcode 8, empty message, dst broadcast.</text>
+  <line class="arrow-secure" x1="202" y1="208" x2="572" y2="208" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="425" y="225" width="350" height="99" rx="8"/>
+  <text class="label" x="600" y="244" text-anchor="middle">Send timer as side effect</text>
+  <text class="detail" x="600" y="270" text-anchor="middle">handle_user_message calls</text>
+  <text class="detail" x="600" y="285" text-anchor="middle">send_start_timer_message before returning</text>
+  <text class="detail" x="600" y="300" text-anchor="middle">the current-player response.</text>
+  <text class="label secure-label" x="810" y="352" text-anchor="middle">Encrypted Start timer broadcast</text>
+  <text class="detail" x="810" y="375" text-anchor="middle">Opcode 11 carries duration_in_seconds; clients start the timer and clear</text>
+  <text class="detail" x="810" y="392" text-anchor="middle">the canvas.</text>
+  <line class="arrow-secure" x1="622" y1="427" x2="992" y2="427" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="425" y="444" width="350" height="84" rx="8"/>
+  <text class="label" x="600" y="463" text-anchor="middle">Mark turn state</text>
+  <text class="detail" x="600" y="489" text-anchor="middle">current_turn_index increments and</text>
+  <text class="detail" x="600" y="504" text-anchor="middle">source_wrapper.answered is set true.</text>
+  <text class="label secure-label" x="810" y="556" text-anchor="middle">Encrypted new current-player broadcast</text>
+  <text class="detail" x="810" y="579" text-anchor="middle">Opcode 8 announces the current player and includes current_round_index.</text>
+  <line class="arrow-secure" x1="622" y1="614" x2="992" y2="614" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="845" y="631" width="350" height="99" rx="8"/>
+  <text class="label" x="1020" y="650" text-anchor="middle">Update turn display</text>
+  <text class="detail" x="1020" y="676" text-anchor="middle">Clients clear the displayed word, update</text>
+  <text class="detail" x="1020" y="691" text-anchor="middle">the round counter, add a chat notice, and</text>
+  <text class="detail" x="1020" y="706" text-anchor="middle">set canDraw false.</text>
+  <rect class="note-box" x="420" y="740" width="360" height="76" rx="8"/>
+  <text class="note-text" x="600" y="763" text-anchor="middle">After the response is sent, websocket_handler</text>
+  <text class="note-text" x="600" y="779" text-anchor="middle">also checks whether everyone answered; if</text>
+  <text class="note-text" x="600" y="795" text-anchor="middle">true, finish_turn runs.</text>
+</svg>

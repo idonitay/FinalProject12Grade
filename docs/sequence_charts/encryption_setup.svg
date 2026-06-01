@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1633" viewBox="0 0 1200 1633" role="img" aria-labelledby="title desc">
+  <title id="title">Encryption setup sequence</title>
+  <desc id="desc">ECDH handshake, key derivation, and first encrypted ready packet.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1200" height="1633"/>
+  <text class="title" x="600" y="36" text-anchor="middle">Encryption setup sequence</text>
+  <text class="subtitle" x="600" y="60" text-anchor="middle">ECDH handshake, key derivation, and first encrypted ready packet.</text>
+
+  <rect class="participant" x="150" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="260" y="106" text-anchor="middle">Browser client</text>
+  <line class="lifeline" x1="260" y1="86" x2="260" y2="1605"/>
+  <rect class="participant" x="830" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="940" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="940" y1="86" x2="940" y2="1605"/>
+  <text class="label" x="600" y="150" text-anchor="middle">Open WebSocket connection</text>
+  <text class="detail" x="600" y="173" text-anchor="middle">GET /ws upgrade; server creates WebSocketResponse and WebSocketWrapper.</text>
+  <line class="arrow-plain" x1="282" y1="208" x2="912" y2="208" marker-end="url(#arrow-plain)"/>
+  <rect class="step-box" x="85" y="225" width="350" height="99" rx="8"/>
+  <text class="label" x="260" y="244" text-anchor="middle">Generate client ECDH key pair</text>
+  <text class="detail" x="260" y="270" text-anchor="middle">WebCrypto ECDH P-256; private key is</text>
+  <text class="detail" x="260" y="285" text-anchor="middle">stored temporarily as</text>
+  <text class="detail" x="260" y="300" text-anchor="middle">window.pendingPrivateKey.</text>
+  <text class="label" x="600" y="352" text-anchor="middle">Plain login / handshake request</text>
+  <text class="detail" x="600" y="375" text-anchor="middle">JSON opcode 0, message "Handshake request", src, dst "server", id,</text>
+  <text class="detail" x="600" y="392" text-anchor="middle">public_key.</text>
+  <line class="arrow-plain" x1="282" y1="427" x2="912" y2="427" marker-end="url(#arrow-plain)"/>
+  <rect class="step-box" x="765" y="444" width="350" height="84" rx="8"/>
+  <text class="label" x="940" y="463" text-anchor="middle">Generate server ECDH key pair</text>
+  <text class="detail" x="940" y="489" text-anchor="middle">Import the client public_key as a P-256</text>
+  <text class="detail" x="940" y="504" text-anchor="middle">encoded point.</text>
+  <rect class="step-box" x="765" y="538" width="350" height="99" rx="8"/>
+  <text class="label" x="940" y="557" text-anchor="middle">Derive server session keys</text>
+  <text class="detail" x="940" y="583" text-anchor="middle">ECDH shared secret, then HKDF-SHA256</text>
+  <text class="detail" x="940" y="598" text-anchor="middle">length 64, salt None, info "handshake</text>
+  <text class="detail" x="940" y="613" text-anchor="middle">data".</text>
+  <rect class="note-box" x="760" y="647" width="360" height="76" rx="8"/>
+  <text class="note-text" x="940" y="670" text-anchor="middle">The first 32 derived bytes become</text>
+  <text class="note-text" x="940" y="686" text-anchor="middle">wrapper.aes_key; the last 32 become</text>
+  <text class="note-text" x="940" y="702" text-anchor="middle">wrapper.hmac_key.</text>
+  <rect class="step-box" x="765" y="747" width="350" height="84" rx="8"/>
+  <text class="label" x="940" y="766" text-anchor="middle">Process login fields</text>
+  <text class="detail" x="940" y="792" text-anchor="middle">Store the username and random client id on</text>
+  <text class="detail" x="940" y="807" text-anchor="middle">the WebSocketWrapper.</text>
+  <text class="label" x="600" y="859" text-anchor="middle">Plain connection established response</text>
+  <text class="detail" x="600" y="882" text-anchor="middle">JSON opcode 0, message "connection established", src, server_public_key.</text>
+  <line class="arrow-plain" x1="918" y1="917" x2="288" y2="917" marker-end="url(#arrow-plain)"/>
+  <rect class="step-box" x="85" y="934" width="350" height="84" rx="8"/>
+  <text class="label" x="260" y="953" text-anchor="middle">Derive client session keys</text>
+  <text class="detail" x="260" y="979" text-anchor="middle">Import server_public_key, run ECDH, then</text>
+  <text class="detail" x="260" y="994" text-anchor="middle">HKDF with the same salt and info values.</text>
+  <rect class="note-box" x="80" y="1028" width="360" height="76" rx="8"/>
+  <text class="note-text" x="260" y="1051" text-anchor="middle">The derived AES-GCM key is used for</text>
+  <text class="note-text" x="260" y="1067" text-anchor="middle">encrypt/decrypt; the derived HMAC-SHA256 key</text>
+  <text class="note-text" x="260" y="1083" text-anchor="middle">is used for sign/verify.</text>
+  <rect class="step-box" x="85" y="1128" width="350" height="117" rx="8"/>
+  <text class="label" x="260" y="1147" text-anchor="middle">Save keys and clear pending private</text>
+  <text class="label" x="260" y="1165" text-anchor="middle">key</text>
+  <text class="detail" x="260" y="1191" text-anchor="middle">saveKeys stores the keys in the current</text>
+  <text class="detail" x="260" y="1206" text-anchor="middle">tab context, then pendingPrivateKey is</text>
+  <text class="detail" x="260" y="1221" text-anchor="middle">deleted.</text>
+  <text class="label secure-label" x="600" y="1273" text-anchor="middle">Encrypted ready packet</text>
+  <text class="detail" x="600" y="1296" text-anchor="middle">send_server_ready_message sends opcode 11 inside {iv, data, signature}.</text>
+  <line class="arrow-secure" x1="282" y1="1331" x2="912" y2="1331" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="765" y="1348" width="350" height="84" rx="8"/>
+  <text class="label" x="940" y="1367" text-anchor="middle">Verify and decrypt ready packet</text>
+  <text class="detail" x="940" y="1393" text-anchor="middle">Verify HMAC over IV + ciphertext, decrypt</text>
+  <text class="detail" x="940" y="1408" text-anchor="middle">with AES-GCM, then handle opcode 11.</text>
+  <rect class="group-box" x="104" y="1452" width="992" height="145" rx="10"/>
+  <rect class="group-title-bg" x="104" y="1452" width="992" height="34" rx="10"/>
+  <text class="group-title" x="126" y="1474" text-anchor="start">Only when this is the first connected client</text>
+  <text class="label secure-label" x="600" y="1512" text-anchor="middle">Encrypted first-player message</text>
+  <text class="detail" x="600" y="1535" text-anchor="middle">Opcode 15 is sent through send_message_to_player_wrapper.</text>
+  <line class="arrow-secure" x1="918" y1="1570" x2="288" y2="1570" marker-end="url(#arrow-secure)"/>
+</svg>

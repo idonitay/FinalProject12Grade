@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="645" viewBox="0 0 1200 645" role="img" aria-labelledby="title desc">
+  <title id="title">Chat message sequence</title>
+  <desc id="desc">A normal chat message is broadcast to every connected client.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1200" height="645"/>
+  <text class="title" x="600" y="36" text-anchor="middle">Chat message sequence</text>
+  <text class="subtitle" x="600" y="60" text-anchor="middle">A normal chat message is broadcast to every connected client.</text>
+
+  <rect class="participant" x="70" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="180" y="106" text-anchor="middle">Sender client</text>
+  <line class="lifeline" x1="180" y1="86" x2="180" y2="617"/>
+  <rect class="participant" x="490" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="600" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="600" y1="86" x2="600" y2="617"/>
+  <rect class="participant" x="910" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="1020" y="106" text-anchor="middle">All connected clients</text>
+  <line class="lifeline" x1="1020" y1="86" x2="1020" y2="617"/>
+  <rect class="step-box" x="5" y="132" width="350" height="84" rx="8"/>
+  <text class="label" x="180" y="151" text-anchor="middle">Type chat text and press Enter</text>
+  <text class="detail" x="180" y="177" text-anchor="middle">chat.sendChatMessage builds opcode 1 with</text>
+  <text class="detail" x="180" y="192" text-anchor="middle">dst broadcast.</text>
+  <text class="label secure-label" x="390" y="244" text-anchor="middle">Encrypted Message sent packet</text>
+  <text class="detail" x="390" y="267" text-anchor="middle">Payload contains the typed chat text.</text>
+  <line class="arrow-secure" x1="202" y1="302" x2="572" y2="302" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="425" y="319" width="350" height="84" rx="8"/>
+  <text class="label" x="600" y="338" text-anchor="middle">Verify, decrypt, and inspect text</text>
+  <text class="detail" x="600" y="364" text-anchor="middle">If the text is not the active word, the</text>
+  <text class="detail" x="600" y="379" text-anchor="middle">server builds server opcode 1.</text>
+  <text class="label secure-label" x="810" y="431" text-anchor="middle">Encrypted Message sent broadcast</text>
+  <text class="detail" x="810" y="454" text-anchor="middle">broadcast_message encrypts a separate envelope for each connected</text>
+  <text class="detail" x="810" y="471" text-anchor="middle">wrapper.</text>
+  <line class="arrow-secure" x1="622" y1="506" x2="992" y2="506" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="845" y="523" width="350" height="84" rx="8"/>
+  <text class="label" x="1020" y="542" text-anchor="middle">Decrypt and display chat message</text>
+  <text class="detail" x="1020" y="568" text-anchor="middle">Each browser appends the text to chat</text>
+  <text class="detail" x="1020" y="583" text-anchor="middle">history using src and id.</text>
+</svg>

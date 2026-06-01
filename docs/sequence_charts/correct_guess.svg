@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1086" viewBox="0 0 1200 1086" role="img" aria-labelledby="title desc">
+  <title id="title">Correct guess sequence</title>
+  <desc id="desc">A chat message can become a correct word guess and update scores.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1200" height="1086"/>
+  <text class="title" x="600" y="36" text-anchor="middle">Correct guess sequence</text>
+  <text class="subtitle" x="600" y="60" text-anchor="middle">A chat message can become a correct word guess and update scores.</text>
+
+  <rect class="participant" x="70" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="180" y="106" text-anchor="middle">Guessing client</text>
+  <line class="lifeline" x1="180" y1="86" x2="180" y2="1058"/>
+  <rect class="participant" x="490" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="600" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="600" y1="86" x2="600" y2="1058"/>
+  <rect class="participant" x="910" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="1020" y="106" text-anchor="middle">All connected clients</text>
+  <line class="lifeline" x1="1020" y1="86" x2="1020" y2="1058"/>
+  <text class="label secure-label" x="390" y="150" text-anchor="middle">Encrypted Message sent packet</text>
+  <text class="detail" x="390" y="173" text-anchor="middle">Opcode 1 carries the guessed text.</text>
+  <line class="arrow-secure" x1="202" y1="208" x2="572" y2="208" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="425" y="225" width="350" height="99" rx="8"/>
+  <text class="label" x="600" y="244" text-anchor="middle">Compare guess with active word</text>
+  <text class="detail" x="600" y="270" text-anchor="middle">The server hashes the guess and the word</text>
+  <text class="detail" x="600" y="285" text-anchor="middle">with SHA-256, then uses</text>
+  <text class="detail" x="600" y="300" text-anchor="middle">hmac.compare_digest.</text>
+  <rect class="group-box" x="104" y="344" width="992" height="426" rx="10"/>
+  <rect class="group-title-bg" x="104" y="344" width="992" height="34" rx="10"/>
+  <text class="group-title" x="126" y="366" text-anchor="start">If this is the player's first correct guess</text>
+  <rect class="step-box" x="425" y="386" width="350" height="84" rx="8"/>
+  <text class="label" x="600" y="405" text-anchor="middle">Award points and mark answered</text>
+  <text class="detail" x="600" y="431" text-anchor="middle">source_wrapper.score += 100,</text>
+  <text class="detail" x="600" y="446" text-anchor="middle">source_wrapper.answered = True.</text>
+  <text class="label secure-label" x="810" y="498" text-anchor="middle">Encrypted Update score broadcast</text>
+  <text class="detail" x="810" y="521" text-anchor="middle">Opcode 13 carries score, index, and player_name.</text>
+  <line class="arrow-secure" x1="622" y1="556" x2="992" y2="556" marker-end="url(#arrow-secure)"/>
+  <text class="label secure-label" x="810" y="591" text-anchor="middle">Encrypted word-guessed broadcast</text>
+  <text class="detail" x="810" y="614" text-anchor="middle">Opcode 10 announces that the player guessed correctly.</text>
+  <line class="arrow-secure" x1="622" y1="649" x2="992" y2="649" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="845" y="666" width="350" height="84" rx="8"/>
+  <text class="label" x="1020" y="685" text-anchor="middle">Update scoreboard and chat</text>
+  <text class="detail" x="1020" y="711" text-anchor="middle">Clients handle opcode 13 in the scoreboard</text>
+  <text class="detail" x="1020" y="726" text-anchor="middle">and opcode 10 in chat history.</text>
+  <rect class="group-box" x="104" y="788" width="992" height="162" rx="10"/>
+  <rect class="group-title-bg" x="104" y="788" width="992" height="34" rx="10"/>
+  <text class="group-title" x="126" y="810" text-anchor="start">If the player already answered, or the current player submitted the word</text>
+  <text class="label secure-label" x="810" y="848" text-anchor="middle">Encrypted already-guessed notice</text>
+  <text class="detail" x="810" y="871" text-anchor="middle">Opcode 1 broadcasts a message saying the player has already guessed</text>
+  <text class="detail" x="810" y="888" text-anchor="middle">correctly.</text>
+  <line class="arrow-secure" x1="622" y1="923" x2="992" y2="923" marker-end="url(#arrow-secure)"/>
+  <rect class="note-box" x="420" y="958" width="360" height="76" rx="8"/>
+  <text class="note-text" x="600" y="981" text-anchor="middle">After each secure message, the server checks</text>
+  <text class="note-text" x="600" y="997" text-anchor="middle">if everyone answered; if true, finish_turn</text>
+  <text class="note-text" x="600" y="1013" text-anchor="middle">runs.</text>
+</svg>

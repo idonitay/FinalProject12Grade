@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="688" viewBox="0 0 1200 688" role="img" aria-labelledby="title desc">
+  <title id="title">Disconnect sequence</title>
+  <desc id="desc">A WebSocket disconnect removes the wrapper and may promote the remaining client.</desc>
+  <defs>
+    <marker id="arrow-plain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-plain"/>
+    </marker>
+    <marker id="arrow-secure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head-secure"/>
+    </marker>
+    <style>
+      .background { fill: #ffffff; }
+      .title { fill: #111827; font: 700 24px Arial, sans-serif; }
+      .subtitle { fill: #4b5563; font: 14px Arial, sans-serif; }
+      .participant { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+      .participant-text { fill: #111827; font: 700 15px Arial, sans-serif; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.5; stroke-dasharray: 6 8; }
+      .arrow-plain { stroke: #2563eb; stroke-width: 2; }
+      .arrow-secure { stroke: #059669; stroke-width: 2.25; }
+      .arrow-head-plain { fill: #2563eb; }
+      .arrow-head-secure { fill: #059669; }
+      .step-box { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.25; }
+      .note-box { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.25; }
+      .group-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.25; stroke-dasharray: 8 6; }
+      .group-title-bg { fill: #e2e8f0; }
+      .label { fill: #111827; font: 700 14px Arial, sans-serif; }
+      .secure-label { fill: #047857; }
+      .detail { fill: #4b5563; font: 13px Arial, sans-serif; }
+      .note-text { fill: #7c2d12; font: 13px Arial, sans-serif; }
+      .group-title { fill: #334155; font: 700 13px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" x="0" y="0" width="1200" height="688"/>
+  <text class="title" x="600" y="36" text-anchor="middle">Disconnect sequence</text>
+  <text class="subtitle" x="600" y="60" text-anchor="middle">A WebSocket disconnect removes the wrapper and may promote the remaining client.</text>
+
+  <rect class="participant" x="70" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="180" y="106" text-anchor="middle">Leaving client</text>
+  <line class="lifeline" x1="180" y1="86" x2="180" y2="660"/>
+  <rect class="participant" x="490" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="600" y="106" text-anchor="middle">WebSocket server</text>
+  <line class="lifeline" x1="600" y1="86" x2="600" y2="660"/>
+  <rect class="participant" x="910" y="78" width="220" height="44" rx="8"/>
+  <text class="participant-text" x="1020" y="106" text-anchor="middle">Remaining client</text>
+  <line class="lifeline" x1="1020" y1="86" x2="1020" y2="660"/>
+  <text class="label" x="390" y="150" text-anchor="middle">WebSocket closes</text>
+  <text class="detail" x="390" y="173" text-anchor="middle">The close event can be a browser close, refresh, or network disconnect.</text>
+  <line class="arrow-plain" x1="202" y1="208" x2="572" y2="208" marker-end="url(#arrow-plain)"/>
+  <rect class="step-box" x="425" y="225" width="350" height="84" rx="8"/>
+  <text class="label" x="600" y="244" text-anchor="middle">Remove wrapper</text>
+  <text class="detail" x="600" y="270" text-anchor="middle">The finally block removes the wrapper and</text>
+  <text class="detail" x="600" y="285" text-anchor="middle">recalculates amount_of_turns.</text>
+  <rect class="group-box" x="104" y="329" width="992" height="239" rx="10"/>
+  <rect class="group-title-bg" x="104" y="329" width="992" height="34" rx="10"/>
+  <text class="group-title" x="126" y="351" text-anchor="start">If exactly one client remains</text>
+  <text class="label secure-label" x="810" y="389" text-anchor="middle">Encrypted First player message</text>
+  <text class="detail" x="810" y="412" text-anchor="middle">Opcode 15 is sent to the remaining client.</text>
+  <line class="arrow-secure" x1="622" y1="447" x2="992" y2="447" marker-end="url(#arrow-secure)"/>
+  <rect class="step-box" x="845" y="464" width="350" height="84" rx="8"/>
+  <text class="label" x="1020" y="483" text-anchor="middle">Create start-game button</text>
+  <text class="detail" x="1020" y="509" text-anchor="middle">The remaining browser handles opcode 15 by</text>
+  <text class="detail" x="1020" y="524" text-anchor="middle">calling create_start_game_button.</text>
+  <rect class="note-box" x="0" y="576" width="360" height="60" rx="8"/>
+  <text class="note-text" x="180" y="599" text-anchor="middle">No application-level Connection closed opcode</text>
+  <text class="note-text" x="180" y="615" text-anchor="middle">is sent by the browser in the current code.</text>
+</svg>
