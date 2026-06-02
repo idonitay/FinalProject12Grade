@@ -135,7 +135,7 @@ function clearCanvas()
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-async function start_timer(duration_param)
+async function start_timer(duration_param, timer_id)
 {
     duration_param = Number(duration_param);
 
@@ -150,7 +150,8 @@ async function start_timer(duration_param)
         if (timeLeft <= 0) {
             console.log("Finished!");
             clearInterval(currentTimer);
-            await send_timer_ended_message();
+            currentTimer = null;
+            await send_timer_ended_message(timer_id);
         }
 
     }, 1000);
@@ -329,4 +330,3 @@ function create_change_username(canvas_and_chat_wrapper_div) {
         }
     });
 }
-

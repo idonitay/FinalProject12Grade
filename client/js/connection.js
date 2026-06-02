@@ -128,7 +128,7 @@ socket.addEventListener("message", async (event) => {
             {
                 stop_timer();
             }
-            await start_timer(duration);
+            await start_timer(duration, response['timer_id']);
             clearCanvas();
             break;
 
@@ -300,11 +300,12 @@ function display_timer(time)
     document.getElementById("timer-div").innerHTML = time;
 }
 
-async function send_timer_ended_message()
+async function send_timer_ended_message(timer_id)
 {
     let message_as_dict = {
         'opcode': client_2_server['Timer ended'], 
         'message': '',
+        'timer_id': timer_id,
         'dst': "broadcast"
     };
 

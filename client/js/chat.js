@@ -39,6 +39,11 @@ class chat
         {
             row.classList.add("reveal_word");
         }
+
+        else if (data.includes("Round over!"))
+        {
+            row.classList.add("round_over");
+        }
         
         else if (data.includes("has won"))
         {

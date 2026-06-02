@@ -7,6 +7,7 @@ import hashlib
 import hmac
 import base64
 import copy
+import time
 
 from web_socket_wrapper import WebSocketWrapper
 from encryption_decryption import decrypt_and_verify
@@ -25,6 +26,9 @@ duration_in_seconds = 60
 amount_of_rounds = 3
 amount_of_turns = len(web_socket_wrappers_array) * amount_of_rounds
 current_turn_index = 0
+timer_sequence = 0
+active_timer_id = None
+active_timer_deadline = None
 
 # --- HTTP handlers ---
 async def index(request):
@@ -134,7 +138,9 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
         return {}
 
     elif opcode == opcodes.client_2_server['Timer ended']:
-        await finish_turn()
+        if claim_timer_expiration(user_message.get("timer_id")):
+            await send_round_over_message()
+            await finish_turn()
         return {}
 
     return {
@@ -223,6 +229,8 @@ async def websocket_handler(request):
                                 await send_message_to_player_wrapper(response_dict, wrapper)
 
                         if check_if_everyone_answered():
+                            if response_dict and response_dict.get('opcode') == opcodes.server_2_client["A word was guessed"]:
+                                await send_round_over_message("Round over! Everyone guessed the word.")
                             await finish_turn()
 
 
@@ -320,8 +328,12 @@ async def send_message_to_player_wrapper(message: dict, wrapper):
 
 async def finish_turn():
     global current_turn_index
+    global active_timer_id
+    global active_timer_deadline
 
 
+    active_timer_id = None
+    active_timer_deadline = None
 
     reset_answered()
     await reveal_word()
@@ -386,16 +398,48 @@ async def reveal_word():
 
     await broadcast_message(message)
 
+async def send_round_over_message(message_text="Round over!"):
+    message = {
+        'opcode': opcodes.server_2_client['Message sent'],
+        'message': message_text,
+        'src': "server",
+        'dst': 'broadcast',
+    }
+
+    await broadcast_message(message)
+
 async def send_start_timer_message():
     global duration_in_seconds
+    global timer_sequence
+    global active_timer_id
+    global active_timer_deadline
+
+    timer_sequence += 1
+    active_timer_id = timer_sequence
+    active_timer_deadline = time.monotonic() + duration_in_seconds
 
     message = {
         'opcode': opcodes.server_2_client['Start timer'],
         'duration': duration_in_seconds,
+        'timer_id': active_timer_id,
         'src': "server",
     }
 
     await broadcast_message(message)
+
+def claim_timer_expiration(timer_id):
+    global active_timer_id
+    global active_timer_deadline
+
+    if active_timer_id is None or timer_id != active_timer_id:
+        return False
+
+    if active_timer_deadline is None or time.monotonic() < active_timer_deadline:
+        return False
+
+    active_timer_id = None
+    active_timer_deadline = None
+    return True
 
 async def send_updated_score_message(i: int, score: int, player_name: str):
     message = {
