@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Client Messages Protocol</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; color: #334155; line-height: 1.5; }
+    .message-structure { margin-bottom: 3em; }
+    h2 { border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5em; margin-top: 2em; }
+    h3 { color: #1e293b; margin-bottom: 1em; }
+    table { border-collapse: collapse; width: 100%; max-width: 1000px; border: 1px solid #c9d1dd; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); }
+    th { background-color: #f1f5f9; text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 700; border: 1px solid #c9d1dd; }
+    td { padding: 14px 16px; border: 1px solid #c9d1dd; font-size: 14px; }
+    .name { font-weight: 700; color: #111827; }
+    .type, .required { color: #1f2937; }
+    .meaning { color: #4b5563; }
+</style>
+</head>
+<body>
+  <h1>Client Messages Protocol</h1>
+  <div class="message-structure">
+    <h3>Client login message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["login"] (0)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"Handshake request"</td>
+        </tr>
+        <tr>
+          <td class="name">src</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">client username</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"server"</td>
+        </tr>
+        <tr>
+          <td class="name">id</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">random client id</td>
+        </tr>
+        <tr>
+          <td class="name">public_key</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">Base64 raw ECDH P-256 public key</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client message sent fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Message sent"] (1)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">chat text typed by the player</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"broadcast"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client error message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Error"] (2)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">error description</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">intended destination</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client connection closed message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Connection closed"] (3)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">connection close description</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"server"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client ping message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Ping"] (4)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"ping"</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"server"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client draw message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Draw"] (5)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">object</td>
+          <td class="required">yes</td>
+          <td class="meaning">brush stroke payload</td>
+        </tr>
+        <tr>
+          <td class="name">message.pointA</td>
+          <td class="type">object</td>
+          <td class="required">yes</td>
+          <td class="meaning">first point</td>
+        </tr>
+        <tr>
+          <td class="name">message.pointA.x</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">x coordinate</td>
+        </tr>
+        <tr>
+          <td class="name">message.pointA.y</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">y coordinate</td>
+        </tr>
+        <tr>
+          <td class="name">message.pointB</td>
+          <td class="type">object</td>
+          <td class="required">yes</td>
+          <td class="meaning">second point</td>
+        </tr>
+        <tr>
+          <td class="name">message.pointB.x</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">x coordinate</td>
+        </tr>
+        <tr>
+          <td class="name">message.pointB.y</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">y coordinate</td>
+        </tr>
+        <tr>
+          <td class="name">message.color</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">CSS color value</td>
+        </tr>
+        <tr>
+          <td class="name">message.size</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">brush size</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"broadcast"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client delete canvas message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Delete canvas"] (6)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">empty string ""</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"broadcast"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client request word message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Request word"] (7)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">empty string ""</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"server"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client current player message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["I am current player"] (8)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">empty string ""</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"broadcast"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client timer ended message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Timer ended"] (9)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">empty string ""</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"broadcast"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client change username message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Change username"] (10)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">new username</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"server"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="message-structure">
+    <h3>Client ready message fields</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Value / Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">opcode</td>
+          <td class="type">number</td>
+          <td class="required">yes</td>
+          <td class="meaning">client_2_server["Ready"] (11)</td>
+        </tr>
+        <tr>
+          <td class="name">message</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">empty string ""</td>
+        </tr>
+        <tr>
+          <td class="name">dst</td>
+          <td class="type">string</td>
+          <td class="required">yes</td>
+          <td class="meaning">"server"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
