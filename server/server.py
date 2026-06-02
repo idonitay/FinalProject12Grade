@@ -103,6 +103,15 @@ async def handle_user_message(source_wrapper: WebSocketWrapper, user_message: di
             'src': "server"
         }
 
+    elif opcode == opcodes.client_2_server['Delete canvas']:
+        return {
+            'opcode': opcodes.server_2_client['Delete canvas'],
+            'message': user_message['message'],
+            'src': source_wrapper.username,
+            'dst': 'broadcast'
+        }
+
+
     elif opcode == opcodes.client_2_server['Change username']:
         source_wrapper.username = user_message['message']
         return {}
