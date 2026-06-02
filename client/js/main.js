@@ -305,28 +305,40 @@ function create_drawing_tools_panel(draw_tools_wrapper) {
 }
 
 function create_change_username(canvas_and_chat_wrapper_div) {
-    let username_wrapper = createDiv("username-wrapper", canvas_and_chat_wrapper_div, ["box"]);
-    let username_data = createDiv("", username_wrapper, []);
-    username_data.innerHTML = "Enter Username:";
-    let user_name_input = createTextInput("username-input", username_wrapper, []);
+    let username_wrapper = createDiv("username-wrapper", canvas_and_chat_wrapper_div, ["username_wrapper", "box"]);
+    let username_data = createDiv("", username_wrapper, ["username_label"]);
+    username_data.textContent = "שם שחקן";
+    let username_controls = createDiv("", username_wrapper, ["username_controls"]);
+    let user_name_input = createTextInput("username-input", username_controls, ["username_input"]);
+    user_name_input.placeholder = username;
+    let save_username_button = createButton("save-username-button", username_controls, "שמור", ["username_button"]);
+
+    function submitUsername() {
+        let inputValue = user_name_input.value.trim();
+
+        if (inputValue === "") {
+            return;
+        }
+
+        let message_as_dict = {
+            'opcode': client_2_server["Change username"],
+            'message': inputValue,
+            'dst': "server"
+        };
+
+        username = inputValue;
+        user_name_input.placeholder = username;
+
+        send_message_to_server(message_as_dict);
+
+        user_name_input.value = "";
+    }
+
+    save_username_button.addEventListener("click", submitUsername);
 
     user_name_input.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            console.log("username changed")
-            // Use event.target to get the input element
-            let inputValue = event.target.value;
-
-            let message_as_dict = {
-                'opcode': client_2_server["Change username"],
-                'message': inputValue,
-                'dst': "server"
-            };
-
-            username = inputValue;
-
-            send_message_to_server(message_as_dict);
-
-            event.target.value = "";
+            submitUsername();
         }
     });
 }
