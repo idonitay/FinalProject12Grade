@@ -97,6 +97,7 @@ socket.addEventListener("message", async (event) => {
             break;
         
         case server_2_client["Delete canvas"]:
+            console.log("deleting canvas")
             clearCanvas();
 
             break;

@@ -14,7 +14,6 @@ class chat
     displayMessage(sender, data, message_div, id) 
     {
         let message = sender;
-        console.log(sender  )
         
 
         if (sender != this.last_sender)
