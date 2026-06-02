@@ -464,7 +464,7 @@ def main():
     app.router.add_get("/", index)
     app.router.add_get("/ws", websocket_handler)
     app.router.add_static("/", path=STATIC_DIR)
-    web.run_app(app, host="localhost", port=8080)
+    web.run_app(app, host="0.0.0.0", port=8080)
 
 
 if __name__ == "__main__":

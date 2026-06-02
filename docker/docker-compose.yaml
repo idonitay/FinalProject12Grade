@@ -26,7 +26,8 @@ services:
         image: phpmyadmin:latest
         restart: always
         depends_on:
-        - mysql-server
+            mysql-server:
+                condition: service_healthy
         ports:
         - "8070:80"
         environment:
@@ -36,22 +37,22 @@ services:
         networks:
             - mynetwork
 
-    # python-server:
-    #     container_name: websocket-server
-    #     image: adir-python:latest
-    #     depends_on:
-    #         mysql-server:
-    #             condition: service_healthy
-    #     volumes:
-    #         - /opt/Sites/odmila.co.il/webSocketServer:/server
-    #     ports:
-    #         - "8082:8082"
-    #         - "80:80"
-    #     networks:
-    #         - mynetwork
-    #     hostname: websocket-test
-    #     domainname: eini
-    #     entrypoint: ["/bin/sh", "/server/run_odmila_server.sh"]
+    python-server:
+        container_name: websocket-server
+        image: docker.io/library/websocket-server:latest
+        depends_on:
+            mysql-server:
+                condition: service_healthy
+        ports:
+            - "8080:8080"
+            - "80:80"
+            
+        networks:
+            - mynetwork
+        hostname: websocket-ido-scribble
+        domainname: eini
+        environment:
+            db_host: mysql-server
 
 networks:
     mynetwork:

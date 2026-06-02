@@ -1,12 +1,15 @@
 import mysql.connector
 from typing import List
+import os
 
 __author__ = 'Ido Nitay Eini'
 
 
 def connect_to_db():
     # return mysql.connector.connect(host='mysql-server', database='scribble', user='ido', password='idoido')
-    return mysql.connector.connect(host='127.0.0.1', database='scribble', user='ido', password='idoido')
+    # return mysql.connector.connect(host='127.0.0.1', database='scribble', user='ido', password='idoido')
+    sql_server_host_name = os.environ.get("db_host", "127.0.0.1")
+    return mysql.connector.connect(host=sql_server_host_name, database='scribble', user='ido', password='idoido')
 
 
 class DbConnection:

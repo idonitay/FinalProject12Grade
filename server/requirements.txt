@@ -1,3 +1,4 @@
 aiohttp
 pathlib
 mysql-connector-python
+cryptography
