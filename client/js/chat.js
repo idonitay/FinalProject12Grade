@@ -13,13 +13,12 @@ class chat
 
     displayMessage(sender, data, message_div, id) 
     {
-        let message = sender;
-        
+        const message = String(data);
 
         if (sender != this.last_sender)
         {
             let sender_div = createDiv("", message_div, ["chat_history_sender"])
-            sender_div.innerHTML = sender;
+            sender_div.textContent = sender;
             if (id != user_id)
             {
                 sender_div.classList.add("not_my_message_in_chat_sender_title");
@@ -28,24 +27,24 @@ class chat
         
         let row = createDiv("", message_div, ["chat_history_message"])
 
-        row.innerHTML = data;  
+        row.textContent = message;  
 
-        if (data.includes("has guessed the word correctly"))
+        if (message.includes("has guessed the word correctly"))
         {
             row.classList.add("correct_guess");
         }
 
-        else if (data.includes("The word was "))
+        else if (message.includes("The word was "))
         {
             row.classList.add("reveal_word");
         }
 
-        else if (data.includes("Round over!"))
+        else if (message.includes("Round over!"))
         {
             row.classList.add("round_over");
         }
         
-        else if (data.includes("has won"))
+        else if (message.includes("has won"))
         {
             row.classList.add("endgame_message");
         }
@@ -67,12 +66,23 @@ class chat
         }
 
         this.last_sender = sender;
+        message_div.scrollTop = message_div.scrollHeight;
     }
 
     createChatInput() 
     {
-        let input_wrapper = createDiv("input-wrapper", document.getElementById("chat-wrapper"), [])
+        let input_wrapper = createDiv("input-wrapper", document.getElementById("chat-wrapper"), ["chat_input_wrapper"])
         let inputbox = createTextInput("chatbox-input", input_wrapper, ["chat_input"]);
+        inputbox.placeholder = "כתוב ניחוש או הודעה";
+        inputbox.autocomplete = "off";
+
+        let send_button = createButton("chat-send-button", input_wrapper, "שלח", ["chat_send_button"]);
+        send_button.addEventListener("click", () => {
+            this.sendChatMessage(inputbox.value);
+            this.clearChatInput(inputbox);
+            inputbox.focus();
+        });
+
         inputbox.addEventListener('keydown', (event) => {
             this.handleChatInputEvents(event, inputbox);
         });
@@ -81,8 +91,9 @@ class chat
     handleChatInputEvents(event, input) 
     {
 
-        if (event.key === 'Enter')
+        if (event.key === 'Enter' && !event.isComposing)
         {
+            event.preventDefault();
             this.sendChatMessage(input.value);
             this.clearChatInput(input);
         }
@@ -91,9 +102,16 @@ class chat
 
     sendChatMessage(data)
     {
+        let message = data.trim();
+
+        if (message === "")
+        {
+            return;
+        }
+
         let message_as_dict = {
             'opcode': client_2_server["Message sent"], 
-            'message': data,
+            'message': message,
             'dst': "broadcast"
             
         };
@@ -110,7 +128,9 @@ class chat
 
     clearChatHistory()
     {
-        chatbox.innerHTML = "";
+        let chat_history = document.getElementById("chat-history");
+        chat_history.innerHTML = "";
+        this.last_sender = "";
     }
 
     createChatHistory(classes)
@@ -120,7 +140,7 @@ class chat
 
     createChat()
     {
-        let chat_box_wrapper = this.createChatWrapper(["box"]);      
+        let chat_box_wrapper = this.createChatWrapper(["chat_box_wrapper", "box"]);      
         let chat_box_history = this.createChatHistory(["scroll_history_wheel"]);
         this.createChatInput();
 

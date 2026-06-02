@@ -75,16 +75,6 @@ h1 {
   height: 25px;
 }
 
-.scroll_history_wheel {
-  flex-grow: 1; /* Takes up all available space */
-  overflow-y: auto; /* Adds the scroll wheel */
-  overflow-x: hidden;
-  padding-bottom: 20px; /* This creates the "gap" you wanted at the bottom */
-  border-bottom: 1px solid #ccc; /* Separator between chat and input */
-  display: flex;
-  flex-direction: column;
-}
-
 .trash_can {
   width: 4em;
   height: auto;
@@ -105,45 +95,6 @@ h1 {
   display: grid;
   align-items: center;
   justify-items: start;
-}
-
-.server_message {
-  color: rgb(0, 0, 0);
-  background-color: rgb(241, 233, 14);
-  align-self: flex-end;
-}
-
-.my_message_in_chat {
-  color: rgb(23, 101, 237);
-}
-
-.not_my_message_in_chat_sender_title {
-  align-self: flex-end;
-  padding-left: 1em;
-}
-
-.correct_guess {
-  color: rgb(66, 246, 46);
-  background-color: rgb(106, 106, 195);
-  align-self: flex-end;
-}
-
-.reveal_word {
-  color: rgb(164, 6, 112);
-  background-color: rgb(106, 106, 195);
-  align-self: flex-end;
-}
-
-.round_over {
-  color: rgb(31, 10, 96);
-  background-color: rgb(255, 255, 255);
-  align-self: flex-end;
-}
-
-.endgame_message {
-  color: rgb(241, 150, 48);
-  background-color: rgb(106, 106, 195);
-  align-self: flex-end;
 }
 
 .row_break {
@@ -248,51 +199,194 @@ h1 {
   cursor: pointer;
 }
 
-.chat_box_wrapper {
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chat_input {
-  width: 94%;
-  min-height: 6%;
-  margin: 0.2em;
-  /* Aligns the bottom edge of the child with the bottom edge of the parent */
-  bottom: 0.5em;
-  flex-shrink: 0;
-  /* Optional: ensures the child spans the full width */
-}
-
 .box {
   border: 0.2em solid rgb(31, 10, 96);
   padding: 0.4em;
 }
 
 .chat_box_wrapper {
-  background-color: white;
+  height: 400px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: rgb(246, 248, 252);
+  box-shadow: 0 0.45em 1.4em rgba(31, 10, 96, 0.12);
+  font-family: Arial;
+}
+
+.scroll_history_wheel {
+  flex-grow: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  padding: 0.75em 0.65em;
+  background: linear-gradient(rgb(246, 248, 252), rgba(246, 248, 252, 0)) top/100% 1.2em no-repeat, linear-gradient(rgba(246, 248, 252, 0), rgb(246, 248, 252)) bottom/100% 1.2em no-repeat;
+}
+
+.scroll_history_wheel::-webkit-scrollbar {
+  width: 0.55em;
+}
+
+.scroll_history_wheel::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scroll_history_wheel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background-color: rgb(184, 190, 214);
+}
+
+.chat_history_sender {
+  max-width: 78%;
+  margin-top: 0.65em;
+  padding: 0 0.35em;
+  align-self: flex-start;
+  color: rgb(108, 113, 133);
+  font-size: 0.78em;
+  font-weight: bold;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.not_my_message_in_chat_sender_title {
+  align-self: flex-end;
 }
 
 .chat_history_message {
-  margin-left: 0.3em;
-  font-size: 1.1em;
-  border-radius: 1em;
-  margin-top: 1em;
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-bottom: 0.3em;
-  padding-top: 0.3em;
-  width: 70%;
+  width: fit-content;
+  max-width: 82%;
+  box-sizing: border-box;
+  margin-top: 0.2em;
+  padding: 0.55em 0.75em;
+  border: 1px solid rgb(214, 219, 234);
+  border-radius: 8px;
+  background-color: white;
+  color: rgb(32, 35, 48);
+  font-size: 0.95em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  box-shadow: 0 0.12em 0.35em rgba(31, 10, 96, 0.08);
 }
 
 .my_message_in_chat {
-  background-color: white;
+  align-self: flex-start;
+  border-color: rgb(31, 10, 96);
+  background-color: rgb(31, 10, 96);
+  color: white;
 }
 
 .peer_chat_history_message {
-  background-color: rgb(161, 161, 255);
   align-self: flex-end;
+  background-color: white;
+}
+
+.server_message,
+.correct_guess,
+.reveal_word,
+.round_over,
+.endgame_message {
+  align-self: center;
+  max-width: 92%;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: none;
+}
+
+.server_message {
+  border-color: rgb(223, 211, 128);
+  background-color: rgb(255, 248, 203);
+  color: rgb(97, 78, 7);
+}
+
+.correct_guess {
+  border-color: rgb(160, 219, 180);
+  background-color: rgb(225, 248, 232);
+  color: rgb(22, 106, 58);
+}
+
+.reveal_word {
+  border-color: rgb(236, 190, 164);
+  background-color: rgb(255, 238, 227);
+  color: rgb(146, 68, 24);
+}
+
+.round_over {
+  border-color: rgb(190, 195, 231);
+  background-color: white;
+  color: rgb(31, 10, 96);
+}
+
+.endgame_message {
+  border-color: rgb(252, 196, 120);
+  background-color: rgb(255, 243, 222);
+  color: rgb(143, 77, 2);
+}
+
+.chat_input_wrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.55em;
+  border-top: 1px solid rgb(214, 219, 234);
+  background-color: white;
+}
+
+.chat_input {
+  min-width: 0;
+  flex: 1;
+  height: 2.6em;
+  box-sizing: border-box;
+  border: 1px solid rgb(190, 195, 231);
+  border-radius: 8px;
+  padding: 0 0.8em;
+  background-color: rgb(247, 248, 255);
+  color: rgb(32, 35, 48);
+  font-family: Arial;
+  font-size: 0.95em;
+  outline: none;
+}
+
+.chat_input::placeholder {
+  color: rgb(126, 130, 153);
+}
+
+.chat_input:focus {
+  border-color: rgb(31, 10, 96);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(31, 10, 96, 0.14);
+}
+
+.chat_send_button {
+  height: 2.6em;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 0.95em;
+  background-color: rgb(28, 149, 84);
+  color: white;
+  cursor: pointer;
+  font-family: Arial;
+  font-size: 0.95em;
+  font-weight: bold;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.chat_send_button:hover {
+  background-color: rgb(32, 170, 96);
+}
+
+.chat_send_button:active {
+  transform: translateY(1px);
 }
 
 .scoreboard_wrapper {
