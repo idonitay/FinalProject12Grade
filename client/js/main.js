@@ -167,8 +167,11 @@ function stop_timer()
 function create_ui()
 {
     //canvas creation and event handler
-    let word_div = createDiv("word-div", body_div, []);
-    let timer_div = createDiv("timer-div", body_div, []);
+    let game_status_bar = createDiv("game-status-bar", body_div, ["game_status_bar"]);
+    createDiv("word-div", game_status_bar, ["status_panel", "word_panel"]);
+    let start_game_button_wrappper = createDiv("start_game_button_wrapper", game_status_bar, ["start_game_button_wrapper"]);
+    start_game_button_wrappper.hidden = true;
+    createDiv("timer-div", game_status_bar, ["status_panel", "timer_panel"]);
     
     let canvas_and_chat_wrapper_div = createDiv("canvas-and-chat-wrapper-div", body_div, []);
 
@@ -199,8 +202,6 @@ function create_ui()
     //colors creation and event handlers
     create_drawing_tools_panel(draw_tools_wrapper);
 
-    let start_game_button_wrappper = createDiv("start_game_button_wrapper", body_div, [])
-
     
     // drawLine(canvas=canvas, p1={x: 40, y: 80}, p2={x: 200, y: 200})
     // drawLine(canvas=canvas, p1={x: 70, y: 68}, p2={x: 300, y: 100})
@@ -213,7 +214,9 @@ function create_start_game_button(parent)
 {
     if (parent.childElementCount == 0)
     {
-        let start_game_button = createButton("start-game-button", parent, "start game", ["start_game_button"]);
+        parent.hidden = false;
+
+        let start_game_button = createButton("start-game-button", parent, "התחל משחק", ["start_game_button"]);
         start_game_button.addEventListener("click", function() {
             DeclareCurrentPlayer();
             requestWordFromServer();
@@ -223,6 +226,7 @@ function create_start_game_button(parent)
 
             start_game_button.remove();
             parent.innerHTML = "";
+            parent.hidden = true;
         });
     }
     
