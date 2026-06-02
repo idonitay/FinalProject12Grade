@@ -210,8 +210,10 @@ function create_ui()
 
 function create_start_game_button(parent) 
 {
-    let start_game_button = createButton("start-game-button", parent, "start game", ["start_game_button"]);
-    start_game_button.addEventListener("click", function() {
+    if (parent.childElementCount == 0)
+    {
+        let start_game_button = createButton("start-game-button", parent, "start game", ["start_game_button"]);
+        start_game_button.addEventListener("click", function() {
             DeclareCurrentPlayer();
             requestWordFromServer();
             
@@ -221,6 +223,8 @@ function create_start_game_button(parent)
             start_game_button.remove();
             parent.innerHTML = "";
         });
+    }
+    
 }
 
 
