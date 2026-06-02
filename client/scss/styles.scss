@@ -11,6 +11,9 @@ $chat_border_color: rgb(214, 219, 234);
 $chat_panel_bg: rgb(246, 248, 252);
 $chat_text_color: rgb(32, 35, 48);
 $chat_muted_color: rgb(108, 113, 133);
+$box_border_width: 0.2em;
+$box_padding: 0.4em;
+$box_vertical_chrome: ($box_border_width + $box_padding) * 2;
 
 // $width:400px;
 $height: 400px;
@@ -239,12 +242,13 @@ h1 {
 
 .box
 {
-    border: 0.2em solid $box_border_color;
-    padding: 0.4em;
+    border: $box_border_width solid $box_border_color;
+    padding: $box_padding;
+    border-radius: 8px;
 }
 
 .chat_box_wrapper {
-    height: $height;
+    height: calc(#{$height} + #{$box_vertical_chrome});
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -432,7 +436,7 @@ h1 {
 
 .scoreboard_wrapper
 {
-    height: $height;
+    height: calc(#{$height} + #{$box_vertical_chrome});
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -626,12 +630,5 @@ h1 {
 }
 
 #chat-wrapper {
-    ////width: $width * 0.75;
-    height: $height ;
-    background-color: #b4b8df;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    
-    //padding: 1em;
+    height: calc(#{$height} + #{$box_vertical_chrome});
 }
