@@ -1,5 +1,10 @@
 // Create a WebSocket connection to your server
-const socket = new WebSocket("ws://localhost:8080/ws");
+const protocol =
+    window.location.protocol === "https:" ? "wss" : "ws";
+
+const socket = new WebSocket(
+    `${protocol}://${window.location.host}/ws`
+);
 
 let username = navigator.userAgent.indexOf('Chrome') === -1 ? "safari" : "chrome";
 const user_id = Math.floor(Math.random() * 2000000);
